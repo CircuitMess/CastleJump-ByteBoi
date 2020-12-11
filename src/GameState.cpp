@@ -1,6 +1,3 @@
-//
-// Created by hrvoj on 01/12/2020.
-//
 #include <Nibble.h>
 #include <Arduino.h>
 #include "GameState.h"
@@ -14,12 +11,23 @@ GameState::GameState(){
 
 	instance = this;
 
+
 	player.pos.x = 66;
 	player.pos.y = 66;
 	player.velocity.x = 0;
 	player.velocity.y = 0;
 
-	dropRect.push_back({0, 0, 20, 2});
+	coin.push_back({50, -700, 2, TFT_GOLD});
+
+	ability.push_back({50, -1800, 2, TFT_BLUE});
+
+	dropRect.push_back({40, 0, 20, 2});
+	dropRect.push_back({80, -20, 40, 2});
+	dropRect.push_back({70, -45, 20, 2});
+	dropRect.push_back({20, -65, 10, 2});
+	dropRect.push_back({60, -85, 20, 2});
+	dropRect.push_back({80, -105, 10, 2});
+
 
 }
 
@@ -56,7 +64,10 @@ void GameState::buttonRightRelease(){
 
 void GameState::drawPlayerCircle(){
 	baseSprite->fillCircle(player.pos.x, player.pos.y, 4, TFT_WHITE);
+}
 
+void GameState::drawCoin(Coin &goldenCoin){
+	baseSprite->fillCircle(goldenCoin.x, goldenCoin.y, goldenCoin.r, goldenCoin.color);
 }
 
 void GameState::drawRect(Rect &stairs){
@@ -64,81 +75,193 @@ void GameState::drawRect(Rect &stairs){
 
 }
 
-void GameState::functionForRects(Rect &stairs){
-	for(int i = 0; i < dropRect.size(); i++){
-		drawRect(dropRect[i]);
-		if(dropRect.size() == 1 && stairs.y > 40){
-			dropRect.push_back({0, 0, 40, 2});
-		}
-		if(dropRect.size() == 2 && stairs.y > 120){
-			dropRect.push_back({0, 0, 10, 2});
-		}
-	}
+void GameState::drawAbilityPoint(PowerUps &ability){
+	baseSprite->fillCircle(ability.x, ability.y, ability.r, ability.color);
 }
 
+
 void GameState::xPosMoving(){
-	if(rightState){
-		player.velocity.x = 30 ;
-	}
-
-	if(player.pos.x > 118){
+	if(player.pos.x > 118 ){
+		checkWallBump=true;
+		rightState=false;
 		player.pos.x = 118;
-
-		player.velocity.x = -50;
+		player.velocity.x = -100;
 	}
 	if(player.pos.x < 10){
+		checkWallBump=true;
+		leftState=false;
 		player.pos.x = 10;
+		player.velocity.x = 100;
+	}
+	if(!rightState && !checkWallBump){
+		player.velocity.x = 0;
 
+	}
+
+	if(!leftState && !checkWallBump){
+		player.velocity.x = 0;
+
+	}
+	if(rightState){
+		checkWallBump=false;
 		player.velocity.x = 50;
 	}
 
 	if(leftState){
-		player.velocity.x = -30 ;
+		checkWallBump=false;
+		player.velocity.x = -50;
 
 	}
+
 
 }
 
-
 void GameState::movingRects(Rect &stairs, uint b){
+	if(!highspeed){
+		stairs.y += 0.6 * speed * b / 13000;
+	}
+	if(highspeed){
+		stairs.y += 1.5 * speed * b / 13000;
+		currentTime = millis();
+		if(currentTime - previousTime > 1000){
+			previousTime = currentTime;
+			seconds++;
+		}
+		if(seconds > 5){
+			seconds = 0;
+			highspeed = false;
 
-	stairs.y += 1.2 * speed * b / 13000;
-
-	if(stairs.y > 126){
-		stairs.y = 0;
-
-		randX = random(110);
-		if(randX - stairs.x < 30 || randX - stairs.x < 50){
-			stairs.x = randX;
 		}
 	}
-
+	if(stairs.y > 126){
+		if(firstTouch){
+			score++;
+		}
+		float randX = stairs.x;
+		do {
+			stairs.y = 0;
+			randX = random(10, 110);
+		} while(abs(randX - stairs.x > 30));
+		stairs.x = randX;
+	}
 }
 
 
 void GameState::velocity(float dt){
 	player.pos += player.velocity * dt;
-	player.velocity += gravity * dt;
+	if(!lowGravity){
+		player.velocity += gravity * dt;
+	}
+	if(lowGravity){
+		player.velocity += gravity * 0.5 * dt;
+		currentTime = millis();
+		if(currentTime - previousTime > 1000){
+			previousTime = currentTime;
+			seconds++;
+		}
 
-
+		if(seconds > 5){
+			seconds = 0;
+			lowGravity = false;
+		}
+	}
 }
 
 
-void GameState::yBouncing(){
-	/*if(player.y > 10 && player.y < 118){
-		player.y += s;
-	}*/
-
+void GameState::checkForPoint(Coin &goldenCoin){
+	if(abs(player.pos.x - goldenCoin.x) == 0 && abs((player.pos.y - goldenCoin.y) == 0) ||
+	   (abs(player.pos.x - goldenCoin.x) + abs((player.pos.y - goldenCoin.y))) <= 5){
+		score = score + 5;
+		goldenCoin.y = -700;
+		float randX = goldenCoin.x;
+		do {
+			goldenCoin.y = -700;
+			randX = random(10, 110);
+		} while(abs(randX - goldenCoin.x > 30));
+		goldenCoin.x = randX;
+	}
 }
 
+void GameState::checkForPowerUp(PowerUps &ability){
+	if(abs(player.pos.x - ability.x) == 0 && abs((player.pos.y - ability.y) == 0) ||
+	   (abs(player.pos.x - ability.x) + abs((player.pos.y - ability.y))) <= 5){
+		int randNum = random(1, 3);
+		if(randNum == 1){
+			highspeed = true;
+		}
+		if(randNum == 2){
+			lowGravity = true;
+		}
+		ability.y = -1800;
+		float randX = ability.x;
+		do {
+			ability.y = -1800;
+			randX = random(10, 110);
+		} while(abs(randX - ability.x > 30));
+		ability.x = randX;
+	}
+}
 
 void GameState::checkForCollision(Rect &stairs){
-	float distX = abs(player.pos.x - stairs.x - 10);
-	float distY = abs(player.pos.y - stairs.y - 1);
-	if(distX <= 11 && distY <= 4){
-		player.velocity.y = -min(player.velocity.y, 150.0f);
+	if(player.velocity.y < 0){
+		return;
 	}
+	if(stairs.w == 20){
+		float distX = abs(player.pos.x - stairs.x - 10);
+		float distY = abs(player.pos.y - stairs.y - 1);
+		if((distX <= 11 && distY <= 4)){
+			player.velocity.y = -min(player.velocity.y, 130.0f);
+			firstTouch = true;
+		}
+	}
+	if(stairs.w == 40){
+		float distX = abs(player.pos.x - stairs.x - 20);
+		float distY = abs(player.pos.y - stairs.y - 1);
+		if((distX <= 21 && distY <= 4)){
+			player.velocity.y = -min(player.velocity.y, 130.0f);
+			firstTouch = true;
+		}
+	}
+	if(stairs.w == 10){
+		float distX = abs(player.pos.x - stairs.x - 5);
+		float distY = abs(player.pos.y - stairs.y - 1);
+		if((distX <= 6 && distY <= 4)){
+			player.velocity.y = -min(player.velocity.y, 130.0f);
+			firstTouch = true;
+		}
+	}
+}
 
+void GameState::scoreTable(){
+	baseSprite->setTextColor(TFT_RED);
+	baseSprite->setTextFont(1);
+	baseSprite->setTextSize(1);
+	baseSprite->drawString("Score:", 3, 1);
+	baseSprite->drawNumber(score - 0, 38, 1);
+}
+
+void GameState::movingCoin(Coin &goldenCoin, uint b){
+	goldenCoin.y += 1.1 * speed * b / 13000;
+	if(goldenCoin.y > 126){
+		float randX = goldenCoin.x;
+		do {
+			goldenCoin.y = -700;
+			randX = random(10, 110);
+		} while(abs(randX - goldenCoin.x > 30));
+		goldenCoin.x = randX;
+	}
+}
+
+void GameState::movingPowerUps(PowerUps &ability, uint b){
+	ability.y += 1.1 * speed * b / 13000;
+	if(ability.y > 126){
+		float randX;
+		do {
+			ability.y = -1800;
+			randX = random(10, 110);
+		} while(abs(randX - ability.x) > 30);
+		ability.x = randX;
+	}
 }
 
 
@@ -149,28 +272,37 @@ void GameState::loop(uint time){
 	for(int i = 0; i < dropRect.size(); ++i){
 		checkForCollision(dropRect[i]);
 	}
-	if(player.pos.y > 118){
-		player.pos.y = 118;
-
-		player.velocity.y = -min(player.velocity.y, 100.0f);
+	if(player.pos.y > 120){
+		player.pos.y = 120;
+		score = 0;
+		firstTouch = false;
+		player.velocity.y = -min(player.velocity.y, 130.0f);
 	}
+
 	/*
 	if(player.pos.x < 10){
 		player.pos.x = 10;
 		leftState = false;
 		player.velocity.x = -player.velocity.x;
-
 	}*/
 	xPosMoving();
-
-	yBouncing();
 	drawPlayerCircle();
+	for(int i = 0; i < 1; i++){
+		drawCoin(coin[0]);
+		movingCoin(coin[0], time);
+		checkForPoint(coin[0]);
+	}
+	scoreTable();
 
 	for(int i = 0; i < dropRect.size(); ++i){
-		drawRect(dropRect[i]);
-		functionForRects(dropRect[i]);
 		movingRects(dropRect[i], time);
+		drawRect(dropRect[i]);
 	}
+	for(int i = 0; i < 1; i++){
+		drawAbilityPoint(ability[i]);
+		movingPowerUps(ability[i], time);
+		checkForPowerUp(ability[i]);
+	}
+
 	display->commit();
 }
-

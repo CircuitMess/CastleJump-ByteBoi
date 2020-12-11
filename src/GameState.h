@@ -1,7 +1,3 @@
-//
-// Created by hrvoj on 01/12/2020.
-//
-
 #ifndef CASTLEJUMP_GAMESTATE_H
 #define CASTLEJUMP_GAMESTATE_H
 
@@ -11,6 +7,18 @@
 struct Player {
 	vec3f pos;
 	vec3f velocity;
+};
+struct Coin {
+	float x;
+	float y;
+	float r;
+	Color color;
+};
+struct PowerUps {
+	float x;
+	float y;
+	float r;
+	Color color;
 };
 struct Rect {
 	float x;
@@ -42,33 +50,49 @@ private:
 	static GameState *instance;
 	Display *display;
 	Sprite *baseSprite;
-	bool direction_y = false;
-	float y_var;
 	const float speed = 1;
 	bool leftState = false;
 	bool rightState = false;
 	Vector<Rect> dropRect;
 	Player player;
-	int randX;
+	int score = 0;
+	vec3f gravity = {0, 190, 0};
+	bool firstTouch = false;
+	bool highspeed=false;
+	bool lowGravity=false;
+	unsigned long currentTime;
+	unsigned long previousTime=0;
+	int seconds=0;
+	Vector<Coin> coin;
+	bool checkWallBump=false;
 
-	vec3f gravity={0,150,0};
+	Vector<PowerUps> ability;
 
 	void drawPlayerCircle();
 
 	void drawRect(Rect &stairs);
 
-	void yBouncing();
-
 	void checkForCollision(Rect &stairs);
 
 	void velocity(float dt);
-
-	void functionForRects(Rect &stairs);
 
 	void movingRects(Rect &stairs, uint b);
 
 	void xPosMoving();
 
+	void scoreTable();
+
+	void drawCoin(Coin &goldenCoin);
+
+	void movingCoin(Coin &goldenCoin,uint b);
+
+	void checkForPoint(Coin &goldenCoin);
+
+	void drawAbilityPoint(PowerUps &ability);
+
+	void movingPowerUps(PowerUps &ability,uint b);
+
+	void checkForPowerUp(PowerUps &ability);
 };
 
 #endif
