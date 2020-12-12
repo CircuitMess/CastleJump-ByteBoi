@@ -82,6 +82,8 @@ private:
 
 	void scoreTable();
 
+	void powerUpTimer();
+
 	void drawCoin(Coin &goldenCoin);
 
 	void movingCoin(Coin &goldenCoin,uint b);

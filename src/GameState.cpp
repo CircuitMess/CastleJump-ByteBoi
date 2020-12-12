@@ -130,7 +130,6 @@ void GameState::movingRects(Rect &stairs, uint b){
 		if(seconds < 0){
 			seconds = 5;
 			highspeed = false;
-
 		}
 	}
 	if(stairs.y > 126){
@@ -239,6 +238,12 @@ void GameState::scoreTable(){
 	baseSprite->drawString("Score:", 3, 1);
 	baseSprite->drawNumber(score - 0, 38, 1);
 }
+void GameState::powerUpTimer(){
+	baseSprite->setTextColor(TFT_BLUE);
+	baseSprite->setTextFont(1);
+	baseSprite->setTextSize(1);
+	baseSprite->drawNumber(seconds - 0, 10, 110);
+}
 
 void GameState::movingCoin(Coin &goldenCoin, uint b){
 	goldenCoin.y += 1.1 * speed * b / 13000;
@@ -302,6 +307,9 @@ void GameState::loop(uint time){
 		drawAbilityPoint(ability[i]);
 		movingPowerUps(ability[i], time);
 		checkForPowerUp(ability[i]);
+	}
+	if(highspeed || lowGravity){
+		powerUpTimer();
 	}
 
 	display->commit();
