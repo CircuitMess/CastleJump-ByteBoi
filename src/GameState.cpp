@@ -244,6 +244,21 @@ void GameState::powerUpTimer(){
 	baseSprite->setTextSize(1);
 	baseSprite->drawNumber(seconds - 0, 10, 110);
 }
+void GameState::levelCounter(){
+	if(score>=50){
+		lvl=2;
+	}
+	if(score>=100){
+		lvl=3;
+	}
+}
+void GameState::level(){
+	baseSprite->setTextColor(TFT_RED);
+	baseSprite->setTextFont(1);
+	baseSprite->setTextSize(1);
+	baseSprite->drawString("Lvl:", 88, 1);
+	baseSprite->drawNumber(lvl - 0, 110, 1);
+}
 
 void GameState::movingCoin(Coin &goldenCoin, uint b){
 	goldenCoin.y += 1.1 * speed * b / 13000;
@@ -280,6 +295,7 @@ void GameState::loop(uint time){
 	if(player.pos.y > 120){
 		player.pos.y = 120;
 		score = 0;
+		lvl=1;
 		firstTouch = false;
 		player.velocity.y = -min(player.velocity.y, 130.0f);
 	}
@@ -311,6 +327,8 @@ void GameState::loop(uint time){
 	if(highspeed || lowGravity){
 		powerUpTimer();
 	}
+	levelCounter();
+	level();
 
 	display->commit();
 }

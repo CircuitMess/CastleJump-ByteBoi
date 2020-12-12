@@ -65,6 +65,7 @@ private:
 	int seconds=5;
 	Vector<Coin> coin;
 	bool checkWallBump=false;
+	int lvl=1;
 
 	Vector<PowerUps> ability;
 
@@ -83,6 +84,10 @@ private:
 	void scoreTable();
 
 	void powerUpTimer();
+
+	void level();
+
+	void levelCounter();
 
 	void drawCoin(Coin &goldenCoin);
 
