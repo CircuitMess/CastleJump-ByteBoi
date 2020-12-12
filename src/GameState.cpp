@@ -125,10 +125,10 @@ void GameState::movingRects(Rect &stairs, uint b){
 		currentTime = millis();
 		if(currentTime - previousTime > 1000){
 			previousTime = currentTime;
-			seconds++;
+			seconds--;
 		}
-		if(seconds > 5){
-			seconds = 0;
+		if(seconds < 0){
+			seconds = 5;
 			highspeed = false;
 
 		}
@@ -157,11 +157,11 @@ void GameState::velocity(float dt){
 		currentTime = millis();
 		if(currentTime - previousTime > 1000){
 			previousTime = currentTime;
-			seconds++;
+			seconds--;
 		}
 
-		if(seconds > 5){
-			seconds = 0;
+		if(seconds < 0){
+			seconds = 5;
 			lowGravity = false;
 		}
 	}

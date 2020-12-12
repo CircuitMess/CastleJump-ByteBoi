@@ -62,7 +62,7 @@ private:
 	bool lowGravity=false;
 	unsigned long currentTime;
 	unsigned long previousTime=0;
-	int seconds=0;
+	int seconds=5;
 	Vector<Coin> coin;
 	bool checkWallBump=false;
 
