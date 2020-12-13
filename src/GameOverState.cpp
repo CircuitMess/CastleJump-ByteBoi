@@ -38,10 +38,10 @@ void GameOverState::drawGameOver(){
 	baseSprite->setTextSize(2);
 	baseSprite->drawString("Your", 3, 20);
 	baseSprite->drawString("score", 3, 40);
-	baseSprite->drawString("is", 3, 60);
+	baseSprite->drawString("is : ", 3, 60);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(2);
-	baseSprite->drawNumber(score - 0, 70, 40);
+	baseSprite->drawNumber(score - 0, 90, 40);
 	baseSprite->setTextSize(1);
 	baseSprite->setCursor(110, 110);
 	baseSprite->printCenter("A: new game");
