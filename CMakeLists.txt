@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 project(CastleJump) # Project name - has to be same as directory name
-set(PORT COM8) # Upload port
+set(PORT COM4) # Upload port
 set(DEVICE cm:esp8266:nibble) # Arduino device FQBN
 set(CMAKE_CXX_STANDARD 11)
 
@@ -60,5 +60,5 @@ add_custom_target(CMUpload ALL
         DEPENDS CMBuild
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-add_executable(${CMAKE_PROJECT_NAME}.bin ${CMAKE_PROJECT_NAME}.ino ${SOURCES} src/CastleJump.cpp src/CastleJump.h src/State.cpp src/State.h src/GameState.cpp src/GameState.h)
+add_executable(${CMAKE_PROJECT_NAME}.bin ${CMAKE_PROJECT_NAME}.ino ${SOURCES} src/CastleJump.cpp src/CastleJump.h src/State.cpp src/State.h src/GameState.cpp src/GameState.h src/GameOverState.cpp src/GameOverState.h src/Menu.h src/Menu.cpp)
 
