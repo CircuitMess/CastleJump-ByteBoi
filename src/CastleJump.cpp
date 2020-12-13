@@ -3,13 +3,13 @@
 //
 #include "CastleJump.h"
 #include "State.h"
-#include "GameState.h"
+#include "Menu.h"
 
 CastleJump *CastleJump::instance= nullptr;
 
 CastleJump::CastleJump(){
 
-	state=new GameState();
+	state=new Menu();
 	state->enter(*this);
 
 }
