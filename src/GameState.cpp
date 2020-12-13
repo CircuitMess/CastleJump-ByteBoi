@@ -1,6 +1,7 @@
 #include <Nibble.h>
 #include <Arduino.h>
 #include "GameState.h"
+#include "GameOverState.h"
 
 GameState *GameState::instance = nullptr;
 
@@ -26,7 +27,7 @@ GameState::GameState(){
 	dropRect.push_back({70, -45, 20, 2});
 	dropRect.push_back({20, -65, 10, 2});
 	dropRect.push_back({60, -85, 20, 2});
-	dropRect.push_back({80, -105, 10, 2});
+	dropRect.push_back({80, -105, 40, 2});
 
 
 }
@@ -39,6 +40,13 @@ void GameState::enter(CastleJump &gameEnter){
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, buttonLeftPress);
 	Input::getInstance()->setBtnReleaseCallback(BTN_LEFT, buttonLeftRelease);
 
+}
+void GameState::exit(){
+	for(int i = 0; i <dropRect.size(); i++){
+		dropRect.pop_back();
+	}
+	Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
+	Input::getInstance()->removeBtnPressCallback(BTN_LEFT);
 }
 
 void GameState::buttonLeftPress(){
@@ -81,15 +89,15 @@ void GameState::drawAbilityPoint(PowerUps &ability){
 
 
 void GameState::xPosMoving(){
-	if(player.pos.x > 118 ){
-		checkWallBump=true;
-		rightState=false;
+	if(player.pos.x > 118){
+		checkWallBump = true;
+		rightState = false;
 		player.pos.x = 118;
 		player.velocity.x = -100;
 	}
 	if(player.pos.x < 10){
-		checkWallBump=true;
-		leftState=false;
+		checkWallBump = true;
+		leftState = false;
 		player.pos.x = 10;
 		player.velocity.x = 100;
 	}
@@ -103,12 +111,12 @@ void GameState::xPosMoving(){
 
 	}
 	if(rightState){
-		checkWallBump=false;
+		checkWallBump = false;
 		player.velocity.x = 50;
 	}
 
 	if(leftState){
-		checkWallBump=false;
+		checkWallBump = false;
 		player.velocity.x = -50;
 
 	}
@@ -238,27 +246,39 @@ void GameState::scoreTable(){
 	baseSprite->drawString("Score:", 3, 1);
 	baseSprite->drawNumber(score - 0, 38, 1);
 }
+
 void GameState::powerUpTimer(){
 	baseSprite->setTextColor(TFT_BLUE);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
 	baseSprite->drawNumber(seconds - 0, 10, 110);
 }
+
 void GameState::levelCounter(){
-	if(score>=50){
-		lvl=2;
+	if(score >= 50){
+		lvl = 2;
 	}
-	if(score>=100){
-		lvl=3;
+	if(score >= 100){
+		lvl = 3;
 	}
 }
+
 void GameState::level(){
 	baseSprite->setTextColor(TFT_RED);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("Lvl:", 88, 1);
-	baseSprite->drawNumber(lvl - 0, 110, 1);
+	baseSprite->drawString("Lvl:", 100, 1);
+	baseSprite->drawNumber(lvl - 0, 120, 1);
 }
+
+void GameState::lives(){
+	baseSprite->setTextColor(TFT_RED);
+	baseSprite->setTextFont(1);
+	baseSprite->setTextSize(1);
+	baseSprite->drawString("X", 103, 1);
+	baseSprite->drawNumber(livesNum - 0, 110, 1);
+}
+
 
 void GameState::movingCoin(Coin &goldenCoin, uint b){
 	goldenCoin.y += 1.1 * speed * b / 13000;
@@ -294,18 +314,13 @@ void GameState::loop(uint time){
 	}
 	if(player.pos.y > 120){
 		player.pos.y = 120;
-		score = 0;
-		lvl=1;
+		if(firstTouch){
+			castleJump->changeState(new GameOverState(score));
+		}
+		lvl = 1;
 		firstTouch = false;
 		player.velocity.y = -min(player.velocity.y, 130.0f);
 	}
-
-	/*
-	if(player.pos.x < 10){
-		player.pos.x = 10;
-		leftState = false;
-		player.velocity.x = -player.velocity.x;
-	}*/
 	xPosMoving();
 	drawPlayerCircle();
 	for(int i = 0; i < 1; i++){
@@ -329,6 +344,8 @@ void GameState::loop(uint time){
 	}
 	levelCounter();
 	level();
+	//lives();
+
 
 	display->commit();
 }

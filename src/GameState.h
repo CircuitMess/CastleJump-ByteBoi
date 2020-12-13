@@ -37,6 +37,8 @@ public:
 
 	void enter(CastleJump &gameEnter) override;
 
+	void exit() override;
+
 	static void buttonRightPress();
 
 	static void buttonRightRelease();
@@ -58,14 +60,15 @@ private:
 	int score = 0;
 	vec3f gravity = {0, 190, 0};
 	bool firstTouch = false;
-	bool highspeed=false;
-	bool lowGravity=false;
+	bool highspeed = false;
+	bool lowGravity = false;
 	unsigned long currentTime;
-	unsigned long previousTime=0;
-	int seconds=5;
+	unsigned long previousTime = 0;
+	int seconds = 5;
 	Vector<Coin> coin;
-	bool checkWallBump=false;
-	int lvl=1;
+	bool checkWallBump = false;
+	int lvl = 1;
+	int livesNum=3;
 
 	Vector<PowerUps> ability;
 
@@ -89,15 +92,19 @@ private:
 
 	void levelCounter();
 
+	void lives();
+
+	void livesCounter();
+
 	void drawCoin(Coin &goldenCoin);
 
-	void movingCoin(Coin &goldenCoin,uint b);
+	void movingCoin(Coin &goldenCoin, uint b);
 
 	void checkForPoint(Coin &goldenCoin);
 
 	void drawAbilityPoint(PowerUps &ability);
 
-	void movingPowerUps(PowerUps &ability,uint b);
+	void movingPowerUps(PowerUps &ability, uint b);
 
 	void checkForPowerUp(PowerUps &ability);
 };
