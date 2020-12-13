@@ -13,12 +13,12 @@ CastleJump::CastleJump(){
 	state->enter(*this);
 
 }
-/*void JumpingJack::changeState(State *differentState){
+void CastleJump::changeState(State *differentState){
 	state->exit();
 	delete state;
 	state = differentState;
 	state->enter(*this);
-}*/
+}
 void CastleJump::loop(uint time){
 	state->loop(time);
 
