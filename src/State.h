@@ -22,7 +22,7 @@ public:
 
 	virtual void enter(CastleJump &gameEnter) = 0;
 
-
+	virtual void exit()=0;
 
 	virtual void loop(uint) = 0;
 
