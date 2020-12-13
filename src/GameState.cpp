@@ -267,7 +267,7 @@ void GameState::level(){
 	baseSprite->setTextColor(TFT_RED);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("Lvl:", 100, 1);
+	baseSprite->drawString("Lvl:", 95, 1);
 	baseSprite->drawNumber(lvl - 0, 120, 1);
 }
 
