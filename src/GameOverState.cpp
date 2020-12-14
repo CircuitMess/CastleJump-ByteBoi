@@ -1,8 +1,10 @@
 #include "GameOverState.h"
 #include "GameState.h"
 #include "Menu.h"
+#include "Highscore/Highscore.h"
 #include <Nibble.h>
 #include <Arduino.h>
+#include "EnterHighscoreState.h"
 
 GameOverState *GameOverState::instance = nullptr;
 
@@ -58,17 +60,28 @@ void GameOverState::drawGameOver(){
 	baseSprite->printCenter("A: new game B: menu");
 	display->commit();
 
-
 }
 
 void GameOverState::loop(uint time){
 	baseSprite->clear(TFT_BLACK);
-	drawGameOver();
+	if(Highscore.count() > 1){
+		initialValue = false;
+	}
+
 	if(aState){
 		castleJump->changeState(new GameState());
 	}
 	if(bState){
 		castleJump->changeState(new Menu());
+	}
+	if(Highscore.get(4).score > score && Highscore.count()>1){
+		drawGameOver();
+	}
+	if(score > Highscore.get(0).score || initialValue || score > Highscore.get(1).score ||
+	   score > Highscore.get(2).score || score > Highscore.get(3).score ||
+	   score > Highscore.get(4).score){
+		Serial.println(Highscore.get(0).score);
+		castleJump->changeState(new EnterHighscoreState(score));
 	}
 }
 

@@ -1,5 +1,5 @@
 #include "ShowHighscoreState.h"
-
+#include "Highscore/Highscore.h"
 #include "Menu.h"
 
 ShowHighscoreState *ShowHighscoreState::instance = nullptr;
@@ -37,9 +37,13 @@ void ShowHighscoreState::drawHighscore(){
 
 	for(int i=1;i<6;i++){
 		baseSprite->setCursor(6,i*20);
-		if(i <= 6){
-			Serial.println(i);
-			baseSprite->printf("%d. %.3s ",i,"--");
+		if(i <= Highscore.count()){
+			Serial.println(Highscore.get(i).score);
+			baseSprite->printf("%d. %.3s %4d",i,Highscore.get(i-1).name, Highscore.get(i-1).score);
+		}
+		else
+		{
+			baseSprite->printf("%d. ---  -----",i);
 		}
 	}
 

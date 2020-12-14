@@ -29,6 +29,7 @@ private:
 	Sprite *baseSprite;
 	bool aState = false;
 	bool bState = false;
+	bool initialValue=true;
 
 	void drawGameOver();
 

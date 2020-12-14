@@ -60,5 +60,5 @@ add_custom_target(CMUpload ALL
         DEPENDS CMBuild
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-add_executable(${CMAKE_PROJECT_NAME}.bin ${CMAKE_PROJECT_NAME}.ino ${SOURCES} src/CastleJump.cpp src/CastleJump.h src/State.cpp src/State.h src/GameState.cpp src/GameState.h src/GameOverState.cpp src/GameOverState.h src/Menu.h src/Menu.cpp src/ShowHighscoreState.cpp src/ShowHighscoreState.h)
+add_executable(${CMAKE_PROJECT_NAME}.bin ${CMAKE_PROJECT_NAME}.ino ${SOURCES} src/CastleJump.cpp src/CastleJump.h src/State.cpp src/State.h src/GameState.cpp src/GameState.h src/GameOverState.cpp src/GameOverState.h src/Menu.h src/Menu.cpp src/ShowHighscoreState.cpp src/ShowHighscoreState.h src/Highscore/Highscore.cpp src/Highscore/Highscore.h src/EnterHighscoreState.cpp src/EnterHighscoreState.h)
 
