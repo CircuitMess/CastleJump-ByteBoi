@@ -2,6 +2,7 @@
 #include <Nibble.h>
 #include <Arduino.h>
 #include "GameState.h"
+#include "ShowHighscoreState.h"
 
 Menu *Menu::instance = nullptr;
 
@@ -78,7 +79,7 @@ void Menu::drawMenuScreen(){
 	baseSprite->setTextColor(TFT_RED);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(2);
-	baseSprite->drawString("CastleJump", 10, 17);
+	baseSprite->drawString("CastleJump", 8, 17);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
 	baseSprite->drawString("New game", 30, 71);
@@ -92,7 +93,7 @@ void Menu::loop(uint time){
 		castleJump->changeState(new GameState());
 	}
 	if(aState && checkState){
-		castleJump->changeState(new GameState());
+		castleJump->changeState(new ShowHighscoreState());
 	}
 	display->commit();
 }
