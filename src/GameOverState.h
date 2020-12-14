@@ -10,7 +10,11 @@ public:
 
 	static void buttonAPress();
 
+	static void buttonBPress();
+
 	static void buttonARelease();
+
+	static void buttonBRelease();
 
 	void loop(uint time) override;
 
@@ -24,8 +28,10 @@ private:
 	Display *display;
 	Sprite *baseSprite;
 	bool aState = false;
+	bool bState = false;
 
 	void drawGameOver();
+
 	static GameOverState *instance;
 };
 
