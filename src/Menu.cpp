@@ -16,6 +16,8 @@ Menu::Menu(){
 	menuSelect.x = 25;
 	menuSelect.y = 73;
 	menuSelect.color = TFT_RED;
+
+	display->commit();
 }
 void Menu::enter(CastleJump &gameEnter){
 
@@ -86,6 +88,7 @@ void Menu::drawMenuScreen(){
 	baseSprite->drawString("Highscore", 30, 91);
 }
 void Menu::loop(uint time){
+	baseSprite->clear(TFT_BLACK);
 	drawMenuScreen();
 	drawSelection(menuSelect);
 	checkStateAndMove(menuSelect);
