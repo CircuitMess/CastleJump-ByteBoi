@@ -45,7 +45,12 @@ public:
 
 	static void buttonLeftPress();
 
+
 	static void buttonLeftRelease();
+
+	static void buttonBPress();
+
+	static void buttonBRelease();
 
 
 private:
@@ -55,6 +60,7 @@ private:
 	const float speed = 1;
 	bool leftState = false;
 	bool rightState = false;
+	bool bState = false;
 	Vector<Rect> dropRect;
 	Player player;
 	int score = 0;

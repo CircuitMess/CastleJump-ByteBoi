@@ -39,14 +39,18 @@ void GameState::enter(CastleJump &gameEnter){
 	Input::getInstance()->setBtnReleaseCallback(BTN_RIGHT, buttonRightRelease);
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, buttonLeftPress);
 	Input::getInstance()->setBtnReleaseCallback(BTN_LEFT, buttonLeftRelease);
+	Input::getInstance()->setBtnPressCallback(BTN_B, buttonBPress);
+	Input::getInstance()->setBtnReleaseCallback(BTN_B, buttonBRelease);
 
 }
 void GameState::exit(){
-	for(int i = 0; i <dropRect.size(); i++){
-		dropRect.pop_back();
+		for(int i = 0; i < dropRect.size(); i++){
+			dropRect.pop_back();
+
 	}
 	Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
 	Input::getInstance()->removeBtnPressCallback(BTN_LEFT);
+	Input::getInstance()->removeBtnPressCallback(BTN_B);
 }
 
 void GameState::buttonLeftPress(){
@@ -67,6 +71,17 @@ void GameState::buttonRightPress(){
 
 void GameState::buttonRightRelease(){
 	instance->rightState = false;
+
+}
+void GameState::buttonBPress(){
+	instance->bState = true;
+
+}
+
+void GameState::buttonBRelease(){
+
+	instance->bState = false;
+
 
 }
 
@@ -320,6 +335,9 @@ void GameState::loop(uint time){
 		lvl = 1;
 		firstTouch = false;
 		player.velocity.y = -min(player.velocity.y, 130.0f);
+	}
+	if(bState){
+		castleJump->pauseGame();
 	}
 	xPosMoving();
 	drawPlayerCircle();
