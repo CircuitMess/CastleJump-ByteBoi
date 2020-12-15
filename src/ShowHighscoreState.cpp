@@ -1,6 +1,7 @@
 #include "ShowHighscoreState.h"
 #include "Highscore/Highscore.h"
 #include "Menu.h"
+#include "EraseHighscoreState.h"
 
 ShowHighscoreState *ShowHighscoreState::instance = nullptr;
 
@@ -16,7 +17,7 @@ void ShowHighscoreState::enter(CastleJump &gameEnter){
 
 	castleJump=&gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_A,[](){
-		instance->castleJump->changeState(new Menu());
+		instance->castleJump->changeState(new EraseHighscoreState());
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_B,[](){
 		instance->castleJump->changeState(new Menu());
@@ -25,6 +26,7 @@ void ShowHighscoreState::enter(CastleJump &gameEnter){
 void ShowHighscoreState::exit(){
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
+
 
 }
 void ShowHighscoreState::drawHighscore(){
