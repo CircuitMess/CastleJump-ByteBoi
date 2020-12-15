@@ -62,6 +62,11 @@ void EnterHighscoreState::enter(CastleJump &gameEnter){
 		if(instance->name[instance->charCursor] == 31) instance->name[instance->charCursor] = '/';
 		if(instance->name[instance->charCursor] == '@') instance->name[instance->charCursor] = ' ';
 	});
+	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
+		instance->charCursor++;
+		instance->cursorBlink = true;
+		instance->cursorTime = millis();
+	});
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
 		if(instance->charCursor > 0){
 			instance->charCursor--;
@@ -76,11 +81,7 @@ void EnterHighscoreState::enter(CastleJump &gameEnter){
 			instance->cursorTime = millis();
 		}
 	});
-	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
-		instance->charCursor++;
-		instance->cursorBlink = true;
-		instance->cursorTime = millis();
-	});
+
 }
 
 
@@ -96,7 +97,7 @@ void EnterHighscoreState::drawHighscore(){
 		baseSprite->printCenter("NEW HIGH!");
 	}else{
 		baseSprite->setCursor(20, 90);
-		baseSprite->printf("SCORE: %4d", score);
+		baseSprite->printf("SCORE: %3d", score);
 	}
 	baseSprite->setCursor(40, 40);
 	baseSprite->print(name[0]);
@@ -107,11 +108,10 @@ void EnterHighscoreState::drawHighscore(){
 	if(cursorBlink){
 		baseSprite->drawFastHLine(38 + 15 * charCursor, 56, 12, TFT_RED);
 	}
-
-
 }
 
 void EnterHighscoreState::exit(){
+
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
 	Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
 	Input::getInstance()->removeBtnPressCallback(BTN_LEFT);
@@ -141,7 +141,6 @@ void EnterHighscoreState::loop(uint time){
 		newScore.score = score;
 		Highscore.add(newScore);
 		castleJump->changeState(new ShowHighscoreState());
-
 	}
 	display->commit();
 }
