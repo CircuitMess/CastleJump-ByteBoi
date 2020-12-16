@@ -20,7 +20,7 @@ GameState::GameState(){
 
 	coin.push_back({50, -700, 2, TFT_GOLD});
 
-	ability.push_back({50, 0, 2, TFT_BLUE});
+	ability.push_back({50, -1800, 2, TFT_BLUE});
 
 	dropRect.push_back({40, 0, 20, 2});
 	dropRect.push_back({80, -20, 40, 2});
@@ -215,10 +215,10 @@ void GameState::checkForPowerUp(PowerUps &ability){
 		if(randNum == 2){
 			lowGravity = true;
 		}
-		ability.y = 0;
+		ability.y = -1800;
 		float randX = ability.x;
 		do {
-			ability.y = 0;
+			ability.y = -1800;
 			randX = random(10, 110);
 		} while(abs(randX - ability.x > 30));
 		ability.x = randX;
@@ -271,10 +271,10 @@ void GameState::powerUpTimer(){
 }
 
 void GameState::levelCounter(){
-	if(score >= 50){
+	if(score >= 100){
 		lvl = 2;
 	}
-	if(score >= 100){
+	if(score >= 200){
 		lvl = 3;
 	}
 }
@@ -317,6 +317,17 @@ void GameState::movingPowerUps(PowerUps &ability, uint b){
 			randX = random(10, 110);
 		} while(abs(randX - ability.x) > 30);
 		ability.x = randX;
+	}
+}
+void GameState::checkLevel(){
+	if(lvl==1){
+		speed=1;
+	}
+	if(lvl==2){
+		speed=1.2;
+	}
+	if(lvl==3){
+		speed=1.7;
 	}
 }
 
@@ -370,6 +381,7 @@ void GameState::loop(uint time){
 	}
 	levelCounter();
 	level();
+	checkLevel();
 	lives();
 
 
