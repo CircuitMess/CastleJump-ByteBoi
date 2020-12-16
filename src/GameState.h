@@ -64,7 +64,7 @@ private:
 	Vector<Rect> dropRect;
 	Player player;
 	int score = 0;
-	vec3f gravity = {0, 190, 0};
+	vec3f gravity = {0, 400, 0};
 	bool firstTouch = false;
 	bool highspeed = false;
 	bool lowGravity = false;
