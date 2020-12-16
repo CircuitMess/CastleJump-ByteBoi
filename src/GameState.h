@@ -57,7 +57,7 @@ private:
 	static GameState *instance;
 	Display *display;
 	Sprite *baseSprite;
-	const float speed = 1;
+	float speed;
 	bool leftState = false;
 	bool rightState = false;
 	bool bState = false;
@@ -113,6 +113,8 @@ private:
 	void movingPowerUps(PowerUps &ability, uint b);
 
 	void checkForPowerUp(PowerUps &ability);
+
+	void checkLevel();
 };
 
 #endif
