@@ -282,8 +282,8 @@ void GameState::level(){
 	baseSprite->setTextColor(TFT_RED);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("Lvl:", 95, 1);
-	baseSprite->drawNumber(lvl - 0, 120, 1);
+	baseSprite->drawString("Lvl: ", 58, 1);
+	baseSprite->drawNumber(lvl - 0, 83, 1);
 }
 
 void GameState::lives(){
@@ -330,11 +330,18 @@ void GameState::loop(uint time){
 	if(player.pos.y > 120){
 		player.pos.y = 120;
 		if(firstTouch){
-			castleJump->changeState(new GameOverState(score));
+			if(livesNum>0){
+				livesNum--;
+			}
+
 		}
+
+		player.velocity.y = -min(player.velocity.y, 130.0f);
+	}
+	if(livesNum==0){
 		lvl = 1;
 		firstTouch = false;
-		player.velocity.y = -min(player.velocity.y, 130.0f);
+		castleJump->changeState(new GameOverState(score));
 	}
 	if(bState){
 		castleJump->pauseGame();
@@ -362,7 +369,7 @@ void GameState::loop(uint time){
 	}
 	levelCounter();
 	level();
-	//lives();
+	lives();
 
 
 	display->commit();
