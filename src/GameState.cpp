@@ -175,7 +175,7 @@ void GameState::velocity(float dt){
 		player.velocity += gravity * dt;
 	}
 	if(lowGravity){
-		player.velocity += gravity * 0.5 * dt;
+		player.velocity += gravity * 0.3 * dt;
 		currentTime = millis();
 		if(currentTime - previousTime > 1000){
 			previousTime = currentTime;
