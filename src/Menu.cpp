@@ -28,6 +28,11 @@ void Menu::enter(CastleJump &gameEnter){
 	Input::getInstance()->setBtnReleaseCallback(BTN_UP, buttonUpRelease);
 	Input::getInstance()->setBtnPressCallback(BTN_DOWN, buttonDownPress);
 	Input::getInstance()->setBtnReleaseCallback(BTN_DOWN, buttonDownRelease);
+	Input::getInstance()->setBtnPressCallback(BTN_LEFT, buttonDownPress);
+	Input::getInstance()->setBtnReleaseCallback(BTN_LEFT, buttonDownRelease);
+	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, buttonUpPress);
+	Input::getInstance()->setBtnReleaseCallback(BTN_RIGHT, buttonUpRelease);
+
 
 }
 void Menu::exit(){
