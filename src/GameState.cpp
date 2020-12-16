@@ -20,7 +20,7 @@ GameState::GameState(){
 
 	coin.push_back({50, -700, 2, TFT_GOLD});
 
-	ability.push_back({50, -1800, 2, TFT_BLUE});
+	ability.push_back({50, 0, 2, TFT_BLUE});
 
 	dropRect.push_back({40, 0, 20, 2});
 	dropRect.push_back({80, -20, 40, 2});
@@ -144,7 +144,7 @@ void GameState::movingRects(Rect &stairs, uint b){
 		stairs.y += 0.6 * speed * b / 13000;
 	}
 	if(highspeed){
-		stairs.y += 1.5 * speed * b / 13000;
+		stairs.y += 0.8 * speed * b / 13000;
 		currentTime = millis();
 		if(currentTime - previousTime > 1000){
 			previousTime = currentTime;
@@ -171,7 +171,7 @@ void GameState::movingRects(Rect &stairs, uint b){
 
 void GameState::velocity(float dt){
 	player.pos += player.velocity * dt;
-	if(!lowGravity){
+	if(!lowGravity ){
 		player.velocity += gravity * dt;
 	}
 	if(lowGravity){
@@ -187,6 +187,7 @@ void GameState::velocity(float dt){
 			lowGravity = false;
 		}
 	}
+
 }
 
 
@@ -214,10 +215,10 @@ void GameState::checkForPowerUp(PowerUps &ability){
 		if(randNum == 2){
 			lowGravity = true;
 		}
-		ability.y = -1800;
+		ability.y = 0;
 		float randX = ability.x;
 		do {
-			ability.y = -1800;
+			ability.y = 0;
 			randX = random(10, 110);
 		} while(abs(randX - ability.x > 30));
 		ability.x = randX;
@@ -232,7 +233,7 @@ void GameState::checkForCollision(Rect &stairs){
 		float distX = abs(player.pos.x - stairs.x - 10);
 		float distY = abs(player.pos.y - stairs.y - 1);
 		if((distX <= 11 && distY <= 4)){
-			player.velocity.y = -min(player.velocity.y, 130.0f);
+			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
 		}
 	}
@@ -240,7 +241,7 @@ void GameState::checkForCollision(Rect &stairs){
 		float distX = abs(player.pos.x - stairs.x - 20);
 		float distY = abs(player.pos.y - stairs.y - 1);
 		if((distX <= 21 && distY <= 4)){
-			player.velocity.y = -min(player.velocity.y, 130.0f);
+			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
 		}
 	}
@@ -248,7 +249,7 @@ void GameState::checkForCollision(Rect &stairs){
 		float distX = abs(player.pos.x - stairs.x - 5);
 		float distY = abs(player.pos.y - stairs.y - 1);
 		if((distX <= 6 && distY <= 4)){
-			player.velocity.y = -min(player.velocity.y, 130.0f);
+			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
 		}
 	}
@@ -336,7 +337,7 @@ void GameState::loop(uint time){
 
 		}
 
-		player.velocity.y = -min(player.velocity.y, 130.0f);
+		player.velocity.y = -min(player.velocity.y, 200.0f);
 	}
 	if(livesNum==0){
 		lvl = 1;
