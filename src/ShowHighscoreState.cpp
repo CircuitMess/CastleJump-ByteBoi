@@ -2,7 +2,7 @@
 #include "Highscore/Highscore.h"
 #include "Menu.h"
 #include "EraseHighscoreState.h"
-
+#include "Melodies/Notes.hpp"
 ShowHighscoreState *ShowHighscoreState::instance = nullptr;
 
 ShowHighscoreState::ShowHighscoreState(){
@@ -16,16 +16,26 @@ ShowHighscoreState::ShowHighscoreState(){
 void ShowHighscoreState::enter(CastleJump &gameEnter){
 
 	castleJump=&gameEnter;
-	Input::getInstance()->setBtnPressCallback(BTN_A,[](){
+	Input::getInstance()->setBtnPressCallback(BTN_UP,[](){
+		Piezo.tone(NOTE_B7,100);
 		instance->castleJump->changeState(new EraseHighscoreState());
 	});
+	Input::getInstance()->setBtnPressCallback(BTN_A,[](){
+		Piezo.tone(NOTE_B6,25);
+		instance->castleJump->changeState(new Menu());
+	});
 	Input::getInstance()->setBtnPressCallback(BTN_B,[](){
+		Piezo.tone(NOTE_B6,25);
 		instance->castleJump->changeState(new Menu());
 	});
 }
 void ShowHighscoreState::exit(){
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
+	Input::getInstance()->removeBtnPressCallback(BTN_UP);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_UP);
 
 
 }

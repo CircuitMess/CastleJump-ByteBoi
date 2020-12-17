@@ -1,8 +1,7 @@
 #include "EraseHighscoreState.h"
 #include "Highscore/Highscore.h"
 #include "ShowHighscoreState.h"
-#include "Menu.h"
-
+#include "Melodies/Notes.hpp"
 
 EraseHighscoreState *EraseHighscoreState::instance = nullptr;
 
@@ -15,21 +14,24 @@ EraseHighscoreState::EraseHighscoreState(){
 }
 
 void EraseHighscoreState::enter(CastleJump &gameEnter){
-	Piezo.setMute(true);
 	castleJump = &gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
 		Highscore.clear();
-		instance->castleJump->changeState(new Menu());
+		instance->castleJump->changeState(new ShowHighscoreState());
+		Piezo.tone(NOTE_B6,25);
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_B, [](){
 		instance->castleJump->changeState(new ShowHighscoreState());
+		Piezo.tone(NOTE_B6,25);
 	});
 }
 
 void EraseHighscoreState::exit(){
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
-	Piezo.setMute(false);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
+
 }
 
 void EraseHighscoreState::drawWarning(){
@@ -44,9 +46,10 @@ void EraseHighscoreState::drawWarning(){
 	baseSprite->setTextSize(1);
 	baseSprite->setCursor(110, 110);
 	baseSprite->printCenter("A: delete  B: back");
-	display->commit();
+
 }
 void EraseHighscoreState::loop(uint time){
+	baseSprite->clear(TFT_BLACK);
 	drawWarning();
-
+	display->commit();
 }

@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include "ShowHighscoreState.h"
 #include "GameOverState.h"
+#include "Melodies/Notes.hpp"
 
 EnterHighscoreState *EnterHighscoreState::instance = nullptr;
 
@@ -16,7 +17,7 @@ EnterHighscoreState::EnterHighscoreState(int highscoreScore){
 	cursorTime = 0;
 	hiscoreTime = 0;
 	cursorBlink = true;
-	hiscoreBlink = 0;
+	hiscoreBlink = false;
 	name = new char[4];
 	strncpy(name, "AAA\0", sizeof(name));
 	instance = this;
@@ -29,6 +30,7 @@ void EnterHighscoreState::enter(CastleJump &gameEnter){
 		instance->cursorBlink = true;
 		instance->cursorTime = millis();
 		instance->name[instance->charCursor]++;
+		Piezo.tone(NOTE_B6,25);
 		if(instance->name[instance->charCursor] == '0') instance->name[instance->charCursor] = ' ';
 		if(instance->name[instance->charCursor] == '!') instance->name[instance->charCursor] = 'A';
 		if(instance->name[instance->charCursor] == '[') instance->name[instance->charCursor] = '0';
@@ -39,6 +41,7 @@ void EnterHighscoreState::enter(CastleJump &gameEnter){
 		instance->cursorBlink = true;
 		instance->cursorTime = millis();
 		instance->name[instance->charCursor]++;
+		Piezo.tone(NOTE_B6,25);
 		if(instance->name[instance->charCursor] == '0') instance->name[instance->charCursor] = ' ';
 		if(instance->name[instance->charCursor] == '!') instance->name[instance->charCursor] = 'A';
 		if(instance->name[instance->charCursor] == '[') instance->name[instance->charCursor] = '0';
@@ -48,6 +51,7 @@ void EnterHighscoreState::enter(CastleJump &gameEnter){
 		instance->cursorBlink = true;
 		instance->cursorTime = millis();
 		instance->name[instance->charCursor]--;
+		Piezo.tone(NOTE_B6,25);
 		if(instance->name[instance->charCursor] == ' ') instance->name[instance->charCursor] = '?';
 		if(instance->name[instance->charCursor] == '/') instance->name[instance->charCursor] = 'Z';
 		if(instance->name[instance->charCursor] == 31) instance->name[instance->charCursor] = '/';
@@ -57,6 +61,7 @@ void EnterHighscoreState::enter(CastleJump &gameEnter){
 		instance->cursorBlink = true;
 		instance->cursorTime = millis();
 		instance->name[instance->charCursor]--;
+		Piezo.tone(NOTE_B6,25);
 		if(instance->name[instance->charCursor] == ' ') instance->name[instance->charCursor] = '?';
 		if(instance->name[instance->charCursor] == '/') instance->name[instance->charCursor] = 'Z';
 		if(instance->name[instance->charCursor] == 31) instance->name[instance->charCursor] = '/';
@@ -66,12 +71,14 @@ void EnterHighscoreState::enter(CastleJump &gameEnter){
 		instance->charCursor++;
 		instance->cursorBlink = true;
 		instance->cursorTime = millis();
+		Piezo.tone(NOTE_B6,25);
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
 		if(instance->charCursor > 0){
 			instance->charCursor--;
 			instance->cursorBlink = true;
 			instance->cursorTime = millis();
+			Piezo.tone(NOTE_B6,25);
 		}
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
@@ -79,6 +86,7 @@ void EnterHighscoreState::enter(CastleJump &gameEnter){
 			instance->charCursor++;
 			instance->cursorBlink = true;
 			instance->cursorTime = millis();
+			Piezo.tone(NOTE_B6,25);
 		}
 	});
 
@@ -113,13 +121,17 @@ void EnterHighscoreState::drawHighscore(){
 void EnterHighscoreState::exit(){
 
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
 	Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_RIGHT);
 	Input::getInstance()->removeBtnPressCallback(BTN_LEFT);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_LEFT);
 	Input::getInstance()->removeBtnPressCallback(BTN_DOWN);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_DOWN);
 	Input::getInstance()->removeBtnPressCallback(BTN_UP);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_UP);
 	Input::getInstance()->setButtonHeldRepeatCallback(BTN_UP, 0, nullptr);
 	Input::getInstance()->setButtonHeldRepeatCallback(BTN_DOWN, 0, nullptr);
-
 }
 
 void EnterHighscoreState::loop(uint time){
@@ -135,7 +147,7 @@ void EnterHighscoreState::loop(uint time){
 		cursorTime = 0;
 		cursorBlink = !cursorBlink;
 	}
-	if(charCursor >= 3){
+	if(charCursor >2 || charCursor<0){
 		Score newScore{};
 		strcpy(newScore.name, name);
 		newScore.score = score;

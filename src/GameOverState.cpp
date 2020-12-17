@@ -5,6 +5,7 @@
 #include <Nibble.h>
 #include <Arduino.h>
 #include "EnterHighscoreState.h"
+#include "Melodies/Notes.hpp"
 
 GameOverState *GameOverState::instance = nullptr;
 
@@ -20,6 +21,7 @@ void GameOverState::enter(CastleJump &gameEnter){
 
 	castleJump = &gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_A, buttonAPress);
+
 	Input::getInstance()->setBtnPressCallback(BTN_B, buttonBPress);
 }
 
@@ -42,11 +44,13 @@ void GameOverState::buttonBRelease(){
 void GameOverState::exit(){
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
 	score = 0;
 }
 
 void GameOverState::drawGameOver(){
-	baseSprite->setTextSize(TFT_WHITE);
+	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(3);
 	baseSprite->drawString("Game", 30, 20);
@@ -67,21 +71,23 @@ void GameOverState::loop(uint time){
 	if(Highscore.count() > 1){
 		initialValue = false;
 	}
-
-	if(aState){
-		castleJump->changeState(new GameState());
-	}
-	if(bState){
-		castleJump->changeState(new Menu());
-	}
-	if(Highscore.get(4).score > score && Highscore.count()>1){
-		drawGameOver();
-	}
 	if(score > Highscore.get(0).score || initialValue || score > Highscore.get(1).score ||
 	   score > Highscore.get(2).score || score > Highscore.get(3).score ||
-	   score > Highscore.get(4).score){
+	   score >= Highscore.get(4).score){
 		Serial.println(Highscore.get(0).score);
 		castleJump->changeState(new EnterHighscoreState(score));
+	}else{
+		if(Highscore.get(4).score > score && Highscore.count()>1 ){
+			drawGameOver();
+		}
+		if(aState){
+			Piezo.tone(NOTE_B6,25);
+			castleJump->changeState(new GameState());
+		}
+		if(bState){
+			Piezo.tone(NOTE_B6,25);
+			castleJump->changeState(new Menu());
+		}
 	}
 }
 
