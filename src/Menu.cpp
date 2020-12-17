@@ -3,6 +3,9 @@
 #include <Arduino.h>
 #include "GameState.h"
 #include "ShowHighscoreState.h"
+#include "Melodies/Notes.hpp"
+#include "bitmaps/player.hpp"
+#include "bitmaps/home_screen.hpp"
 
 Menu *Menu::instance = nullptr;
 
@@ -13,12 +16,13 @@ Menu::Menu(){
 
 	instance = this;
 
-	menuSelect.x = 25;
-	menuSelect.y = 73;
+	menuSelect.x = 20;
+	menuSelect.y = 100;
 	menuSelect.color = TFT_RED;
 
 	display->commit();
 }
+
 void Menu::enter(CastleJump &gameEnter){
 
 	castleJump = &gameEnter;
@@ -35,11 +39,17 @@ void Menu::enter(CastleJump &gameEnter){
 
 
 }
+
 void Menu::exit(){
+
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
 	Input::getInstance()->removeBtnPressCallback(BTN_UP);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_UP);
 	Input::getInstance()->removeBtnPressCallback(BTN_DOWN);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_DOWN);
 }
+
 void Menu::buttonAPress(){
 	instance->aState = true;
 
@@ -49,6 +59,7 @@ void Menu::buttonARelease(){
 	instance->aState = false;
 
 }
+
 void Menu::buttonUpPress(){
 	instance->upState = true;
 
@@ -68,39 +79,45 @@ void Menu::buttonDownRelease(){
 	instance->downState = false;
 
 }
+
 void Menu::drawSelection(MenuSelection &menuSelect){
-	baseSprite->drawRect(menuSelect.x,menuSelect.y,70,16,menuSelect.color);
+	baseSprite->drawIcon(icon_player,menuSelect.x, menuSelect.y, 8,8);
 }
+
 void Menu::checkStateAndMove(MenuSelection &menuSelect){
-	if (upState){
-		menuSelect.y=73;
-		checkState=false;
+	if(upState){
+
+		menuSelect.y = 100;
+		checkState = false;
 	}
-	if (downState){
-		menuSelect.y=93;
-		checkState=true;
+	if(downState){
+
+		menuSelect.y = 115;
+		checkState = true;
 	}
 }
+
 void Menu::drawMenuScreen(){
 	baseSprite->clear(TFT_BLACK);
-	baseSprite->setTextColor(TFT_RED);
-	baseSprite->setTextFont(1);
-	baseSprite->setTextSize(2);
-	baseSprite->drawString("CastleJump", 8, 17);
+	baseSprite->drawIcon(homescreen,0,0,128,128);
+	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("New game", 30, 71);
-	baseSprite->drawString("Highscore", 30, 91);
+	baseSprite->drawString("New game", 30, 96);
+	baseSprite->drawString("Highscore", 30, 111);
 }
+
 void Menu::loop(uint time){
 	baseSprite->clear(TFT_BLACK);
 	drawMenuScreen();
 	drawSelection(menuSelect);
 	checkStateAndMove(menuSelect);
 	if(aState && !checkState){
+		Piezo.tone(NOTE_B6,25);
 		castleJump->changeState(new GameState());
 	}
 	if(aState && checkState){
+		Piezo.tone(NOTE_B6,25);
 		castleJump->changeState(new ShowHighscoreState());
 	}
 	display->commit();
