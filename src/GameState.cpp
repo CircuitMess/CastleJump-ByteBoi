@@ -18,6 +18,7 @@
 #include "bitmaps/platform3_1.hpp"
 #include "bitmaps/platform3_2.hpp"
 #include "bitmaps/platform3_4.hpp"
+#include "bitmaps/lava.hpp"
 
 
 GameState *GameState::instance = nullptr;
@@ -158,7 +159,12 @@ void GameState::drawWalls(){
 }
 
 void GameState::drawFloor(){
-	baseSprite->drawIcon(icon_floor, 0, 118, 128, 10);
+	if(!firstTouch){
+		baseSprite->drawIcon(icon_floor, 0, 118, 128, 10);
+	}else if(firstTouch){
+		baseSprite->drawIcon(icon_lava, 0, 118, 128, 10);
+
+	}
 }
 
 
@@ -409,8 +415,13 @@ void GameState::loop(uint time){
 	for(int i = 0; i < dropRect.size(); ++i){
 		checkForCollision(dropRect[i]);
 	}
-	if(player.pos.y > 115){
+	if(!firstTouch && player.pos.y > 115){
 		player.pos.y = 115;
+		Piezo.tone(NOTE_E5, 100);
+		player.velocity.y = -min(player.velocity.y, 200.0f);
+	}
+	if(firstTouch && player.pos.y > 120){
+		player.pos.y = 120;
 		Piezo.tone(NOTE_E5, 100);
 		if(firstTouch){
 			if(livesNum > 0){
