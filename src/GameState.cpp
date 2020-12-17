@@ -8,6 +8,7 @@
 #include "bitmaps/power_up.hpp"
 #include "bitmaps/leftWall.hpp"
 #include "bitmaps/rightWall.hpp"
+#include "bitmaps/floor.hpp"
 
 
 GameState *GameState::instance = nullptr;
@@ -128,6 +129,9 @@ void GameState::drawWalls(){
 	baseSprite->drawIcon(rightWall,123,0,5,128);
 
 }
+void GameState::drawFloor(){
+	baseSprite->drawIcon(icon_floor,0,118,128,10);
+}
 
 
 void GameState::xPosMoving(){
@@ -182,7 +186,7 @@ void GameState::movingRects(Rect &stairs, uint b){
 			highspeed = false;
 		}
 	}
-	if(stairs.y > 126){
+	if(stairs.y > 117){
 		if(firstTouch){
 			score++;
 		}
@@ -335,7 +339,7 @@ void GameState::lives(){
 
 void GameState::movingCoin(Coin &goldenCoin, uint b){
 	goldenCoin.y += 1.1 * speed * b / 13000;
-	if(goldenCoin.y > 126){
+	if(goldenCoin.y > 117){
 		float randX = goldenCoin.x;
 		do {
 			goldenCoin.y = -700;
@@ -347,7 +351,7 @@ void GameState::movingCoin(Coin &goldenCoin, uint b){
 
 void GameState::movingPowerUps(PowerUps &ability, uint b){
 	ability.y += 1.1 * speed * b / 13000;
-	if(ability.y > 126){
+	if(ability.y > 117){
 		float randX;
 		do {
 			ability.y = -1800;
@@ -377,8 +381,8 @@ void GameState::loop(uint time){
 	for(int i = 0; i < dropRect.size(); ++i){
 		checkForCollision(dropRect[i]);
 	}
-	if(player.pos.y > 120){
-		player.pos.y = 121;
+	if(player.pos.y > 115){
+		player.pos.y = 115;
 		Piezo.tone(NOTE_E5, 100);
 		if(firstTouch){
 			if(livesNum > 0){
@@ -402,6 +406,7 @@ void GameState::loop(uint time){
 	xPosMoving();
 	drawPlayerCircle();
 	drawWalls();
+	drawFloor();
 	for(int i = 0; i < 1; i++){
 		drawCoin(coin[0]);
 		movingCoin(coin[0], time);
