@@ -9,6 +9,13 @@
 #include "bitmaps/leftWall.hpp"
 #include "bitmaps/rightWall.hpp"
 #include "bitmaps/floor.hpp"
+#include "bitmaps/platform1_1.hpp"
+#include "bitmaps/platform1_2.hpp"
+#include "bitmaps/platform1_4.hpp"
+#include "bitmaps/platform2_1.hpp"
+#include "bitmaps/platform2_2.hpp"
+#include "bitmaps/platform2_4.hpp"
+
 
 
 GameState *GameState::instance = nullptr;
@@ -43,7 +50,6 @@ GameState::GameState(){
 void GameState::enter(CastleJump &gameEnter){
 
 	castleJump = &gameEnter;
-
 
 	for(int i = 0; i < dropRect.size(); ++i){
 		dropRect[i].x;
@@ -118,7 +124,28 @@ void GameState::drawCoin(Coin &goldenCoin){
 }
 
 void GameState::drawRect(Rect &stairs){
-	baseSprite->fillRect(stairs.x, stairs.y, stairs.w, stairs.h, TFT_RED);
+	if(lvl==1 && stairs.w==10){
+		baseSprite->drawIcon(icon_platform1_1,stairs.x, stairs.y, stairs.w, stairs.h);
+	}
+	else if(lvl==1 && stairs.w==20){
+		baseSprite->drawIcon(icon_platform1_2,stairs.x, stairs.y, stairs.w, stairs.h);
+	}
+	else if(lvl==1 && stairs.w==40){
+		baseSprite->drawIcon(icon_platform1_4,stairs.x, stairs.y, stairs.w, stairs.h);
+	}
+	else if(lvl==2 && stairs.w==10){
+		baseSprite->drawIcon(icon_platform2_1,stairs.x, stairs.y, stairs.w, stairs.h);
+	}
+	else if(lvl==2 && stairs.w==20){
+		baseSprite->drawIcon(icon_platform2_2,stairs.x, stairs.y, stairs.w, stairs.h);
+	}
+	else if(lvl==2 && stairs.w==40){
+		baseSprite->drawIcon(icon_platform2_4,stairs.x, stairs.y, stairs.w, stairs.h);
+	}
+
+	else{
+		baseSprite->fillRect(stairs.x, stairs.y, stairs.w, stairs.h,TFT_RED);
+	}
 }
 
 void GameState::drawAbilityPoint(PowerUps &ability){
@@ -419,6 +446,7 @@ void GameState::loop(uint time){
 		drawRect(dropRect[i]);
 
 	}
+
 	for(int i = 0; i < 1; i++){
 		drawAbilityPoint(ability[i]);
 		movingPowerUps(ability[i], time);
