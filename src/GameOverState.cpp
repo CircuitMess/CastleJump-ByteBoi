@@ -6,6 +6,7 @@
 #include <Arduino.h>
 #include "EnterHighscoreState.h"
 #include "Melodies/Notes.hpp"
+#include "bitmaps/game_over.hpp"
 
 GameOverState *GameOverState::instance = nullptr;
 
@@ -51,16 +52,13 @@ void GameOverState::exit(){
 
 void GameOverState::drawGameOver(){
 	baseSprite->setTextColor(TFT_WHITE);
-	baseSprite->setTextFont(1);
-	baseSprite->setTextSize(3);
-	baseSprite->drawString("Game", 30, 20);
-	baseSprite->drawString("Over", 30, 40);
+	baseSprite->drawIcon(game_over,0,0,128,128);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("Score : ",30,70);
-	baseSprite->drawNumber(score - 0, 80, 70);
+	baseSprite->drawString("Score : ",40,30);
+	baseSprite->drawNumber(score - 0, 90, 30);
 	baseSprite->setTextSize(1);
-	baseSprite->setCursor(110, 110);
+	baseSprite->setCursor(110, 1);
 	baseSprite->printCenter("A: new game B: menu");
 	display->commit();
 
