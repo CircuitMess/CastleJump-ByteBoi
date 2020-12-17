@@ -15,7 +15,9 @@
 #include "bitmaps/platform2_1.hpp"
 #include "bitmaps/platform2_2.hpp"
 #include "bitmaps/platform2_4.hpp"
-
+#include "bitmaps/platform3_1.hpp"
+#include "bitmaps/platform3_2.hpp"
+#include "bitmaps/platform3_4.hpp"
 
 
 GameState *GameState::instance = nullptr;
@@ -116,48 +118,47 @@ void GameState::buttonBRelease(){
 }
 
 void GameState::drawPlayerCircle(){
-	baseSprite->drawIcon(icon_player,player.pos.x, player.pos.y,8,8 );
+	baseSprite->drawIcon(icon_player, player.pos.x, player.pos.y, 8, 8);
 }
 
 void GameState::drawCoin(Coin &goldenCoin){
-	baseSprite->drawIcon(icon_coin,goldenCoin.x, goldenCoin.y, 5,5);
+	baseSprite->drawIcon(icon_coin, goldenCoin.x, goldenCoin.y, 5, 5);
 }
 
 void GameState::drawRect(Rect &stairs){
-	if(lvl==1 && stairs.w==10){
-		baseSprite->drawIcon(icon_platform1_1,stairs.x, stairs.y, stairs.w, stairs.h);
-	}
-	else if(lvl==1 && stairs.w==20){
-		baseSprite->drawIcon(icon_platform1_2,stairs.x, stairs.y, stairs.w, stairs.h);
-	}
-	else if(lvl==1 && stairs.w==40){
-		baseSprite->drawIcon(icon_platform1_4,stairs.x, stairs.y, stairs.w, stairs.h);
-	}
-	else if(lvl==2 && stairs.w==10){
-		baseSprite->drawIcon(icon_platform2_1,stairs.x, stairs.y, stairs.w, stairs.h);
-	}
-	else if(lvl==2 && stairs.w==20){
-		baseSprite->drawIcon(icon_platform2_2,stairs.x, stairs.y, stairs.w, stairs.h);
-	}
-	else if(lvl==2 && stairs.w==40){
-		baseSprite->drawIcon(icon_platform2_4,stairs.x, stairs.y, stairs.w, stairs.h);
-	}
-
-	else{
-		baseSprite->fillRect(stairs.x, stairs.y, stairs.w, stairs.h,TFT_RED);
+	if(lvl == 1 && stairs.w == 10){
+		baseSprite->drawIcon(icon_platform1_1, stairs.x, stairs.y, stairs.w, stairs.h);
+	}else if(lvl == 1 && stairs.w == 20){
+		baseSprite->drawIcon(icon_platform1_2, stairs.x, stairs.y, stairs.w, stairs.h);
+	}else if(lvl == 1 && stairs.w == 40){
+		baseSprite->drawIcon(icon_platform1_4, stairs.x, stairs.y, stairs.w, stairs.h);
+	}else if(lvl == 2 && stairs.w == 10){
+		baseSprite->drawIcon(icon_platform2_1, stairs.x, stairs.y, stairs.w, stairs.h);
+	}else if(lvl == 2 && stairs.w == 20){
+		baseSprite->drawIcon(icon_platform2_2, stairs.x, stairs.y, stairs.w, stairs.h);
+	}else if(lvl == 2 && stairs.w == 40){
+		baseSprite->drawIcon(icon_platform2_4, stairs.x, stairs.y, stairs.w, stairs.h);
+	}else if(lvl == 3 && stairs.w == 10){
+		baseSprite->drawIcon(icon_platform3_1, stairs.x, stairs.y, stairs.w, stairs.h);
+	}else if(lvl == 3 && stairs.w == 20){
+		baseSprite->drawIcon(icon_platform3_2, stairs.x, stairs.y, stairs.w, stairs.h);
+	}else if(lvl == 3 && stairs.w == 40){
+		baseSprite->drawIcon(icon_platform3_4, stairs.x, stairs.y, stairs.w, stairs.h);
 	}
 }
 
 void GameState::drawAbilityPoint(PowerUps &ability){
-	baseSprite->drawIcon(power_up,ability.x, ability.y, 5,5);
+	baseSprite->drawIcon(power_up, ability.x, ability.y, 5, 5);
 }
+
 void GameState::drawWalls(){
-	baseSprite->drawIcon(leftWall,0,0,5,128);
-	baseSprite->drawIcon(rightWall,123,0,5,128);
+	baseSprite->drawIcon(leftWall, 0, 0, 5, 128);
+	baseSprite->drawIcon(rightWall, 123, 0, 5, 128);
 
 }
+
 void GameState::drawFloor(){
-	baseSprite->drawIcon(icon_floor,0,118,128,10);
+	baseSprite->drawIcon(icon_floor, 0, 118, 128, 10);
 }
 
 
@@ -252,8 +253,8 @@ void GameState::velocity(float dt){
 void GameState::checkForPoint(Coin &goldenCoin){
 	if(abs(player.pos.x - goldenCoin.x) == 0 && abs((player.pos.y - goldenCoin.y) == 0) ||
 	   (abs(player.pos.x - goldenCoin.x) + abs((player.pos.y - goldenCoin.y))) <= 5){
-		Piezo.tone(NOTE_B5,100);
-		Piezo.tone(NOTE_E6,150);
+		Piezo.tone(NOTE_B5, 100);
+		Piezo.tone(NOTE_E6, 150);
 		score = score + 5;
 		goldenCoin.y = -700;
 		float randX = goldenCoin.x;
