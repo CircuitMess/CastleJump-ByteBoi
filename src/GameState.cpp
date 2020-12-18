@@ -304,7 +304,7 @@ void GameState::checkForCollision(Rect &stairs){
 	if(stairs.w == 20){
 		float distX = abs(player.pos.x - stairs.x - 10);
 		float distY = abs(player.pos.y - stairs.y - 1);
-		if((distX <= 11 && distY <= 4)){
+		if((distX <= 11 && distY <= 5)){
 
 			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
@@ -315,7 +315,7 @@ void GameState::checkForCollision(Rect &stairs){
 	if(stairs.w == 40){
 		float distX = abs(player.pos.x - stairs.x - 20);
 		float distY = abs(player.pos.y - stairs.y - 1);
-		if((distX <= 21 && distY <= 4)){
+		if((distX <= 21 && distY <= 5)){
 
 			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
@@ -325,7 +325,7 @@ void GameState::checkForCollision(Rect &stairs){
 	if(stairs.w == 10){
 		float distX = abs(player.pos.x - stairs.x - 5);
 		float distY = abs(player.pos.y - stairs.y - 1);
-		if((distX <= 6 && distY <= 4)){
+		if((distX <= 6 && distY <= 5)){
 
 			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
@@ -438,8 +438,8 @@ void GameState::loop(uint time){
 		drawRect(dropRect[i]);
 		checkForCollision(dropRect[i]);
 	}
-	if(!firstTouch && player.pos.y > 115){
-		player.pos.y = 115;
+	if(!firstTouch && player.pos.y > 112){
+		player.pos.y = 112;
 		Piezo.tone(NOTE_E5, 100);
 		player.velocity.y = -min(player.velocity.y, 200.0f);
 	}
