@@ -231,7 +231,7 @@ void GameState::movingRects(Rect &stairs, uint b){
 		float randX;
 		do {
 			stairs.y = 0;
-			randX = random(10, 110);
+			randX = random(10, 90);
 		} while(abs(randX - stairs.x > 30));
 		stairs.x = randX;
 	}
