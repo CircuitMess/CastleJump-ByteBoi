@@ -4,6 +4,7 @@
 #include "State.h"
 #include <Motion/vec.hpp>
 
+
 struct Player {
 	vec3f pos;
 	vec3f velocity;
@@ -53,7 +54,9 @@ public:
 	static void buttonBRelease();
 
 
+
 private:
+
 	static GameState *instance;
 	Display *display;
 	Sprite *baseSprite;
@@ -76,7 +79,7 @@ private:
 	int lvl = 1;
 	int livesNum=3;
 
-	Vector<PowerUps> ability;
+	Vector<PowerUps> powerUp;
 
 	void drawPlayerCircle();
 
@@ -100,21 +103,23 @@ private:
 
 	void lives();
 
-	void livesCounter();
-
 	void drawCoin(Coin &goldenCoin);
 
 	void movingCoin(Coin &goldenCoin, uint b);
 
 	void checkForPoint(Coin &goldenCoin);
 
-	void drawAbilityPoint(PowerUps &ability);
+	void drawAbilityPoint(PowerUps &powerUp);
 
-	void movingPowerUps(PowerUps &ability, uint b);
+	void movingPowerUps(PowerUps &powerUp, uint b);
 
-	void checkForPowerUp(PowerUps &ability);
+	void checkForPowerUp(PowerUps &powerUp);
 
 	void checkLevel();
+
+	void drawWalls();
+
+	void drawFloor();
 };
 
 #endif

@@ -38,7 +38,7 @@ GameState::GameState(){
 
 	coin.push_back({50, -700, 2, TFT_GOLD});
 
-	ability.push_back({50, -1800, 2, TFT_BLUE});
+	powerUp.push_back({50, -1800, 2, TFT_BLUE});
 
 	dropRect.push_back({40, 0, 20, 2});
 	dropRect.push_back({80, -20, 40, 2});
@@ -183,25 +183,18 @@ void GameState::xPosMoving(){
 	}
 	if(!rightState && !checkWallBump){
 		player.velocity.x = 0;
-
 	}
-
 	if(!leftState && !checkWallBump){
 		player.velocity.x = 0;
-
 	}
 	if(rightState){
 		checkWallBump = false;
 		player.velocity.x = 50;
 	}
-
 	if(leftState){
 		checkWallBump = false;
 		player.velocity.x = -50;
-
 	}
-
-
 }
 
 void GameState::movingRects(Rect &stairs, uint b){
@@ -224,7 +217,7 @@ void GameState::movingRects(Rect &stairs, uint b){
 		if(firstTouch){
 			score++;
 		}
-		float randX = stairs.x;
+		float randX;
 		do {
 			stairs.y = 0;
 			randX = random(10, 110);
@@ -263,7 +256,7 @@ void GameState::checkForPoint(Coin &goldenCoin){
 		Piezo.tone(NOTE_E6, 150);
 		score = score + 5;
 		goldenCoin.y = -700;
-		float randX = goldenCoin.x;
+		float randX;
 		do {
 			goldenCoin.y = -700;
 			randX = random(10, 110);
@@ -272,9 +265,9 @@ void GameState::checkForPoint(Coin &goldenCoin){
 	}
 }
 
-void GameState::checkForPowerUp(PowerUps &ability){
-	if(abs(player.pos.x - ability.x) == 0 && abs((player.pos.y - ability.y) == 0) ||
-	   (abs(player.pos.x - ability.x) + abs((player.pos.y - ability.y))) <= 5){
+void GameState::checkForPowerUp(PowerUps &powerUp){
+	if(abs(player.pos.x - powerUp.x) == 0 && abs((player.pos.y - powerUp.y) == 0) ||
+	   (abs(player.pos.x - powerUp.x) + abs((player.pos.y - powerUp.y))) <= 5){
 		int randNum = random(1, 3);
 		if(randNum == 1){
 			highspeed = true;
@@ -282,13 +275,13 @@ void GameState::checkForPowerUp(PowerUps &ability){
 		if(randNum == 2){
 			lowGravity = true;
 		}
-		ability.y = -1800;
-		float randX = ability.x;
+		powerUp.y = -1800;
+		float randX;
 		do {
-			ability.y = -1800;
+			powerUp.y = -1800;
 			randX = random(10, 110);
-		} while(abs(randX - ability.x > 30));
-		ability.x = randX;
+		} while(abs(randX - powerUp.x > 30));
+		powerUp.x = randX;
 	}
 }
 
@@ -331,7 +324,7 @@ void GameState::checkForCollision(Rect &stairs){
 }
 
 void GameState::scoreTable(){
-	baseSprite->setTextColor(TFT_RED);
+	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
 	baseSprite->drawString("Score:", 3, 1);
@@ -339,7 +332,7 @@ void GameState::scoreTable(){
 }
 
 void GameState::powerUpTimer(){
-	baseSprite->setTextColor(TFT_BLUE);
+	baseSprite->setTextColor(TFT_GREEN);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
 	baseSprite->drawNumber(seconds - 0, 10, 110);
@@ -355,7 +348,7 @@ void GameState::levelCounter(){
 }
 
 void GameState::level(){
-	baseSprite->setTextColor(TFT_RED);
+	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
 	baseSprite->drawString("Lvl: ", 58, 1);
@@ -363,7 +356,7 @@ void GameState::level(){
 }
 
 void GameState::lives(){
-	baseSprite->setTextColor(TFT_RED);
+	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
 	baseSprite->drawString("X", 103, 1);
@@ -409,10 +402,21 @@ void GameState::checkLevel(){
 
 
 void GameState::loop(uint time){
-	float dt = (float) time / 1000000.0f;
 	baseSprite->clear(TFT_BLACK);
+	scoreTable();
+	xPosMoving();
+	drawPlayerCircle();
+	drawWalls();
+	drawFloor();
+	levelCounter();
+	level();
+	checkLevel();
+	lives();
+	float dt = (float) time / 1000000.0f;
 	velocity(dt);
 	for(int i = 0; i < dropRect.size(); ++i){
+		movingRects(dropRect[i], time);
+		drawRect(dropRect[i]);
 		checkForCollision(dropRect[i]);
 	}
 	if(!firstTouch && player.pos.y > 115){
@@ -430,7 +434,6 @@ void GameState::loop(uint time){
 			}
 
 		}
-
 		player.velocity.y = -min(player.velocity.y, 200.0f);
 	}
 	if(livesNum == 0){
@@ -442,36 +445,18 @@ void GameState::loop(uint time){
 	if(bState){
 		castleJump->pauseGame();
 	}
-	xPosMoving();
-	drawPlayerCircle();
-	drawWalls();
-	drawFloor();
-	for(int i = 0; i < 1; i++){
-		drawCoin(coin[0]);
-		movingCoin(coin[0], time);
-		checkForPoint(coin[0]);
-	}
-	scoreTable();
-
-	for(int i = 0; i < dropRect.size(); ++i){
-		movingRects(dropRect[i], time);
-		drawRect(dropRect[i]);
-
-	}
 
 	for(int i = 0; i < 1; i++){
-		drawAbilityPoint(ability[i]);
-		movingPowerUps(ability[i], time);
-		checkForPowerUp(ability[i]);
+		drawCoin(coin[i]);
+		movingCoin(coin[i], time);
+		checkForPoint(coin[i]);
+		drawAbilityPoint(powerUp[i]);
+		movingPowerUps(powerUp[i], time);
+		checkForPowerUp(powerUp[i]);
 	}
 	if(highspeed || lowGravity){
 		powerUpTimer();
 	}
-	levelCounter();
-	level();
-	checkLevel();
-	lives();
-
 
 	display->commit();
 }
