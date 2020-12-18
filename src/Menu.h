@@ -4,9 +4,10 @@
 #include "State.h"
 
 struct MenuSelection{
-	float x;
-	float y;
-	Color color;
+		float x;
+		float y;
+		float r;
+		Color color;
 };
 
 class Menu : public State {
@@ -45,7 +46,6 @@ private:
 	bool upState = false;
 	bool downState = false;
 	bool checkState = false;
-	const float speed = 1;
 
 	void drawMenuScreen();
 };
