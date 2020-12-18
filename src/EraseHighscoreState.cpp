@@ -3,6 +3,7 @@
 #include "ShowHighscoreState.h"
 #include "Melodies/Notes.hpp"
 
+
 EraseHighscoreState *EraseHighscoreState::instance = nullptr;
 
 EraseHighscoreState::EraseHighscoreState(){
@@ -36,7 +37,7 @@ void EraseHighscoreState::exit(){
 
 void EraseHighscoreState::drawWarning(){
 	baseSprite->clear(TFT_BLACK);
-	baseSprite->setTextColor(TFT_RED);
+	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
 	baseSprite->drawString("Your really want", 15, 17);

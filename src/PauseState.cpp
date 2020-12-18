@@ -41,7 +41,7 @@ void PauseState::displayMessage(){
 	baseSprite->setCursor(32, baseSprite->height() / 2 - 25);
 	baseSprite->setTextSize(2);
 	baseSprite->setTextFont(2);
-	baseSprite->setTextColor(TFT_RED);
+	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->printCenter("PAUSE");
 	baseSprite->setTextSize(1);
 	baseSprite->setCursor(110, 110);
