@@ -6,6 +6,8 @@
 #include "src/CastleJump.h"
 #include "src/GameState.h"
 #include "src/Highscore/Highscore.h"
+#include <Audio/Piezo.h>
+#include <avr/pgmspace.h>
 
 CastleJump *castleJump;
 
