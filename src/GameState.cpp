@@ -19,6 +19,17 @@
 #include "bitmaps/platform3_2.hpp"
 #include "bitmaps/platform3_4.hpp"
 #include "bitmaps/lava.hpp"
+#include "bitmaps/heart/heart1.hpp"
+#include "bitmaps/heart/heart2.hpp"
+#include "bitmaps/heart/heart3.hpp"
+#include "bitmaps/heart/heart4.hpp"
+#include "bitmaps/heart/heart5.hpp"
+#include "bitmaps/heart/heart6.hpp"
+#include "bitmaps/heart/heart7.hpp"
+#include "bitmaps/heart/heart8.hpp"
+#include "bitmaps/heart/heart9.hpp"
+#include "bitmaps/heart/heart10.hpp"
+#include "bitmaps/heart/heart11.hpp"
 
 
 GameState *GameState::instance = nullptr;
@@ -327,8 +338,8 @@ void GameState::scoreTable(){
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("Score:", 3, 1);
-	baseSprite->drawNumber(score - 0, 38, 1);
+	baseSprite->drawString("Score:", 6, 1);
+	baseSprite->drawNumber(score - 0, 44, 1);
 }
 
 void GameState::powerUpTimer(){
@@ -351,16 +362,16 @@ void GameState::level(){
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("Lvl: ", 58, 1);
-	baseSprite->drawNumber(lvl - 0, 83, 1);
+	baseSprite->drawString("Lvl: ", 63, 1);
+	baseSprite->drawNumber(lvl - 0, 89, 1);
 }
 
 void GameState::lives(){
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("X", 103, 1);
-	baseSprite->drawNumber(livesNum - 0, 110, 1);
+	baseSprite->drawString("x", 109, 1);
+	baseSprite->drawNumber(livesNum - 0, 115, 1);
 }
 
 
@@ -414,6 +425,14 @@ void GameState::loop(uint time){
 	lives();
 	float dt = (float) time / 1000000.0f;
 	velocity(dt);
+	if(player.pos.y<0){
+		float delta=-player.pos.y;
+		player.pos.y=0;
+		for(int i = 0; i < dropRect.size(); ++i){
+			dropRect[i].y-=delta;
+			speed=speed+0.1;
+		}
+	}
 	for(int i = 0; i < dropRect.size(); ++i){
 		movingRects(dropRect[i], time);
 		drawRect(dropRect[i]);
