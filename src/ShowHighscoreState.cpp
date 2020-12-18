@@ -3,6 +3,7 @@
 #include "Menu.h"
 #include "EraseHighscoreState.h"
 #include "Melodies/Notes.hpp"
+#include "bitmaps/highscore.hpp"
 ShowHighscoreState *ShowHighscoreState::instance = nullptr;
 
 ShowHighscoreState::ShowHighscoreState(){
@@ -41,21 +42,15 @@ void ShowHighscoreState::exit(){
 }
 void ShowHighscoreState::drawHighscore(){
 	baseSprite->clear(TFT_BLACK);
-	baseSprite->setCursor(15, 4);
-	baseSprite->setTextSize(1);
-	baseSprite->setTextFont(2);
-	baseSprite->setTextColor(TFT_WHITE);
-	baseSprite->printCenter("HIGHSCORES");
-
-	for(int i=1;i<6;i++){
-		baseSprite->setCursor(6,i*20);
-		if(i <= Highscore.count()){
+	baseSprite->drawIcon(high_score,0,0,128,128);
+	for(int i=0;i<5;i++){
+		baseSprite->setTextColor(TFT_WHITE);
+		baseSprite->setCursor(43,(i*16)+37);
+		baseSprite->setTextSize(1);
+		baseSprite->setTextFont(1);
+		if((i+1) <= Highscore.count()){
 			Serial.println(Highscore.get(i).score);
-			baseSprite->printf("%d. %.3s %4d",i,Highscore.get(i-1).name, Highscore.get(i-1).score);
-		}
-		else
-		{
-			baseSprite->printf("%d. ---  -----",i);
+			baseSprite->printf("%.3s  %4d",Highscore.get(i).name, Highscore.get(i).score);
 		}
 	}
 
