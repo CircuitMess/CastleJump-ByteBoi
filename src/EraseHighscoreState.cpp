@@ -25,6 +25,7 @@ void EraseHighscoreState::enter(CastleJump &gameEnter){
 		instance->castleJump->changeState(new ShowHighscoreState());
 		Piezo.tone(NOTE_B6,25);
 	});
+	Piezo.setMute(false);
 }
 
 void EraseHighscoreState::exit(){
@@ -32,7 +33,7 @@ void EraseHighscoreState::exit(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
-
+	Piezo.setMute(true);
 }
 
 void EraseHighscoreState::drawWarning(){
