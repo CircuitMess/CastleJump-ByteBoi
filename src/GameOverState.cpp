@@ -22,8 +22,8 @@ void GameOverState::enter(CastleJump &gameEnter){
 
 	castleJump = &gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_A, buttonAPress);
-
 	Input::getInstance()->setBtnPressCallback(BTN_B, buttonBPress);
+	Piezo.setMute(false);
 }
 
 void GameOverState::buttonAPress(){
@@ -48,6 +48,7 @@ void GameOverState::exit(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
 	score = 0;
+	Piezo.setMute(true);
 }
 
 void GameOverState::drawGameOver(){
@@ -55,8 +56,8 @@ void GameOverState::drawGameOver(){
 	baseSprite->drawIcon(game_over,0,0,128,128);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("Score : ",40,30);
-	baseSprite->drawNumber(score - 0, 90, 30);
+	baseSprite->drawString("Score : ",35,30);
+	baseSprite->drawNumber(score - 0, 85, 30);
 	baseSprite->setTextSize(1);
 	baseSprite->setCursor(110, 1);
 	baseSprite->printCenter("A: new game B: menu");
@@ -75,16 +76,25 @@ void GameOverState::loop(uint time){
 		Serial.println(Highscore.get(0).score);
 		castleJump->changeState(new EnterHighscoreState(score));
 	}else{
-		if(Highscore.get(4).score > score && Highscore.count()>1 ){
-			drawGameOver();
-		}
-		if(aState){
-			Piezo.tone(NOTE_B6,25);
-			castleJump->changeState(new GameState());
-		}
-		if(bState){
-			Piezo.tone(NOTE_B6,25);
-			castleJump->changeState(new Menu());
+		if(Highscore.get(4).score > score && Highscore.count() > 1){
+			previousTime = 0;
+			 currentTime = millis();
+			if(currentTime - previousTime > 1000){
+				previousTime = currentTime;
+				seconds++;
+				if(seconds < 2){
+					melody.play(MelodyImpl::dead, false);
+				}
+				drawGameOver();
+			}
+			if(aState){
+				Piezo.tone(NOTE_B6, 25);
+				castleJump->changeState(new GameState());
+			}
+			if(bState){
+				Piezo.tone(NOTE_B6, 25);
+				castleJump->changeState(new Menu());
+			}
 		}
 	}
 }
