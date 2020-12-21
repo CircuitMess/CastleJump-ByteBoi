@@ -21,6 +21,7 @@ EnterHighscoreState::EnterHighscoreState(int highscoreScore){
 	name = new char[4];
 	strncpy(name, "AAA\0", sizeof(name));
 	instance = this;
+	melody.play(MelodyImpl::win,false);
 
 }
 
@@ -89,6 +90,7 @@ void EnterHighscoreState::enter(CastleJump &gameEnter){
 			Piezo.tone(NOTE_B6,25);
 		}
 	});
+	Piezo.setMute(false);
 
 }
 
@@ -96,7 +98,7 @@ void EnterHighscoreState::enter(CastleJump &gameEnter){
 void EnterHighscoreState::drawHighscore(){
 	baseSprite->setCursor(16, 8);
 	baseSprite->setTextFont(2);
-	baseSprite->setTextColor(TFT_RED);
+	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextSize(1);
 	baseSprite->printCenter("ENTER NAME");
 	baseSprite->setCursor(20, 75);
@@ -114,7 +116,7 @@ void EnterHighscoreState::drawHighscore(){
 	baseSprite->setCursor(70, 40);
 	baseSprite->print(name[2]);
 	if(cursorBlink){
-		baseSprite->drawFastHLine(38 + 15 * charCursor, 56, 12, TFT_RED);
+		baseSprite->drawFastHLine(38 + 15 * charCursor, 56, 12, TFT_WHITE);
 	}
 }
 
@@ -132,6 +134,7 @@ void EnterHighscoreState::exit(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_UP);
 	Input::getInstance()->setButtonHeldRepeatCallback(BTN_UP, 0, nullptr);
 	Input::getInstance()->setButtonHeldRepeatCallback(BTN_DOWN, 0, nullptr);
+	Piezo.setMute(true);
 }
 
 void EnterHighscoreState::loop(uint time){
