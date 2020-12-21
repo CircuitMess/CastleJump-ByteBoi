@@ -6,6 +6,7 @@
 #include "Melodies/Notes.hpp"
 #include "bitmaps/player.hpp"
 #include "bitmaps/home_screen.hpp"
+#include <Pins.hpp>
 
 Menu *Menu::instance = nullptr;
 
@@ -19,7 +20,7 @@ Menu::Menu(){
 	menuSelect.x = 20;
 	menuSelect.y = 100;
 	menuSelect.color = TFT_RED;
-
+	melody.play(MelodyImpl::menu, true);
 	display->commit();
 }
 
@@ -36,7 +37,7 @@ void Menu::enter(CastleJump &gameEnter){
 	Input::getInstance()->setBtnReleaseCallback(BTN_LEFT, buttonDownRelease);
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, buttonUpPress);
 	Input::getInstance()->setBtnReleaseCallback(BTN_RIGHT, buttonUpRelease);
-
+	Piezo.setMute(false);
 
 }
 
@@ -48,6 +49,7 @@ void Menu::exit(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_UP);
 	Input::getInstance()->removeBtnPressCallback(BTN_DOWN);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_DOWN);
+	Piezo.setMute(true);
 }
 
 void Menu::buttonAPress(){
@@ -81,7 +83,7 @@ void Menu::buttonDownRelease(){
 }
 
 void Menu::drawSelection(MenuSelection &menuSelect){
-	baseSprite->drawIcon(icon_player,menuSelect.x, menuSelect.y, 8,8);
+	baseSprite->drawIcon(icon_player, menuSelect.x, menuSelect.y, 8, 8);
 }
 
 void Menu::checkStateAndMove(MenuSelection &menuSelect){
@@ -99,7 +101,7 @@ void Menu::checkStateAndMove(MenuSelection &menuSelect){
 
 void Menu::drawMenuScreen(){
 	baseSprite->clear(TFT_BLACK);
-	baseSprite->drawIcon(homescreen,0,0,128,128);
+	baseSprite->drawIcon(homescreen, 0, 0, 128, 128);
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
@@ -113,11 +115,11 @@ void Menu::loop(uint time){
 	drawSelection(menuSelect);
 	checkStateAndMove(menuSelect);
 	if(aState && !checkState){
-		Piezo.tone(NOTE_B6,25);
+		Piezo.tone(NOTE_B6, 25);
 		castleJump->changeState(new GameState());
 	}
 	if(aState && checkState){
-		Piezo.tone(NOTE_B6,25);
+		Piezo.tone(NOTE_B6, 25);
 		castleJump->changeState(new ShowHighscoreState());
 	}
 	display->commit();
