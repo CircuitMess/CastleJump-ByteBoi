@@ -29,6 +29,7 @@ void ShowHighscoreState::enter(CastleJump &gameEnter){
 		Piezo.tone(NOTE_B6,25);
 		instance->castleJump->changeState(new Menu());
 	});
+	Piezo.setMute(true);
 }
 void ShowHighscoreState::exit(){
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
@@ -37,7 +38,6 @@ void ShowHighscoreState::exit(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
 	Input::getInstance()->removeBtnPressCallback(BTN_UP);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_UP);
-
 
 }
 void ShowHighscoreState::drawHighscore(){
