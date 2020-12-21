@@ -29,7 +29,11 @@ private:
 	Sprite *baseSprite;
 	bool aState = false;
 	bool bState = false;
-	bool initialValue=true;
+	bool initialValue = true;
+	bool checkMusic = false;
+	int seconds=0;
+	int currentTime;
+	int previousTime;
 
 	void drawGameOver();
 
