@@ -19,17 +19,7 @@
 #include "bitmaps/platform3_2.hpp"
 #include "bitmaps/platform3_4.hpp"
 #include "bitmaps/lava.hpp"
-#include "bitmaps/heart/heart1.hpp"
-#include "bitmaps/heart/heart2.hpp"
-#include "bitmaps/heart/heart3.hpp"
-#include "bitmaps/heart/heart4.hpp"
-#include "bitmaps/heart/heart5.hpp"
-#include "bitmaps/heart/heart6.hpp"
-#include "bitmaps/heart/heart7.hpp"
-#include "bitmaps/heart/heart8.hpp"
-#include "bitmaps/heart/heart9.hpp"
-#include "bitmaps/heart/heart10.hpp"
-#include "bitmaps/heart/heart11.hpp"
+#include <CircuitOS.h>
 
 
 GameState *GameState::instance = nullptr;
@@ -58,7 +48,7 @@ GameState::GameState(){
 	dropRect.push_back({60, -85, 20, 2});
 	dropRect.push_back({80, -105, 40, 2});
 
-
+	melody.play(MelodyImpl::game,true);
 }
 
 void GameState::enter(CastleJump &gameEnter){
@@ -80,7 +70,7 @@ void GameState::enter(CastleJump &gameEnter){
 	Input::getInstance()->setBtnReleaseCallback(BTN_LEFT, buttonLeftRelease);
 	Input::getInstance()->setBtnPressCallback(BTN_B, buttonBPress);
 	Input::getInstance()->setBtnReleaseCallback(BTN_B, buttonBRelease);
-
+	Piezo.setMute(false);
 }
 
 void GameState::exit(){
@@ -94,6 +84,7 @@ void GameState::exit(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_LEFT);
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
+	Piezo.setMute(true);
 }
 
 void GameState::buttonLeftPress(){
@@ -156,6 +147,12 @@ void GameState::drawRect(Rect &stairs){
 		baseSprite->drawIcon(icon_platform3_2, stairs.x, stairs.y, stairs.w, stairs.h);
 	}else if(lvl == 3 && stairs.w == 40){
 		baseSprite->drawIcon(icon_platform3_4, stairs.x, stairs.y, stairs.w, stairs.h);
+	}else if(lvl == 4 && stairs.w == 10){
+		baseSprite->drawIcon(icon_platform1_1, stairs.x, stairs.y, stairs.w, stairs.h);
+	}else if(lvl == 4 && stairs.w == 20){
+		baseSprite->drawIcon(icon_platform2_2, stairs.x, stairs.y, stairs.w, stairs.h);
+	}else if(lvl == 4 && stairs.w == 40){
+		baseSprite->drawIcon(icon_platform3_4, stairs.x, stairs.y, stairs.w, stairs.h);
 	}
 }
 
@@ -177,6 +174,9 @@ void GameState::drawFloor(){
 
 	}
 }
+void GameState::drawLives(){
+
+}
 
 
 void GameState::xPosMoving(){
@@ -185,12 +185,16 @@ void GameState::xPosMoving(){
 		rightState = false;
 		player.pos.x = 115;
 		player.velocity.x = -100;
+		Piezo.tone(NOTE_E4, 100);
+
 	}
 	if(player.pos.x < 5){
 		checkWallBump = true;
 		leftState = false;
 		player.pos.x = 5;
 		player.velocity.x = 100;
+		Piezo.tone(NOTE_E4, 100);
+
 	}
 	if(!rightState && !checkWallBump){
 		player.velocity.x = 0;
@@ -200,11 +204,11 @@ void GameState::xPosMoving(){
 	}
 	if(rightState){
 		checkWallBump = false;
-		player.velocity.x = 50;
+		player.velocity.x =70;
 	}
 	if(leftState){
 		checkWallBump = false;
-		player.velocity.x = -50;
+		player.velocity.x = -70;
 	}
 }
 
@@ -308,27 +312,33 @@ void GameState::checkForCollision(Rect &stairs){
 
 			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
+
+
 		}
 
 
 	}
-	if(stairs.w == 40){
+	else if(stairs.w == 40){
 		float distX = abs(player.pos.x - stairs.x - 20);
 		float distY = abs(player.pos.y - stairs.y - 1);
 		if((distX <= 21 && distY <= 5)){
 
 			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
+
+
 		}
 
 	}
-	if(stairs.w == 10){
+	else if(stairs.w == 10){
 		float distX = abs(player.pos.x - stairs.x - 5);
 		float distY = abs(player.pos.y - stairs.y - 1);
 		if((distX <= 6 && distY <= 5)){
 
 			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
+
+
 		}
 
 	}
@@ -355,6 +365,9 @@ void GameState::levelCounter(){
 	}
 	if(score >= 200){
 		lvl = 3;
+	}
+	if(score >= 300){
+		lvl = 4;
 	}
 }
 
@@ -404,10 +417,13 @@ void GameState::checkLevel(){
 		speed = 1;
 	}
 	if(lvl == 2){
-		speed = 1.2;
+		speed = 1.3;
 	}
 	if(lvl == 3){
 		speed = 1.7;
+	}
+	if(lvl == 4){
+		speed = 1.9;
 	}
 }
 
@@ -430,7 +446,7 @@ void GameState::loop(uint time){
 		player.pos.y=0;
 		for(int i = 0; i < dropRect.size(); ++i){
 			dropRect[i].y-=delta;
-			speed=speed+0.1;
+			speed=speed+0.05;
 		}
 	}
 	for(int i = 0; i < dropRect.size(); ++i){
@@ -449,14 +465,13 @@ void GameState::loop(uint time){
 		if(firstTouch){
 			if(livesNum > 0){
 				livesNum--;
-				Piezo.tone(NOTE_E2, 100);
+				Piezo.tone(NOTE_E5, 100);
 			}
 
 		}
 		player.velocity.y = -min(player.velocity.y, 200.0f);
 	}
 	if(livesNum == 0){
-		Piezo.tone(NOTE_E2, 500);
 		lvl = 1;
 		firstTouch = false;
 		castleJump->changeState(new GameOverState(score));
@@ -476,6 +491,9 @@ void GameState::loop(uint time){
 	if(highspeed || lowGravity){
 		powerUpTimer();
 	}
+
+
+
 
 	display->commit();
 }
