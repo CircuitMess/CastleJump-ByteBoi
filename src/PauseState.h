@@ -20,7 +20,6 @@ private:
 
 	void displayMessage();
 
-	void goToMenu();
 
 	static PauseState *instance;
 };
