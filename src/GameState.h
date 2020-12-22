@@ -3,7 +3,7 @@
 
 #include "State.h"
 #include <Motion/vec.hpp>
-
+#include <Display/AnimatedSprite.h>
 
 struct Player {
 	vec3f pos;
@@ -33,7 +33,6 @@ class GameState : public State {
 
 public:
 	GameState();
-
 	void loop(uint time) override;
 
 	void enter(CastleJump &gameEnter) override;
@@ -56,7 +55,6 @@ public:
 
 
 private:
-
 	static GameState *instance;
 	Display *display;
 	Sprite *baseSprite;
@@ -78,9 +76,18 @@ private:
 	bool checkWallBump = false;
 	int lvl = 1;
 	int livesNum=3;
+    bool touch=false;
+    float korak=0;
 
 	Vector<PowerUps> powerUp;
-
+	AnimatedSprite srce;
+	AnimatedSprite downHit;
+	AnimatedSprite leftHit;
+	AnimatedSprite rightHit;
+	enum AnimState{
+		NONE,ANIM_LEFT,ANIM_RIGHT,ANIM_DOWN
+	};
+	AnimState state;
 	void drawPlayerCircle();
 
 	void drawRect(Rect &stairs);
@@ -120,6 +127,10 @@ private:
 	void drawWalls();
 
 	void drawFloor();
+
+	void drawLives();
+
+	void drawBackGround();
 };
 
 #endif
