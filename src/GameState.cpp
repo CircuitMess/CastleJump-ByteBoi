@@ -19,22 +19,30 @@
 #include "bitmaps/platform3_2.hpp"
 #include "bitmaps/platform3_4.hpp"
 #include "bitmaps/lava.hpp"
-#include <CircuitOS.h>
+#include "bitmaps/heart/heart1.hpp"
+#include "bitmaps/downAnim.hpp"
+#include "bitmaps/leftAnim.hpp"
+#include "bitmaps/rightAnim.hpp"
 
 
-GameState *GameState::instance = nullptr;
+GameState *GameState::instance  = nullptr;
 
-GameState::GameState(){
+GameState::GameState() : srce(Nibble.getDisplay()->getBaseSprite(), sprite_srce, sizeof(sprite_srce)),downHit(Nibble.getDisplay()->getBaseSprite(), dolje, sizeof(dolje)),leftHit(Nibble.getDisplay()->getBaseSprite(), lijevo, sizeof(lijevo)),rightHit(Nibble.getDisplay()->getBaseSprite(), desno, sizeof(desno)){
 
 	display = Nibble.getDisplay();
 	baseSprite = display->getBaseSprite();
 
 	instance = this;
 
+	srce.setXY(100, 0);
+
+	downHit.setLoopDoneCallback([]{instance->state=NONE;});
+	leftHit.setLoopDoneCallback([]{instance->state=NONE;});
+	rightHit.setLoopDoneCallback([]{instance->state=NONE;});
 
 	player.pos.x = 66;
 	player.pos.y = 66;
-	player.velocity.x = 0;
+	player.velocity.x  = 0;
 	player.velocity.y = 0;
 
 	coin.push_back({50, -700, 2, TFT_GOLD});
@@ -48,7 +56,10 @@ GameState::GameState(){
 	dropRect.push_back({60, -85, 20, 2});
 	dropRect.push_back({80, -105, 40, 2});
 
-	melody.play(MelodyImpl::game,true);
+	melody.play(MelodyImpl::game, true);
+}
+GameState::~GameState(){
+
 }
 
 void GameState::enter(CastleJump &gameEnter){
@@ -70,7 +81,7 @@ void GameState::enter(CastleJump &gameEnter){
 	Input::getInstance()->setBtnReleaseCallback(BTN_LEFT, buttonLeftRelease);
 	Input::getInstance()->setBtnPressCallback(BTN_B, buttonBPress);
 	Input::getInstance()->setBtnReleaseCallback(BTN_B, buttonBRelease);
-	Piezo.setMute(false);
+	//Piezo.setMute(false);
 }
 
 void GameState::exit(){
@@ -85,6 +96,7 @@ void GameState::exit(){
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
 	Piezo.setMute(true);
+
 }
 
 void GameState::buttonLeftPress(){
@@ -121,7 +133,18 @@ void GameState::buttonBRelease(){
 }
 
 void GameState::drawPlayerCircle(){
-	baseSprite->drawIcon(icon_player, player.pos.x, player.pos.y, 8, 8);
+	if(state==NONE){
+		baseSprite->drawIcon(icon_player, player.pos.x, player.pos.y, 8, 8);
+	}else if(state==ANIM_DOWN){
+		downHit.setXY(player.pos.x,player.pos.y);
+		downHit.push();
+	}else if(state==ANIM_LEFT){
+		leftHit.setXY(player.pos.x,player.pos.y);
+		leftHit.push();
+	}else if(state==ANIM_RIGHT){
+		rightHit.setXY(player.pos.x,player.pos.y);
+		rightHit.push();
+	}
 }
 
 void GameState::drawCoin(Coin &goldenCoin){
@@ -170,12 +193,12 @@ void GameState::drawFloor(){
 	if(!firstTouch){
 		baseSprite->drawIcon(icon_floor, 0, 118, 128, 10);
 	}else if(firstTouch){
-		baseSprite->drawIcon(icon_lava, 0, 118, 128, 10);
 
 	}
 }
-void GameState::drawLives(){
 
+void GameState::drawLives(){
+	srce.push();
 }
 
 
@@ -184,6 +207,8 @@ void GameState::xPosMoving(){
 		checkWallBump = true;
 		rightState = false;
 		player.pos.x = 115;
+		rightHit.reset();
+		state=ANIM_RIGHT;
 		player.velocity.x = -100;
 		Piezo.tone(NOTE_E4, 100);
 
@@ -192,6 +217,8 @@ void GameState::xPosMoving(){
 		checkWallBump = true;
 		leftState = false;
 		player.pos.x = 5;
+		leftHit.reset();
+		state=ANIM_LEFT;
 		player.velocity.x = 100;
 		Piezo.tone(NOTE_E4, 100);
 
@@ -204,7 +231,7 @@ void GameState::xPosMoving(){
 	}
 	if(rightState){
 		checkWallBump = false;
-		player.velocity.x =70;
+		player.velocity.x = 70;
 	}
 	if(leftState){
 		checkWallBump = false;
@@ -309,7 +336,6 @@ void GameState::checkForCollision(Rect &stairs){
 		float distX = abs(player.pos.x - stairs.x - 10);
 		float distY = abs(player.pos.y - stairs.y - 1);
 		if((distX <= 11 && distY <= 5)){
-
 			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
 
@@ -317,24 +343,19 @@ void GameState::checkForCollision(Rect &stairs){
 		}
 
 
-	}
-	else if(stairs.w == 40){
+	}else if(stairs.w == 40){
 		float distX = abs(player.pos.x - stairs.x - 20);
 		float distY = abs(player.pos.y - stairs.y - 1);
 		if((distX <= 21 && distY <= 5)){
-
+			leftHit.reset();
 			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
-
-
 		}
 
-	}
-	else if(stairs.w == 10){
+	}else if(stairs.w == 10){
 		float distX = abs(player.pos.x - stairs.x - 5);
 		float distY = abs(player.pos.y - stairs.y - 1);
 		if((distX <= 6 && distY <= 5)){
-
 			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
 
@@ -435,18 +456,19 @@ void GameState::loop(uint time){
 	drawPlayerCircle();
 	drawWalls();
 	drawFloor();
+	drawLives();
 	levelCounter();
 	level();
 	checkLevel();
 	lives();
 	float dt = (float) time / 1000000.0f;
 	velocity(dt);
-	if(player.pos.y<0){
-		float delta=-player.pos.y;
-		player.pos.y=0;
+	if(player.pos.y < 0){
+		float delta = -player.pos.y;
+		player.pos.y = 0;
 		for(int i = 0; i < dropRect.size(); ++i){
-			dropRect[i].y-=delta;
-			speed=speed+0.05;
+			dropRect[i].y -= delta;
+			speed = speed + 0.05;
 		}
 	}
 	for(int i = 0; i < dropRect.size(); ++i){
@@ -456,11 +478,15 @@ void GameState::loop(uint time){
 	}
 	if(!firstTouch && player.pos.y > 112){
 		player.pos.y = 112;
+		downHit.reset();
+		state=ANIM_DOWN;
 		Piezo.tone(NOTE_E5, 100);
 		player.velocity.y = -min(player.velocity.y, 200.0f);
 	}
 	if(firstTouch && player.pos.y > 120){
 		player.pos.y = 120;
+		downHit.reset();
+		state=ANIM_DOWN;
 		Piezo.tone(NOTE_E5, 100);
 		if(firstTouch){
 			if(livesNum > 0){
@@ -491,8 +517,6 @@ void GameState::loop(uint time){
 	if(highspeed || lowGravity){
 		powerUpTimer();
 	}
-
-
 
 
 	display->commit();
