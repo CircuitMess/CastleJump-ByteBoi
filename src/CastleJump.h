@@ -13,6 +13,7 @@
 #include <spiffs_api.h>
 #include <Audio/Piezo.h>
 #include "CastleJump.h"
+#include "Melodies/Melody.h"
 
 class State;
 
