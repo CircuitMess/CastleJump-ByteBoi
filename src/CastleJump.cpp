@@ -5,15 +5,18 @@
 #include "State.h"
 #include "Menu.h"
 #include "PauseState.h"
+#include "GameState.h"
 
 CastleJump *CastleJump::instance= nullptr;
 
 CastleJump::CastleJump(){
 
+	LoopManager::addListener(&melody);
 	state=new Menu();
 	state->enter(*this);
 
 }
+
 void CastleJump::pauseGame(){
 
 	pausedGameState = state;
@@ -28,6 +31,7 @@ void CastleJump::resumeGame(){
 	pausedGameState = nullptr;
 	state->enter(*this);
 }
+
 
 void CastleJump::changeState(State *differentState){
 	state->exit();
