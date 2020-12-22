@@ -12,6 +12,7 @@
 #include <Display/Sprite.h>
 #include <Nibble.h>
 #include "CastleJump.h"
+#include "Melodies/Melody.h"
 
 class State {
 
