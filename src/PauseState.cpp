@@ -14,8 +14,6 @@ PauseState::PauseState(){
 	instance = this;
 }
 
-
-
 void PauseState::enter(CastleJump &gameEnter){
 	castleJump = &gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
@@ -23,17 +21,16 @@ void PauseState::enter(CastleJump &gameEnter){
 
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_B, [](){
+		delete instance->castleJump->pausedGameState;
 		instance->castleJump->pausedGameState = nullptr;
 		instance->castleJump->changeState(new Menu());
 	});
-	Piezo.setMute(true);
-
 }
 
 void PauseState::exit(){
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
-	Piezo.setMute(false);
+
 }
 
 
