@@ -30,6 +30,10 @@ include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/libraries/TF
 include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/libraries/FS)
 include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/cores/esp8266/FS)
 include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/libraries/LittleFS/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/cores/esp8266/avr)
+
+
+
 
 
 
@@ -60,5 +64,5 @@ add_custom_target(CMUpload ALL
         DEPENDS CMBuild
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-add_executable(${CMAKE_PROJECT_NAME}.bin ${CMAKE_PROJECT_NAME}.ino ${SOURCES} src/CastleJump.cpp src/CastleJump.h src/State.cpp src/State.h src/GameState.cpp src/GameState.h src/GameOverState.cpp src/GameOverState.h src/Menu.h src/Menu.cpp src/ShowHighscoreState.cpp src/ShowHighscoreState.h src/Highscore/Highscore.cpp src/Highscore/Highscore.h src/EnterHighscoreState.cpp src/EnterHighscoreState.h src/PauseState.cpp src/PauseState.h src/EraseHighscoreState.cpp src/EraseHighscoreState.h)
+add_executable(${CMAKE_PROJECT_NAME}.bin ${CMAKE_PROJECT_NAME}.ino ${SOURCES} src/CastleJump.cpp src/CastleJump.h src/State.cpp src/State.h src/GameState.cpp src/GameState.h src/GameOverState.cpp src/GameOverState.h src/Menu.h src/Menu.cpp src/ShowHighscoreState.cpp src/ShowHighscoreState.h src/Highscore/Highscore.cpp src/Highscore/Highscore.h src/EnterHighscoreState.cpp src/EnterHighscoreState.h src/PauseState.cpp src/PauseState.h src/EraseHighscoreState.cpp src/EraseHighscoreState.h src/Melodies/Notes.hpp src/Melodies/Note.h src/Melodies/Melody.cpp src/Melodies/Melody.h src/Melodies/MelodyNotes.h)
 
