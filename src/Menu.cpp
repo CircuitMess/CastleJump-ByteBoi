@@ -37,7 +37,7 @@ void Menu::enter(CastleJump &gameEnter){
 	Input::getInstance()->setBtnReleaseCallback(BTN_LEFT, buttonDownRelease);
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, buttonUpPress);
 	Input::getInstance()->setBtnReleaseCallback(BTN_RIGHT, buttonUpRelease);
-	Piezo.setMute(false);
+Piezo.setMute(true);
 
 }
 
@@ -108,11 +108,13 @@ void Menu::drawMenuScreen(){
 	baseSprite->drawString("New game", 30, 96);
 	baseSprite->drawString("Highscore", 30, 111);
 }
-
-void Menu::loop(uint time){
-	baseSprite->clear(TFT_BLACK);
+void Menu::draw(){
 	drawMenuScreen();
 	drawSelection(menuSelect);
+	display->commit();
+}
+void Menu::loop(uint time){
+	baseSprite->clear(TFT_BLACK);
 	checkStateAndMove(menuSelect);
 	if(aState && !checkState){
 		Piezo.tone(NOTE_B6, 25);
@@ -122,5 +124,6 @@ void Menu::loop(uint time){
 		Piezo.tone(NOTE_B6, 25);
 		castleJump->changeState(new ShowHighscoreState());
 	}
-	display->commit();
+
+
 }

@@ -39,6 +39,8 @@ public:
 
 	void exit() override;
 
+	void draw() override;
+
 	static void buttonRightPress();
 
 	static void buttonRightRelease();
@@ -81,9 +83,9 @@ private:
 
 	Vector<PowerUps> powerUp;
 	AnimatedSprite srce;
-	AnimatedSprite downHit;
+	/*AnimatedSprite downHit;
 	AnimatedSprite leftHit;
-	AnimatedSprite rightHit;
+	AnimatedSprite rightHit;*/
 	enum AnimState{
 		NONE,ANIM_LEFT,ANIM_RIGHT,ANIM_DOWN
 	};

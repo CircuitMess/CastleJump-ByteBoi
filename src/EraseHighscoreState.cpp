@@ -50,8 +50,11 @@ void EraseHighscoreState::drawWarning(){
 	baseSprite->printCenter("A: delete  B: back");
 
 }
-void EraseHighscoreState::loop(uint time){
-	baseSprite->clear(TFT_BLACK);
+void EraseHighscoreState::draw(){
 	drawWarning();
 	display->commit();
+
+}
+void EraseHighscoreState::loop(uint time){
+
 }

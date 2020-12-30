@@ -22,6 +22,8 @@ public:
 
 	void exit() override;
 
+	void draw() override;
+
 private:
 	int score;
 	GameState *gameState;

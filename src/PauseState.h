@@ -13,6 +13,8 @@ public:
 
 	void exit() override;
 
+	void draw() override;
+
 private:
 
 	Display *display;

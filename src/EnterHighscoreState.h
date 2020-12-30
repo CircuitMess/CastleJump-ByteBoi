@@ -16,6 +16,8 @@ public:
 
 	void exit() override;
 
+	void draw() override;
+
 private:
 	int score{};
 	char *name;

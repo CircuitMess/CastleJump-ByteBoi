@@ -13,6 +13,8 @@
 #include <Nibble.h>
 #include "CastleJump.h"
 #include "Melodies/Melody.h"
+#include "Pins.hpp"
+
 
 class State {
 
@@ -23,9 +25,11 @@ public:
 
 	virtual void enter(CastleJump &gameEnter) = 0;
 
-	virtual void exit()=0;
+	virtual void exit() = 0;
 
-	virtual void loop(uint) = 0;
+	virtual void loop(uint time) = 0;
+
+	virtual void draw(){};
 
 
 protected:

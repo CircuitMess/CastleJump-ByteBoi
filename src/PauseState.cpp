@@ -44,9 +44,13 @@ void PauseState::displayMessage(){
 	baseSprite->setCursor(110, 110);
 	baseSprite->printCenter("A: resume   B: quit");
 }
+void PauseState::draw(){
+	displayMessage();
+	display->commit();
+
+}
 
 void PauseState::loop(uint time){
 	baseSprite->clear(TFT_BLACK);
-	displayMessage();
 	display->commit();
 }

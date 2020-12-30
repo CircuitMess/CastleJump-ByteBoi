@@ -14,6 +14,8 @@ public:
 
 	void exit() override;
 
+	void draw() override;
+
 private:
 
 	void drawWarning();

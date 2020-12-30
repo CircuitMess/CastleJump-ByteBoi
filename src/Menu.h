@@ -26,11 +26,21 @@ public:
 
 	static void buttonUpRelease();
 
+	static void buttonRightPress();
+
+	static void buttonRightRelease();
+
+	static void buttonLeftPress();
+
+	static void buttonLeftRelease();
+
 	void loop(uint time) override;
 
 	void enter(CastleJump &gameEnter) override;
 
 	void exit() override;
+
+	void draw() override;
 
 private:
 

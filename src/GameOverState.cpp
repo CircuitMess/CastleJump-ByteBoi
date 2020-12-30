@@ -23,7 +23,7 @@ void GameOverState::enter(CastleJump &gameEnter){
 	castleJump = &gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_A, buttonAPress);
 	Input::getInstance()->setBtnPressCallback(BTN_B, buttonBPress);
-	Piezo.setMute(false);
+	//Piezo.setMute(false);
 }
 
 void GameOverState::buttonAPress(){
@@ -61,6 +61,11 @@ void GameOverState::drawGameOver(){
 	baseSprite->setTextSize(1);
 	baseSprite->setCursor(110, 1);
 	baseSprite->printCenter("A: new game B: menu");
+	display->commit();
+
+}
+
+void GameOverState::draw(){
 	display->commit();
 
 }

@@ -4,6 +4,8 @@
 #include "EraseHighscoreState.h"
 #include "Melodies/Notes.hpp"
 #include "bitmaps/highscore.hpp"
+#include "Pins.hpp"
+
 ShowHighscoreState *ShowHighscoreState::instance = nullptr;
 
 ShowHighscoreState::ShowHighscoreState(){
@@ -54,8 +56,12 @@ void ShowHighscoreState::drawHighscore(){
 		}
 	}
 
+}
+void ShowHighscoreState::draw(){
+	drawHighscore();
 	display->commit();
+
 }
 void ShowHighscoreState::loop(uint time){
-	drawHighscore();
+
 }

@@ -6,15 +6,20 @@
 #include "Menu.h"
 #include "PauseState.h"
 #include "GameState.h"
+#include "Pins.hpp"
+
 
 CastleJump *CastleJump::instance= nullptr;
 
-CastleJump::CastleJump(){
+CastleJump::CastleJump() : Context(*display) {
 
 	LoopManager::addListener(&melody);
 	state=new Menu();
 	state->enter(*this);
 
+}
+void CastleJump::draw(){
+	state->draw();
 }
 
 void CastleJump::pauseGame(){
@@ -41,5 +46,6 @@ void CastleJump::changeState(State *differentState){
 }
 void CastleJump::loop(uint time){
 	state->loop(time);
+	draw();
 
 }

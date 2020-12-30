@@ -14,11 +14,13 @@
 #include <Audio/Piezo.h>
 #include "CastleJump.h"
 #include "Melodies/Melody.h"
+#include <Support/Context.h>
+extern Context* runningContext;
+
 
 class State;
 
-class CastleJump : public LoopListener {
-
+class CastleJump : public Context, public LoopListener {
 
 public:
 
@@ -41,7 +43,6 @@ private:
 
 	State *state;
 	static CastleJump *instance;
-
 
 	Display *display;
 	Sprite *baseSprite;

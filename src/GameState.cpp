@@ -21,17 +21,16 @@
 #include "bitmaps/platform3_4.hpp"
 #include "bitmaps/lava.hpp"
 #include "bitmaps/heart/heart1.hpp"
-#include "bitmaps/downAnim.hpp"
-#include "bitmaps/leftAnim.hpp"
-#include "bitmaps/rightAnim.hpp"
+
 
 
 GameState *GameState::instance = nullptr;
 
-GameState::GameState() : srce(Nibble.getDisplay()->getBaseSprite(), sprite_srce, sizeof(sprite_srce)),
-						 downHit(Nibble.getDisplay()->getBaseSprite(), dolje, sizeof(dolje)),
-						 leftHit(Nibble.getDisplay()->getBaseSprite(), lijevo, sizeof(lijevo)),
-						 rightHit(Nibble.getDisplay()->getBaseSprite(), desno, sizeof(desno)){
+GameState::GameState() : srce(Nibble.getDisplay()->getBaseSprite(), sprite_srce, sizeof(sprite_srce))
+						 //downHit(Nibble.getDisplay()->getBaseSprite(), dolje, sizeof(dolje))
+						// leftHit(Nibble.getDisplay()->getBaseSprite(), lijevo, sizeof(lijevo)),
+						// rightHit(Nibble.getDisplay()->getBaseSprite(), desno, sizeof(desno))
+						{
 
 	display = Nibble.getDisplay();
 	baseSprite = display->getBaseSprite();
@@ -40,9 +39,9 @@ GameState::GameState() : srce(Nibble.getDisplay()->getBaseSprite(), sprite_srce,
 
 	srce.setXY(100, 0);
 
-	downHit.setLoopDoneCallback([]{ instance->state = NONE; });
-	leftHit.setLoopDoneCallback([]{ instance->state = NONE; });
-	rightHit.setLoopDoneCallback([]{ instance->state = NONE; });
+	//downHit.setLoopDoneCallback([]{ instance->state = NONE; });
+	//leftHit.setLoopDoneCallback([]{ instance->state = NONE; });
+	//rightHit.setLoopDoneCallback([]{ instance->state = NONE; });
 
 	player.pos.x = 66;
 	player.pos.y = 66;
@@ -127,18 +126,7 @@ void GameState::buttonBRelease(){
 }
 
 void GameState::drawPlayerCircle(){
-	if(state == NONE){
 		baseSprite->drawIcon(icon_player, player.pos.x, player.pos.y, 8, 8, 1, TFT_BLACK);
-	}else if(state == ANIM_DOWN){
-		downHit.setXY(player.pos.x, player.pos.y);
-		downHit.push();
-	}else if(state == ANIM_LEFT){
-		leftHit.setXY(player.pos.x, player.pos.y);
-		leftHit.push();
-	}else if(state == ANIM_RIGHT){
-		rightHit.setXY(player.pos.x, player.pos.y);
-		rightHit.push();
-	}
 }
 
 void GameState::drawCoin(Coin &goldenCoin){
@@ -212,8 +200,8 @@ void GameState::xPosMoving(){
 		checkWallBump = true;
 		rightState = false;
 		player.pos.x = 115;
-		rightHit.reset();
-		state = ANIM_RIGHT;
+	//	rightHit.reset();
+	//	state = ANIM_RIGHT;
 		player.velocity.x = -100;
 		Piezo.tone(NOTE_E4, 100);
 
@@ -222,8 +210,8 @@ void GameState::xPosMoving(){
 		checkWallBump = true;
 		leftState = false;
 		player.pos.x = 5;
-		leftHit.reset();
-		state = ANIM_LEFT;
+		//leftHit.reset();
+		//state = ANIM_LEFT;
 		player.velocity.x = 100;
 		Piezo.tone(NOTE_E4, 100);
 
@@ -341,8 +329,8 @@ void GameState::checkForCollision(Rect &stairs){
 		float distX = abs(player.pos.x - stairs.x - 10);
 		float distY = abs(player.pos.y - stairs.y - 1);
 		if((distX <= 11.5 && distY <= 6)){
-			downHit.reset();
-			state = ANIM_DOWN;
+		//	downHit.reset();
+		//	state = ANIM_DOWN;
 			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
 
@@ -354,8 +342,8 @@ void GameState::checkForCollision(Rect &stairs){
 		float distX = abs(player.pos.x - stairs.x - 20);
 		float distY = abs(player.pos.y - stairs.y - 1);
 		if((distX <= 21.5 && distY <= 6)){
-			downHit.reset();
-			state = ANIM_DOWN;
+		//	downHit.reset();
+		//	state = ANIM_DOWN;
 			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
 		}
@@ -364,8 +352,8 @@ void GameState::checkForCollision(Rect &stairs){
 		float distX = abs(player.pos.x - stairs.x - 5);
 		float distY = abs(player.pos.y - stairs.y - 1);
 		if((distX <= 6.5 && distY <= 6)){
-			downHit.reset();
-			state = ANIM_DOWN;
+			//downHit.reset();
+			//state = ANIM_DOWN;
 			player.velocity.y = -min(player.velocity.y, 200.0f);
 			firstTouch = true;
 
@@ -457,21 +445,24 @@ void GameState::checkLevel(){
 		speed = 1.9;
 	}
 }
-
-
-void GameState::loop(uint time){
-	baseSprite->clear(TFT_BLACK);
-//	drawBackGround();
+void GameState::draw(){
 	scoreTable();
-	xPosMoving();
 	drawPlayerCircle();
 	drawWalls();
 	drawFloor();
 	drawLives();
-	levelCounter();
 	level();
-	checkLevel();
 	lives();
+	display->commit();
+
+}
+
+void GameState::loop(uint time){
+	baseSprite->clear(TFT_BLACK);
+//	drawBackGround();
+	xPosMoving();
+	levelCounter();
+	checkLevel();
 	float dt = (float) time / 1000000.0f;
 	velocity(dt);
 	if(player.pos.y < 0){//check height
@@ -490,15 +481,15 @@ void GameState::loop(uint time){
 	}
 	if(!firstTouch && player.pos.y > 112){
 		player.pos.y = 112;
-		downHit.reset();
-		state = ANIM_DOWN;
+		//downHit.reset();
+		//state = ANIM_DOWN;
 		Piezo.tone(NOTE_E5, 100);
 		player.velocity.y = -min(player.velocity.y, 200.0f);
 	}
 	if(firstTouch && player.pos.y > 120){
 		player.pos.y = 120;
-		downHit.reset();
-		state = ANIM_DOWN;
+		//downHit.reset();
+		//state = ANIM_DOWN;
 		Piezo.tone(NOTE_E5, 100);
 		if(firstTouch){
 			if(livesNum > 0){
@@ -531,5 +522,4 @@ void GameState::loop(uint time){
 	}
 
 
-	display->commit();
 }

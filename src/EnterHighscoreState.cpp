@@ -136,10 +136,14 @@ void EnterHighscoreState::exit(){
 	Input::getInstance()->setButtonHeldRepeatCallback(BTN_DOWN, 0, nullptr);
 	Piezo.setMute(true);
 }
+void EnterHighscoreState::draw(){
+	drawHighscore();
+	display->commit();
+
+}
 
 void EnterHighscoreState::loop(uint time){
 	baseSprite->clear(TFT_BLACK);
-	drawHighscore();
 	hiscoreTime += time;
 	if(hiscoreTime >= 1000000){
 		hiscoreTime = 0;
@@ -157,5 +161,5 @@ void EnterHighscoreState::loop(uint time){
 		Highscore.add(newScore);
 		castleJump->changeState(new ShowHighscoreState());
 	}
-	display->commit();
+
 }
