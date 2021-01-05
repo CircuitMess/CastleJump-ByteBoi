@@ -34,9 +34,6 @@ include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/cores/esp826
 
 
 
-
-
-
 # Source directories
 AUX_SOURCE_DIRECTORY(src SOURCES)
 

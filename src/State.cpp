@@ -1,4 +1,5 @@
 #include "State.h"
 
-State::~State(){
+CastleJump::State::~State(){
+	stop();
 }

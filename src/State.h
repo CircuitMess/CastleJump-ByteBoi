@@ -15,28 +15,29 @@
 #include "Melodies/Melody.h"
 #include "Pins.hpp"
 
+namespace CastleJump {
+	class CastleJump;
+	class State {
 
-class State {
-
-public:
-
-
-	virtual ~State();
-
-	virtual void enter(CastleJump &gameEnter) = 0;
-
-	virtual void exit() = 0;
-
-	virtual void loop(uint time) = 0;
-
-	virtual void draw(){};
+	public:
 
 
-protected:
+		virtual ~State();
 
-	CastleJump *castleJump;
+		virtual void start(CastleJump &gameEnter) = 0;
+
+		virtual void stop(){};
+
+		virtual void loop(uint time) = 0;
+
+		virtual void draw() = 0;
 
 
+	protected:
+
+		CastleJump *castleJump;
+
+
+	};
 };
-
 #endif //JUMPINGJACK_STATE_H

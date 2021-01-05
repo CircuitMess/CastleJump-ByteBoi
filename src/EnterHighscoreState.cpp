@@ -1,16 +1,12 @@
 #include "EnterHighscoreState.h"
-#include "CastleJump.h"
 #include "Highscore/Highscore.h"
-#include "GameState.h"
-#include "ShowHighscoreState.h"
-#include "GameOverState.h"
 #include "Melodies/Notes.hpp"
 
-EnterHighscoreState *EnterHighscoreState::instance = nullptr;
+CastleJump::EnterHighscoreState *CastleJump::EnterHighscoreState::instance = nullptr;
 
-EnterHighscoreState::EnterHighscoreState(int highscoreScore){
+CastleJump::EnterHighscoreState::EnterHighscoreState(){
 
-	score = highscoreScore;
+
 	display = Nibble.getDisplay();
 	baseSprite = display->getBaseSprite();
 	charCursor = 0;
@@ -25,7 +21,7 @@ EnterHighscoreState::EnterHighscoreState(int highscoreScore){
 
 }
 
-void EnterHighscoreState::enter(CastleJump &gameEnter){
+void CastleJump::EnterHighscoreState::start(CastleJump &gameEnter){
 	castleJump = &gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_UP, [](){
 		instance->cursorBlink = true;
@@ -95,7 +91,7 @@ void EnterHighscoreState::enter(CastleJump &gameEnter){
 }
 
 
-void EnterHighscoreState::drawHighscore(){
+void CastleJump::EnterHighscoreState::drawHighscore(){
 	baseSprite->setCursor(16, 8);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextColor(TFT_WHITE);
@@ -103,11 +99,11 @@ void EnterHighscoreState::drawHighscore(){
 	baseSprite->printCenter("ENTER NAME");
 	baseSprite->setCursor(20, 75);
 
-	if(hiscoreBlink && score > Highscore.get(0).score){
+	if(hiscoreBlink && castleJump->score > Highscore.get(0).score){
 		baseSprite->printCenter("NEW HIGH!");
 	}else{
 		baseSprite->setCursor(20, 90);
-		baseSprite->printf("SCORE: %3d", score);
+		baseSprite->printf("SCORE: %3d", castleJump->score);
 	}
 	baseSprite->setCursor(40, 40);
 	baseSprite->print(name[0]);
@@ -120,7 +116,7 @@ void EnterHighscoreState::drawHighscore(){
 	}
 }
 
-void EnterHighscoreState::exit(){
+void CastleJump::EnterHighscoreState::stop(){
 
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
@@ -135,14 +131,15 @@ void EnterHighscoreState::exit(){
 	Input::getInstance()->setButtonHeldRepeatCallback(BTN_UP, 0, nullptr);
 	Input::getInstance()->setButtonHeldRepeatCallback(BTN_DOWN, 0, nullptr);
 	Piezo.setMute(true);
+	castleJump->score=0;
 }
-void EnterHighscoreState::draw(){
+void CastleJump::EnterHighscoreState::draw(){
 	drawHighscore();
 	display->commit();
 
 }
 
-void EnterHighscoreState::loop(uint time){
+void CastleJump::EnterHighscoreState::loop(uint time){
 	baseSprite->clear(TFT_BLACK);
 	hiscoreTime += time;
 	if(hiscoreTime >= 1000000){
@@ -157,9 +154,9 @@ void EnterHighscoreState::loop(uint time){
 	if(charCursor >2 || charCursor<0){
 		Score newScore{};
 		strcpy(newScore.name, name);
-		newScore.score = score;
+		newScore.score = castleJump->score;
 		Highscore.add(newScore);
-		castleJump->changeState(new ShowHighscoreState());
+		castleJump->openHighscores();
 	}
 
 }

@@ -3,25 +3,27 @@
 
 #include "State.h"
 
-class EraseHighscoreState : public State {
-public:
+namespace CastleJump {
+	class EraseHighscoreState : public State {
+	public:
 
-	EraseHighscoreState();
+		EraseHighscoreState();
 
-	void loop(uint time) override;
+		void loop(uint time) override;
 
-	void enter(CastleJump &gameEnter) override;
+		void start(CastleJump &gameEnter) override;
 
-	void exit() override;
+		void stop() override;
 
-	void draw() override;
+		void draw() override;
 
-private:
+	private:
 
-	void drawWarning();
+		void drawWarning();
 
-	static EraseHighscoreState *instance;
-	Display *display;
-	Sprite *baseSprite;
+		static EraseHighscoreState *instance;
+		Display *display;
+		Sprite *baseSprite;
+	};
 };
 #endif //CASTLEJUMP_ERASEHIGHSCORESTATE_H

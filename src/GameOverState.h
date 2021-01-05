@@ -3,43 +3,43 @@
 
 #include "State.h"
 #include "GameState.h"
+namespace CastleJump {
+	class GameOverState : public State {
+	public:
+		GameOverState();
 
-class GameOverState : public State {
-public:
-	GameOverState(int score);
+		static void buttonAPress();
 
-	static void buttonAPress();
+		static void buttonBPress();
 
-	static void buttonBPress();
+		static void buttonARelease();
 
-	static void buttonARelease();
+		static void buttonBRelease();
 
-	static void buttonBRelease();
+		void loop(uint time) override;
 
-	void loop(uint time) override;
+		void start(CastleJump &gameEnter) override;
 
-	void enter(CastleJump &gameEnter) override;
+		void stop() override;
 
-	void exit() override;
+		void draw() override;
 
-	void draw() override;
+	private:
+		GameState *gameState;
+		Display *display;
+		Sprite *baseSprite;
+		bool aState = false;
+		bool bState = false;
+		bool initialValue = true;
+		bool checkMusic = false;
+		int seconds = 0;
+		int currentTime;
+		int previousTime;
+		uint score;
 
-private:
-	int score;
-	GameState *gameState;
-	Display *display;
-	Sprite *baseSprite;
-	bool aState = false;
-	bool bState = false;
-	bool initialValue = true;
-	bool checkMusic = false;
-	int seconds=0;
-	int currentTime;
-	int previousTime;
+		void drawGameOver();
 
-	void drawGameOver();
-
-	static GameOverState *instance;
+		static GameOverState *instance;
+	};
 };
-
 #endif //CASTLEJUMP_GAMEOVERSTATE_H

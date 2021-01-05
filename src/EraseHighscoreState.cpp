@@ -1,12 +1,11 @@
 #include "EraseHighscoreState.h"
 #include "Highscore/Highscore.h"
-#include "ShowHighscoreState.h"
 #include "Melodies/Notes.hpp"
 
 
-EraseHighscoreState *EraseHighscoreState::instance = nullptr;
+CastleJump::EraseHighscoreState *CastleJump::EraseHighscoreState::instance = nullptr;
 
-EraseHighscoreState::EraseHighscoreState(){
+CastleJump::EraseHighscoreState::EraseHighscoreState(){
 
 	display = Nibble.getDisplay();
 	baseSprite = display->getBaseSprite();
@@ -14,21 +13,21 @@ EraseHighscoreState::EraseHighscoreState(){
 
 }
 
-void EraseHighscoreState::enter(CastleJump &gameEnter){
+void CastleJump::EraseHighscoreState::start(CastleJump &gameEnter){
 	castleJump = &gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
 		Highscore.clear();
-		instance->castleJump->changeState(new ShowHighscoreState());
+		instance->castleJump->openHighscores();
 		Piezo.tone(NOTE_B6,25);
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_B, [](){
-		instance->castleJump->changeState(new ShowHighscoreState());
+		instance->castleJump->openHighscores();
 		Piezo.tone(NOTE_B6,25);
 	});
 
 }
 
-void EraseHighscoreState::exit(){
+void CastleJump::EraseHighscoreState::stop(){
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
@@ -36,7 +35,7 @@ void EraseHighscoreState::exit(){
 	Piezo.setMute(true);
 }
 
-void EraseHighscoreState::drawWarning(){
+void CastleJump::EraseHighscoreState::drawWarning(){
 	baseSprite->clear(TFT_BLACK);
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(2);
@@ -50,11 +49,11 @@ void EraseHighscoreState::drawWarning(){
 	baseSprite->printCenter("A: delete  B: back");
 
 }
-void EraseHighscoreState::draw(){
+void CastleJump::EraseHighscoreState::draw(){
 	drawWarning();
 	display->commit();
 
 }
-void EraseHighscoreState::loop(uint time){
+void CastleJump::EraseHighscoreState::loop(uint time){
 
 }

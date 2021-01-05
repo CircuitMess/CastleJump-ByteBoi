@@ -4,35 +4,35 @@
 
 #include "GameState.h"
 #include "State.h"
+namespace CastleJump {
+	class EnterHighscoreState : public State {
+	public:
 
-class EnterHighscoreState : public State {
-public:
+		EnterHighscoreState();
 
-	EnterHighscoreState(int score);
+		void loop(uint time) override;
 
-	void loop(uint time) override;
+		void start(CastleJump &gameEnter) override;
 
-	void enter(CastleJump &gameEnter) override;
+		void stop() override;
 
-	void exit() override;
+		void draw() override;
 
-	void draw() override;
+	private:
+		int score{};
+		char *name;
+		uint8_t charCursor;
+		bool cursorBlink;
+		bool hiscoreBlink;
+		uint cursorTime;
+		uint hiscoreTime;
 
-private:
-	int score{};
-	char *name;
-	uint8_t charCursor;
-	bool cursorBlink;
-	bool hiscoreBlink;
-	uint cursorTime;
-	uint hiscoreTime;
+		void drawHighscore();
 
-	void drawHighscore();
-
-	static EnterHighscoreState *instance;
-	Display *display;
-	Sprite *baseSprite;
+		static EnterHighscoreState *instance;
+		Display *display;
+		Sprite *baseSprite;
+	};
 };
-
 
 #endif //CASTLEJUMP_ENTERHIGHSCORESTATE_H
