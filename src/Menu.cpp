@@ -1,128 +1,124 @@
 #include "Menu.h"
 #include <Nibble.h>
 #include <Arduino.h>
-#include "GameState.h"
-#include "ShowHighscoreState.h"
 #include "Melodies/Notes.hpp"
 #include "bitmaps/player.hpp"
 #include "bitmaps/home_screen.hpp"
 #include <Pins.hpp>
 
-Menu *Menu::instance = nullptr;
+const char *CastleJump::Menu::titleMenu[3] = {"Start", "Highscore", "Quit"};
+CastleJump::Menu *CastleJump::Menu::instance = nullptr;
 
-Menu::Menu(){
+CastleJump::Menu::Menu(){
 
 	display = Nibble.getDisplay();
 	baseSprite = display->getBaseSprite();
 
 	instance = this;
-
-	menuSelect.x = 20;
-	menuSelect.y = 100;
-	menuSelect.color = TFT_RED;
+	titleCursor = 0;
+	blinkState = 0;
+	blinkMicros = 0;
 	melody.play(MelodyImpl::menu, true);
 	display->commit();
 }
 
-void Menu::enter(CastleJump &gameEnter){
+void CastleJump::Menu::start(CastleJump &gameEnter){
 
 	castleJump = &gameEnter;
-	Input::getInstance()->setBtnPressCallback(BTN_A, buttonAPress);
-	Input::getInstance()->setBtnReleaseCallback(BTN_A, buttonARelease);
-	Input::getInstance()->setBtnPressCallback(BTN_UP, buttonUpPress);
-	Input::getInstance()->setBtnReleaseCallback(BTN_UP, buttonUpRelease);
-	Input::getInstance()->setBtnPressCallback(BTN_DOWN, buttonDownPress);
-	Input::getInstance()->setBtnReleaseCallback(BTN_DOWN, buttonDownRelease);
-	Input::getInstance()->setBtnPressCallback(BTN_LEFT, buttonDownPress);
-	Input::getInstance()->setBtnReleaseCallback(BTN_LEFT, buttonDownRelease);
-	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, buttonUpPress);
-	Input::getInstance()->setBtnReleaseCallback(BTN_RIGHT, buttonUpRelease);
-Piezo.setMute(true);
+	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
+		if(instance->titleCursor > 0){
+			instance->titleCursor--;
+			Piezo.tone(NOTE_B6, 25);
+
+		}
+	});
+	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
+		if(instance->titleCursor < 2){
+			instance->titleCursor++;
+			Piezo.tone(NOTE_B6, 25);
+
+		}
+	});
+	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
+		switch (instance->titleCursor)
+		{
+			case 0:
+				instance->castleJump->newGame();
+				break;
+
+			case 1:
+				instance->castleJump->openHighscores();
+				break;
+			case 2:
+				instance->castleJump->pop();
+				break;
+		}
+	});
+	Piezo.setMute(true);
 
 }
 
-void Menu::exit(){
+CastleJump::Menu::~Menu(){
+	stop();
+}
+
+void CastleJump::Menu::stop(){
 
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
-	Input::getInstance()->removeBtnPressCallback(BTN_UP);
-	Input::getInstance()->removeBtnReleaseCallback(BTN_UP);
-	Input::getInstance()->removeBtnPressCallback(BTN_DOWN);
-	Input::getInstance()->removeBtnReleaseCallback(BTN_DOWN);
+	Input::getInstance()->removeBtnPressCallback(BTN_LEFT);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_LEFT);
+	Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_RIGHT);
 	Piezo.setMute(true);
 }
 
-void Menu::buttonAPress(){
-	instance->aState = true;
-
-}
-
-void Menu::buttonARelease(){
-	instance->aState = false;
-
-}
-
-void Menu::buttonUpPress(){
-	instance->upState = true;
-
-}
-
-void Menu::buttonUpRelease(){
-	instance->upState = false;
-
-}
-
-void Menu::buttonDownPress(){
-	instance->downState = true;
-
-}
-
-void Menu::buttonDownRelease(){
-	instance->downState = false;
-
-}
-
-void Menu::drawSelection(MenuSelection &menuSelect){
-	baseSprite->drawIcon(icon_player, menuSelect.x, menuSelect.y, 8, 8);
-}
-
-void Menu::checkStateAndMove(MenuSelection &menuSelect){
-	if(upState){
-
-		menuSelect.y = 100;
-		checkState = false;
-	}
-	if(downState){
-
-		menuSelect.y = 115;
-		checkState = true;
-	}
-}
-
-void Menu::drawMenuScreen(){
+void CastleJump::Menu::draw(){
 	baseSprite->clear(TFT_BLACK);
-	baseSprite->drawIcon(homescreen, 0, 0, 128, 128);
-	baseSprite->setTextColor(TFT_WHITE);
+	baseSprite->drawIcon(homescreen, 0,0,128,128);
+	baseSprite->setCursor(118, 110);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("New game", 30, 96);
-	baseSprite->drawString("Highscore", 30, 111);
-}
-void Menu::draw(){
-	drawMenuScreen();
-	drawSelection(menuSelect);
+	baseSprite->setTextColor(TFT_WHITE);
+	baseSprite->drawRect(18, 110, 92, 18, TFT_WHITE);
+	baseSprite->drawRect(17, 109, 94, 20, TFT_WHITE);
+
+	baseSprite->setCursor(18*2, 110);
+	baseSprite->printCenter(titleMenu[titleCursor]);
+	if(blinkState)
+	{
+		if (titleCursor == 0)
+		{
+			baseSprite->drawIcon(icon_player, 4, 114, 8, 8, 1, TFT_BLACK );
+			baseSprite->drawIcon(icon_player, 116, 114, 8, 8, 1, TFT_BLACK);
+		}
+		else if (titleCursor == 2)
+		{
+			baseSprite->drawIcon(icon_player, 4, 116, 8, 8, 1, TFT_BLACK);
+			baseSprite->drawIcon(icon_player, 116, 116, 8, 8, 1, TFT_BLACK);
+		}
+		else
+		{
+			baseSprite->drawIcon(icon_player, 4, 116, 8, 8, 1, TFT_BLACK);
+			baseSprite->drawIcon(icon_player, 116, 114, 8, 8, 1, TFT_BLACK);
+		}
+	}
+	else
+	{
+		baseSprite->drawIcon(icon_player, 4, 114, 8, 8, 1, TFT_BLACK);
+		baseSprite->drawIcon(icon_player, 116, 116, 8, 8, 1, TFT_BLACK);
+	}
+
 	display->commit();
 }
-void Menu::loop(uint time){
+
+void CastleJump::Menu::loop(uint time){
 	baseSprite->clear(TFT_BLACK);
-	checkStateAndMove(menuSelect);
-	if(aState && !checkState){
-		Piezo.tone(NOTE_B6, 25);
-		castleJump->changeState(new GameState());
-	}
-	if(aState && checkState){
-		Piezo.tone(NOTE_B6, 25);
-		castleJump->changeState(new ShowHighscoreState());
+	blinkMicros+=time;
+	if(blinkMicros > 200000)
+	{
+		blinkState = !blinkState;
+		blinkMicros = 0;
 	}
 
 

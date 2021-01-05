@@ -3,62 +3,60 @@
 
 #include "State.h"
 
-struct MenuSelection{
+namespace CastleJump {
+
+	struct MenuSelection {
 		float x;
 		float y;
 		float r;
 		Color color;
+	};
+
+	class Menu : public State {
+
+	public:
+		Menu();
+
+		~Menu();
+
+		static void buttonAPress();
+
+		static void buttonARelease();
+
+		static void buttonDownPress();
+
+		static void buttonDownRelease();
+
+		static void buttonUpPress();
+
+		static void buttonUpRelease();
+
+		static void buttonRightPress();
+
+		static void buttonRightRelease();
+
+		static void buttonLeftPress();
+
+		static void buttonLeftRelease();
+
+		void loop(uint time) override;
+
+		void start(CastleJump &gameEnter) override;
+
+		void stop() override;
+
+		void draw() override;
+
+	private:
+		static const char *titleMenu[3];
+		uint8_t titleCursor;
+		bool blinkState;
+		uint blinkMicros;
+		static Menu *instance;
+		Display *display;
+		Sprite *baseSprite;
+
+	};
 };
-
-class Menu : public State {
-
-public:
-	Menu();
-	static void buttonAPress();
-
-	static void buttonARelease();
-
-	static void buttonDownPress();
-
-	static void buttonDownRelease();
-
-	static void buttonUpPress();
-
-	static void buttonUpRelease();
-
-	static void buttonRightPress();
-
-	static void buttonRightRelease();
-
-	static void buttonLeftPress();
-
-	static void buttonLeftRelease();
-
-	void loop(uint time) override;
-
-	void enter(CastleJump &gameEnter) override;
-
-	void exit() override;
-
-	void draw() override;
-
-private:
-
-	void drawSelection(MenuSelection &menuSelect);
-
-	void checkStateAndMove(MenuSelection &menuSelect);
-
-	MenuSelection menuSelect;
-	static Menu *instance;
-	Display *display;
-	Sprite *baseSprite;
-	bool aState = false;
-	bool upState = false;
-	bool downState = false;
-	bool checkState = false;
-
-	void drawMenuScreen();
-};
-
 
 #endif //CASTLEJUMP_MENU_H
