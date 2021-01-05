@@ -1,14 +1,12 @@
 #include "ShowHighscoreState.h"
 #include "Highscore/Highscore.h"
-#include "Menu.h"
-#include "EraseHighscoreState.h"
 #include "Melodies/Notes.hpp"
 #include "bitmaps/highscore.hpp"
 #include "Pins.hpp"
 
-ShowHighscoreState *ShowHighscoreState::instance = nullptr;
+CastleJump::ShowHighscoreState *CastleJump::ShowHighscoreState::instance = nullptr;
 
-ShowHighscoreState::ShowHighscoreState(){
+CastleJump::ShowHighscoreState::ShowHighscoreState(){
 
 	display = Nibble.getDisplay();
 	baseSprite = display->getBaseSprite();
@@ -16,33 +14,38 @@ ShowHighscoreState::ShowHighscoreState(){
 
 }
 
-void ShowHighscoreState::enter(CastleJump &gameEnter){
+void CastleJump::ShowHighscoreState::start(CastleJump &gameEnter){
 
 	castleJump=&gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_UP,[](){
 		Piezo.tone(NOTE_B7,100);
-		instance->castleJump->changeState(new EraseHighscoreState());
+		instance->castleJump->deleteHighscores();
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_A,[](){
 		Piezo.tone(NOTE_B6,25);
-		instance->castleJump->changeState(new Menu());
+		instance->castleJump->returnToMenu();
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_B,[](){
 		Piezo.tone(NOTE_B6,25);
-		instance->castleJump->changeState(new Menu());
+		instance->castleJump->returnToMenu();
+	});
+	Input::getInstance()->setBtnPressCallback(BTN_C, [](){
+		instance->castleJump->returnToMenu();
 	});
 	Piezo.setMute(true);
 }
-void ShowHighscoreState::exit(){
+void CastleJump::ShowHighscoreState::stop(){
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
 	Input::getInstance()->removeBtnPressCallback(BTN_UP);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_UP);
+	Input::getInstance()->removeBtnPressCallback(BTN_C);
+	Input::getInstance()->removeBtnReleaseCallback(BTN_C);
 
 }
-void ShowHighscoreState::drawHighscore(){
+void CastleJump::ShowHighscoreState::drawHighscore(){
 	baseSprite->clear(TFT_BLACK);
 	baseSprite->drawIcon(high_score,0,0,128,128);
 	for(int i=0;i<5;i++){
@@ -57,11 +60,11 @@ void ShowHighscoreState::drawHighscore(){
 	}
 
 }
-void ShowHighscoreState::draw(){
+void CastleJump::ShowHighscoreState::draw(){
 	drawHighscore();
 	display->commit();
 
 }
-void ShowHighscoreState::loop(uint time){
+void CastleJump::ShowHighscoreState::loop(uint time){
 
 }
