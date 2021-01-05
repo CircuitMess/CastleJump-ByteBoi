@@ -15,39 +15,55 @@
 #include "CastleJump.h"
 #include "Melodies/Melody.h"
 #include <Support/Context.h>
-extern Context* runningContext;
+//extern Context* runningContext;
+
+namespace CastleJump {
 
 
-class State;
+	class State;
 
-class CastleJump : public Context, public LoopListener {
+	class CastleJump : public Context, public LoopListener {
 
-public:
+	public:
 
-	CastleJump();
+		CastleJump(Display *display);
 
-	void changeState(State *differentState);
+		void start() override;
 
-	void loop(uint) override;
+		void loop(uint time) override;
 
-	void pauseGame();
+		void stop() override;
 
-	void resumeGame();
+		void draw() override;
 
-	void draw() ;
+		void newGame();
+
+		void enterHighscore();
+
+		void openHighscores();
+
+		void deleteHighscores();
+
+		void pauseGame();
+
+		void gameOver();
+
+		void resumeGame();
+
+		void returnToMenu();
+
+		State *pausedGameState = nullptr;
+
+		uint score;
+
+	private:
+
+		State *state;
+		static CastleJump *instance;
+		Display *display;
+		Sprite *baseSprite;
 
 
-	State *pausedGameState = nullptr;
-
-private:
-
-	State *state;
-	static CastleJump *instance;
-
-	Display *display;
-	Sprite *baseSprite;
-
-
+	};
 };
-
 #endif
