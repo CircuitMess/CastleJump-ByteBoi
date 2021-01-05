@@ -10,23 +10,19 @@
 #include "src/Menu.h"
 #include "Pins.hpp"
 
-CastleJump *castleJump;
+
+CastleJump::CastleJump *castleJump;
 
 void setup(){
 	Serial.begin(115200);
+	Nibble.getDisplay();
 	Nibble.begin();
-	Highscore.begin();
-	//Serial.println(ESP.getFreeHeap());
-	castleJump=new CastleJump();//new (bilo koji state)
-	//delete castleJump;
-//	Serial.println(ESP.getFreeHeap());
+	castleJump = new CastleJump::CastleJump(Nibble.getDisplay());
 	LoopManager::addListener(castleJump);
 	LoopManager::addListener(Input::getInstance());
-
+	castleJump->start();
 }
 
 void loop(){
-
-	LoopManager::loop() ;
-
+	LoopManager::loop();
 }
