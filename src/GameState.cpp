@@ -173,10 +173,6 @@ void CastleJump::GameState::drawRedScreen(){
 	baseSprite->drawIcon(redScreen, 0, 0, 128, 128, 1, TFT_BLACK);
 }
 
-//void GameState::drawBackGround(){
-//	korak = korak + 0.1;
-//baseSprite->drawIcon(background_sprite, 10, -korak, 166, 500);
-//}
 
 void CastleJump::GameState::xPosMoving(){
 	if(player.pos.x > 115){
@@ -234,7 +230,7 @@ void CastleJump::GameState::movingRects(Rect &stairs, uint b){
 		float randX;
 		do {
 			stairs.y = 0;
-			randX = random(10, 85);
+			randX = random(9, 86);
 		} while(abs(randX - stairs.x > 30));
 		stairs.x = randX;
 	}
