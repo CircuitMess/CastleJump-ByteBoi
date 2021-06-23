@@ -441,14 +441,14 @@ void CastleJump::GameState::loop(uint time){
 	checkLevel();
 	float dt = (float) time / 1000000.0f;
 	velocity(dt);
-	if(player.pos.y < 0){//check height
+	/*if(player.pos.y < 0){//check height
 		float delta = -player.pos.y;
 		player.pos.y = 0;
 		for(int i = 0; i < dropRect.size(); ++i){
 			dropRect[i].y -= delta;
 			speed = speed + 0.1;
 		}
-	}
+	}*/
 	for(int i = 0; i < dropRect.size(); ++i){
 		movingRects(dropRect[i], time);
 		drawRect(dropRect[i]);
