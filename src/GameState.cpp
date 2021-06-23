@@ -165,7 +165,12 @@ void CastleJump::GameState::drawFloor(){
 }
 
 void CastleJump::GameState::drawLives(){
-	srce.push();
+	baseSprite->drawIcon(srce, 100, 0, 8, 8, 1, TFT_BLACK);
+//	srce.push();
+}
+
+void CastleJump::GameState::drawRedScreen(){
+	baseSprite->drawIcon(redScreen, 0, 0, 128, 128, 1, TFT_BLACK);
 }
 
 //void GameState::drawBackGround(){
@@ -304,6 +309,7 @@ void CastleJump::GameState::checkForCollision(Rect &stairs){
 		if((distX <= 11.5 && distY <= 6)){
 			player.velocity.y = -min(player.velocity.y, 110.0f);
 			firstTouch = true;
+			lostLife = false;
 		}
 	}else if(stairs.w == 40){
 		float distX = abs(player.pos.x - stairs.x - 20);
@@ -311,6 +317,7 @@ void CastleJump::GameState::checkForCollision(Rect &stairs){
 		if((distX <= 21.5 && distY <= 6)){
 			player.velocity.y = -min(player.velocity.y, 110.0f);
 			firstTouch = true;
+			lostLife = false;
 		}
 
 	}else if(stairs.w == 10){
@@ -319,6 +326,7 @@ void CastleJump::GameState::checkForCollision(Rect &stairs){
 		if((distX <= 6.5 && distY <= 6)){
 			player.velocity.y = -min(player.velocity.y, 110.0f);
 			firstTouch = true;
+			lostLife = false;
 		}
 
 	}
@@ -408,15 +416,19 @@ void CastleJump::GameState::checkLevel(){
 }
 
 void CastleJump::GameState::draw(){
-	scoreTable();
 	drawPlayerCircle();
 	drawWalls();
-	drawFloor();
+	if(!lostLife){
+		drawFloor();
+	}
+	if(lostLife){
+		drawRedScreen();
+	}
+	scoreTable();
 	drawLives();
 	level();
 	lives();
 	display->commit();
-
 
 }
 
@@ -453,6 +465,7 @@ void CastleJump::GameState::loop(uint time){
 		if(firstTouch){
 			if(livesNum > 0){
 				livesNum--;
+				lostLife = true;
 				Piezo.tone(NOTE_E5, 100);
 			}
 

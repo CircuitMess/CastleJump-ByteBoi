@@ -76,6 +76,8 @@ namespace CastleJump {
 		int lvl = 1;
 		int livesNum = 3;
 		float korak = 0;
+		bool lostLife = false;
+		uint8_t lavaHeight = 128;
 
 		Vector<PowerUps> powerUp;
 		AnimatedSprite srce;
@@ -129,7 +131,7 @@ namespace CastleJump {
 
 		void drawLives();
 
-		void drawBackGround();
+		void drawRedScreen();
 	};
 };
 #endif
