@@ -404,7 +404,7 @@ void CastleJump::GameState::checkLevel(){
 		speed = 1.3;
 	}
 	if(lvl == 3){
-		speed = 1.7;
+		speed = 1.6;
 	}
 	if(lvl == 4){
 		speed = 1.9;
