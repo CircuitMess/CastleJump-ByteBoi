@@ -11,16 +11,19 @@
 #include "bitmaps/floor.hpp"
 #include "bitmaps/platform1_1.hpp"
 #include "bitmaps/platform1_2.hpp"
-#include "bitmaps/platform1_4.hpp"
+#include "bitmaps/platform1_3.hpp"
 #include "bitmaps/platform2_1.hpp"
 #include "bitmaps/platform2_2.hpp"
-#include "bitmaps/platform2_4.hpp"
+#include "bitmaps/platform2_3.hpp"
 #include "bitmaps/platform3_1.hpp"
 #include "bitmaps/platform3_2.hpp"
-#include "bitmaps/platform3_4.hpp"
+#include "bitmaps/platform3_3.hpp"
 #include "bitmaps/lava.hpp"
 #include "bitmaps/heart/heart1.hpp"
-
+#include "bitmaps/heart/srce_8x8.hpp"
+#include "bitmaps/red_screen.hpp"
+#include "bitmaps/window.hpp"
+#include "bitmaps/brick2.hpp"
 
 CastleJump::GameState *CastleJump::GameState::instance = nullptr;
 
@@ -114,29 +117,29 @@ void CastleJump::GameState::drawCoin(Coin &goldenCoin){
 
 void CastleJump::GameState::drawRect(Rect &stairs){
 	if(lvl == 1 && stairs.w == 10){
-		baseSprite->drawIcon(icon_platform1_1, stairs.x, stairs.y, stairs.w, stairs.h);
+		baseSprite->drawIcon(icon_platform1_1, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
 	}else if(lvl == 1 && stairs.w == 20){
-		baseSprite->drawIcon(icon_platform1_2, stairs.x, stairs.y, stairs.w, stairs.h);
+		baseSprite->drawIcon(icon_platform1_2, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
 	}else if(lvl == 1 && stairs.w == 40){
-		baseSprite->drawIcon(icon_platform1_4, stairs.x, stairs.y, stairs.w, stairs.h);
+		baseSprite->drawIcon(icon_platform1_3, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
 	}else if(lvl == 2 && stairs.w == 10){
-		baseSprite->drawIcon(icon_platform2_1, stairs.x, stairs.y, stairs.w, stairs.h);
+		baseSprite->drawIcon(icon_platform2_1, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
 	}else if(lvl == 2 && stairs.w == 20){
-		baseSprite->drawIcon(icon_platform2_2, stairs.x, stairs.y, stairs.w, stairs.h);
+		baseSprite->drawIcon(icon_platform2_2, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
 	}else if(lvl == 2 && stairs.w == 40){
-		baseSprite->drawIcon(icon_platform2_4, stairs.x, stairs.y, stairs.w, stairs.h);
+		baseSprite->drawIcon(icon_platform2_3, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
 	}else if(lvl == 3 && stairs.w == 10){
-		baseSprite->drawIcon(icon_platform3_1, stairs.x, stairs.y, stairs.w, stairs.h);
+		baseSprite->drawIcon(icon_platform3_1, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
 	}else if(lvl == 3 && stairs.w == 20){
-		baseSprite->drawIcon(icon_platform3_2, stairs.x, stairs.y, stairs.w, stairs.h);
+		baseSprite->drawIcon(icon_platform3_2, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
 	}else if(lvl == 3 && stairs.w == 40){
-		baseSprite->drawIcon(icon_platform3_4, stairs.x, stairs.y, stairs.w, stairs.h);
+		baseSprite->drawIcon(icon_platform3_3, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
 	}else if(lvl == 4 && stairs.w == 10){
-		baseSprite->drawIcon(icon_platform1_1, stairs.x, stairs.y, stairs.w, stairs.h);
+		baseSprite->drawIcon(icon_platform1_1, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
 	}else if(lvl == 4 && stairs.w == 20){
-		baseSprite->drawIcon(icon_platform2_2, stairs.x, stairs.y, stairs.w, stairs.h);
+		baseSprite->drawIcon(icon_platform2_2, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
 	}else if(lvl == 4 && stairs.w == 40){
-		baseSprite->drawIcon(icon_platform3_4, stairs.x, stairs.y, stairs.w, stairs.h);
+		baseSprite->drawIcon(icon_platform3_3, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
 	}
 }
 
@@ -173,6 +176,10 @@ void CastleJump::GameState::drawRedScreen(){
 	baseSprite->drawIcon(redScreen, 0, 0, 128, 128, 1, TFT_BLACK);
 }
 
+void CastleJump::GameState::drawBackground(){
+	baseSprite->drawIcon(window_draw, 20, 30, 20, 20, 1, TFT_BLACK);
+	baseSprite->drawIcon(cigle2, 70, 70, 40, 20, 1, TFT_BLACK);
+}
 
 void CastleJump::GameState::xPosMoving(){
 	if(player.pos.x > 115){
@@ -412,6 +419,10 @@ void CastleJump::GameState::checkLevel(){
 }
 
 void CastleJump::GameState::draw(){
+	drawBackground();
+	for(int i = 0; i < dropRect.size(); ++i){
+		drawRect(dropRect[i]);
+	}
 	drawPlayerCircle();
 	drawWalls();
 	if(!lostLife){
