@@ -440,8 +440,7 @@ void CastleJump::GameState::draw(){
 }
 
 void CastleJump::GameState::loop(uint time){
-	baseSprite->clear(TFT_BLACK);
-//	drawBackGround();
+	baseSprite->clear(TFT_DARKGREY);
 	castleJump->score = score;
 	xPosMoving();
 	levelCounter();
