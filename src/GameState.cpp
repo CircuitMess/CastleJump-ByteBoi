@@ -388,7 +388,7 @@ void CastleJump::GameState::lives(){
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
 	baseSprite->drawString("x", 109, 1);
-	baseSprite->drawNumber(livesNum - 0, 115, 1);
+	baseSprite->drawNumber(lifeNum - 0, 115, 1);
 }
 
 void CastleJump::GameState::movingBrick(BackPict& brick, uint b){

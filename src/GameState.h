@@ -80,7 +80,7 @@ namespace CastleJump {
 		Vector<Coin> coin;
 		bool checkWallBump = false;
 		int lvl = 1;
-		int livesNum = 3;
+		int lifeNum = 5;
 		float korak = 0;
 		bool lostLife = false;
 		uint8_t lavaHeight = 128;
