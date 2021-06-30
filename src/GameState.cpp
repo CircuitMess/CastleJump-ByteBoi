@@ -24,8 +24,12 @@
 #include "bitmaps/red_screen.hpp"
 #include "bitmaps/window.hpp"
 #include "bitmaps/brick2.hpp"
+#include "bitmaps/brick1.hpp"
+#include "bitmaps/brick3.hpp"
 
-CastleJump::GameState *CastleJump::GameState::instance = nullptr;
+CastleJump::GameState* CastleJump::GameState::instance = nullptr;
+const unsigned short* listBricks1[2] = {cigle2, cigle3};
+const unsigned short* listBricks2[2] = {window_draw, cigle1};
 
 CastleJump::GameState::GameState() : srce(Nibble.getDisplay()->getBaseSprite(), sprite_srce, sizeof(sprite_srce)){
 
@@ -45,12 +49,18 @@ CastleJump::GameState::GameState() : srce(Nibble.getDisplay()->getBaseSprite(), 
 
 	powerUp.push_back({50, -1800, 2, TFT_BLUE});
 
+	bricks.push_back({70, 80, 40, 20});
+
+	window.push_back({20, 30, 20, 20});
+
 	dropRect.push_back({40, 0, 20, 2});
 	dropRect.push_back({80, -21, 40, 2});
 	dropRect.push_back({70, -42, 20, 2});
 	dropRect.push_back({20, -63, 10, 2});
 	dropRect.push_back({60, -84, 20, 2});
 	dropRect.push_back({80, -100, 40, 2});
+	randBitmapBrick = 0;
+	randBitmapWin = 0;
 
 	score = 0;
 	melody.play(MelodyImpl::game, true);
@@ -147,6 +157,14 @@ void CastleJump::GameState::drawAbilityPoint(PowerUps &ability){
 	baseSprite->drawIcon(power_up, ability.x, ability.y, 5, 5);
 }
 
+void CastleJump::GameState::drawBrick(BackPict& brick){
+	baseSprite->drawIcon(listBricks1[randBitmapBrick], brick.x, brick.y, brick.w, brick.h, 1, TFT_BLACK);
+}
+
+void CastleJump::GameState::drawWindow(BackPict& windows){
+	baseSprite->drawIcon(listBricks2[randBitmapWin], windows.x, windows.y, windows.w, windows.h, 1, TFT_BLACK);
+}
+
 void CastleJump::GameState::drawWalls(){
 	baseSprite->drawIcon(leftWall, 0, 0, 5, 128);
 	baseSprite->drawIcon(rightWall, 123, 0, 5, 128);
@@ -174,11 +192,6 @@ void CastleJump::GameState::drawLives(){
 
 void CastleJump::GameState::drawRedScreen(){
 	baseSprite->drawIcon(redScreen, 0, 0, 128, 128, 1, TFT_BLACK);
-}
-
-void CastleJump::GameState::drawBackground(){
-	baseSprite->drawIcon(window_draw, 20, 30, 20, 20, 1, TFT_BLACK);
-	baseSprite->drawIcon(cigle2, 70, 70, 40, 20, 1, TFT_BLACK);
 }
 
 void CastleJump::GameState::xPosMoving(){
@@ -378,6 +391,25 @@ void CastleJump::GameState::lives(){
 	baseSprite->drawNumber(livesNum - 0, 115, 1);
 }
 
+void CastleJump::GameState::movingBrick(BackPict& brick, uint b){
+	if(firstTouch){
+		brick.y += backgorundSpeed * speed * b / 20000;
+		if(brick.y > 125){
+			brick.y = -20;
+			randBitmapBrick = random(0, 2);
+		}
+	}
+}
+
+void CastleJump::GameState::movingWindow(BackPict& window, uint b){
+	if(firstTouch){
+		window.y += backgorundSpeed * speed * b / 20000;
+		if(window.y > 125){
+			window.y = -20;
+			randBitmapWin = random(0, 2);
+		}
+	}
+}
 
 void CastleJump::GameState::movingCoin(Coin &goldenCoin, uint b) const{
 	goldenCoin.y += 1.1 * speed * b / 20000;
@@ -414,12 +446,14 @@ void CastleJump::GameState::checkLevel(){
 		speed = 1.6;
 	}
 	if(lvl == 4){
-		speed = 1.9;
+		speed = 1.6;
+		backgorundSpeed = 0.5;
 	}
 }
 
 void CastleJump::GameState::draw(){
-	drawBackground();
+	drawBrick(bricks[0]);
+	drawWindow(window[0]);
 	for(int i = 0; i < dropRect.size(); ++i){
 		drawRect(dropRect[i]);
 	}
@@ -457,7 +491,7 @@ void CastleJump::GameState::loop(uint time){
 	}*/
 	for(int i = 0; i < dropRect.size(); ++i){
 		movingRects(dropRect[i], time);
-		drawRect(dropRect[i]);
+
 		checkForCollision(dropRect[i]);
 	}
 	if(!firstTouch && player.pos.y > 112){
@@ -491,10 +525,10 @@ void CastleJump::GameState::loop(uint time){
 		drawAbilityPoint(powerUp[i]);
 		movingPowerUps(powerUp[i], time);
 		checkForPowerUp(powerUp[i]);
+		movingBrick(bricks[i], time);
+		movingWindow(window[i], time);
 	}
 	if(highspeed || lowGravity){
 		powerUpTimer();
 	}
-
-
 }

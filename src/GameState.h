@@ -26,7 +26,12 @@ namespace CastleJump {
 		float y;
 		float w;
 		float h;
-
+	};
+	struct BackPict {
+		float x;
+		float y;
+		float w;
+		float h;
 	};
 
 	class GameState : public State {
@@ -80,11 +85,13 @@ namespace CastleJump {
 		uint8_t lavaHeight = 128;
 
 		Vector<PowerUps> powerUp;
-		AnimatedSprite srce;
-		/*AnimatedSprite downHit;
-		AnimatedSprite leftHit;
-		AnimatedSprite rightHit;*/
-		enum AnimState {
+		Vector<BackPict> bricks;
+		Vector<BackPict> window;
+
+		uint8_t randBitmapBrick;
+		uint8_t randBitmapWin;
+		//GIFAnimatedSprite srce;
+		/*enum AnimState {
 			NONE, ANIM_LEFT, ANIM_RIGHT, ANIM_DOWN
 		};
 		AnimState state;
@@ -112,6 +119,14 @@ namespace CastleJump {
 		void lives();
 
 		void drawCoin(Coin &goldenCoin);
+
+		void drawBrick(BackPict &brick);
+
+		void drawWindow(BackPict &windows);
+
+		void movingBrick(BackPict &brick, uint b);
+
+		void movingWindow(BackPict &window, uint b) ;
 
 		void movingCoin(Coin &goldenCoin, uint b) const;
 
