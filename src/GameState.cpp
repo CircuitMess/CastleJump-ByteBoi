@@ -438,12 +438,15 @@ void CastleJump::GameState::movingPowerUps(PowerUps &ability, uint b) const{
 void CastleJump::GameState::checkLevel(){
 	if(lvl == 1){
 		speed = 1;
+		backgorundSpeed = 0.2;
 	}
 	if(lvl == 2){
-		speed = 1.3;
+		speed = 1.2;
+		backgorundSpeed = 0.3;
 	}
 	if(lvl == 3){
-		speed = 1.6;
+		speed = 1.4;
+		backgorundSpeed = 0.4;
 	}
 	if(lvl == 4){
 		speed = 1.6;

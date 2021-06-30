@@ -65,6 +65,7 @@ namespace CastleJump {
 		Display *display;
 		Sprite *baseSprite;
 		double speed;
+		float backgorundSpeed = 0.2;
 		bool leftState = false;
 		bool rightState = false;
 		Vector<Rect> dropRect;
