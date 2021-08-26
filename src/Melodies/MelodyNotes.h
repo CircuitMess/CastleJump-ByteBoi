@@ -9,7 +9,17 @@ Note melodyCoin[] = {{NOTE_B5, 100},
 					 {NOTE_E6, 150},
 					 {0,       100}
 };
-Note melodyWin[] = {{NOTE_A5, 100},
+Note melodyWin[] = {{NOTE_F6,100},
+					{0,       100},
+					{NOTE_A6,100},
+					{0,       100},
+					{NOTE_F6,100},
+					{0,       100},
+					{NOTE_A6,100},
+
+
+};
+/*Note melodyWin[] = {{NOTE_A5, 100},
 					{0,       100},
 					{NOTE_B5, 150},
 					{0,       100},
@@ -29,7 +39,7 @@ Note melodyWin[] = {{NOTE_A5, 100},
 					{0,       100},
 					{NOTE_C5, 200}
 
-};
+};*/
 Note melodyDead[] = {{NOTE_E2, 500},
 					 {0,       100},
 					 {NOTE_C2, 500},
@@ -48,7 +58,7 @@ Note melodyGame[] = {{NOTE_D6, 100},
 					 {0,       100},
 					 {NOTE_B5, 100},
 					 {0,       100},
-					 {NOTE_D6, 100},
+					 {NOTE_D6, 200},
 					 {0,       100},
 					 {NOTE_B5, 100},
 					 {0,       100},
@@ -60,7 +70,7 @@ Note melodyGame[] = {{NOTE_D6, 100},
 					 {0,       100},
 					 {NOTE_B5, 100},
 					 {0,       100},
-					 {NOTE_D6, 100},
+					 {NOTE_D6, 200},
 					 {0,       100},
 					 {NOTE_B5, 100},
 					 {0,       100},
