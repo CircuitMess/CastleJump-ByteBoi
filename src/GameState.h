@@ -4,6 +4,7 @@
 #include "State.h"
 #include <Motion/vec.hpp>
 #include <Display/AnimatedSprite.h>
+
 namespace CastleJump {
 	struct Player {
 		vec3f pos;
@@ -41,7 +42,7 @@ namespace CastleJump {
 
 		void loop(uint time) override;
 
-		void start(CastleJump &gameEnter) override;
+		void start(CastleJump& gameEnter) override;
 
 		void stop() override;
 
@@ -61,9 +62,9 @@ namespace CastleJump {
 
 
 	private:
-		static GameState *instance;
-		Display *display;
-		Sprite *baseSprite;
+		static GameState* instance;
+		Display* display;
+		Sprite* baseSprite;
 		double speed;
 		float backgorundSpeed = 0.2;
 		bool leftState = false;
@@ -80,7 +81,7 @@ namespace CastleJump {
 		Vector<Coin> coin;
 		bool checkWallBump = false;
 		int lvl = 1;
-		int lifeNum = 5;
+		int livesNum = 5;
 		float korak = 0;
 		bool lostLife = false;
 		uint8_t lavaHeight = 128;
@@ -91,21 +92,19 @@ namespace CastleJump {
 
 		uint8_t randBitmapBrick;
 		uint8_t randBitmapWin;
-		//GIFAnimatedSprite srce;
-		/*enum AnimState {
-			NONE, ANIM_LEFT, ANIM_RIGHT, ANIM_DOWN
-		};
-		AnimState state;
+
+		AnimatedSprite heartGif;
+		AnimatedSprite lavaGif;
 
 		void drawPlayerCircle();
 
-		void drawRect(Rect &stairs);
+		void drawRect(Rect& stairs);
 
-		void checkForCollision(Rect &stairs);
+		void checkForCollision(Rect& stairs);
 
 		void velocity(float dt);
 
-		void movingRects(Rect &stairs, uint b);
+		void movingRects(Rect& stairs, uint b);
 
 		void xPosMoving();
 
@@ -119,33 +118,31 @@ namespace CastleJump {
 
 		void lives();
 
-		void drawCoin(Coin &goldenCoin);
+		void drawCoin(Coin& goldenCoin);
 
-		void drawBrick(BackPict &brick);
+		void drawBrick(BackPict& brick);
 
-		void drawWindow(BackPict &windows);
+		void drawWindow(BackPict& windows);
 
-		void movingBrick(BackPict &brick, uint b);
+		void movingBrick(BackPict& brick, uint b);
 
-		void movingWindow(BackPict &window, uint b) ;
+		void movingWindow(BackPict& window, uint b);
 
-		void movingCoin(Coin &goldenCoin, uint b) const;
+		void movingCoin(Coin& goldenCoin, uint b) const;
 
-		void checkForPoint(Coin &goldenCoin);
+		void checkForPoint(Coin& goldenCoin);
 
-		void drawAbilityPoint(PowerUps &powerUp);
+		void drawAbilityPoint(PowerUps& powerUp);
 
-		void movingPowerUps(PowerUps &powerUp, uint b) const;
+		void movingPowerUps(PowerUps& powerUp, uint b) const;
 
-		void checkForPowerUp(PowerUps &powerUp);
+		void checkForPowerUp(PowerUps& powerUp);
 
 		void checkLevel();
 
 		void drawWalls();
 
 		void drawFloor();
-
-		void drawLives();
 
 		void drawRedScreen();
 	};

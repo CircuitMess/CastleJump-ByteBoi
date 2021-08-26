@@ -20,25 +20,37 @@
 #include "bitmaps/platform3_3.hpp"
 #include "bitmaps/lava.hpp"
 #include "bitmaps/heart/heart1.hpp"
-#include "bitmaps/heart/srce_8x8.hpp"
 #include "bitmaps/red_screen.hpp"
 #include "bitmaps/window.hpp"
 #include "bitmaps/brick2.hpp"
 #include "bitmaps/brick1.hpp"
 #include "bitmaps/brick3.hpp"
+#include <FS/PGMFile.h>
+#include <FS/CompressedFile.h>
+#include <LittleFS.h>
 
 CastleJump::GameState* CastleJump::GameState::instance = nullptr;
+
 const unsigned short* listBricks1[2] = {cigle2, cigle3};
 const unsigned short* listBricks2[2] = {window_draw, cigle1};
 
-CastleJump::GameState::GameState() : srce(Nibble.getDisplay()->getBaseSprite(), sprite_srce, sizeof(sprite_srce)){
+CastleJump::GameState::GameState() : heartGif(Nibble.getDisplay()->getBaseSprite(), LittleFS.open("/heart.hpp.g565", "r")),
+									 lavaGif(Nibble.getDisplay()->getBaseSprite(), CompressedFile::open(LittleFS.open("/lava.g565.hs", "r"), 12, 11, 683), true){
+	if(LittleFS.exists("/lava.g565.hs")){
+		Serial.println("Exists");
+	}
+	Serial.println(ESP.getFreeHeap());
 
 	display = Nibble.getDisplay();
 	baseSprite = display->getBaseSprite();
-
 	instance = this;
 
-	srce.setXY(100, 0);
+	heartGif.setXY(100, 0);
+	heartGif.setMaskingColor(TFT_BLACK);
+	lavaGif.setLoop(true);
+	lavaGif.setXY(0, 118);
+	lavaGif.setMaskingColor(TFT_BLACK);
+	lavaGif.nextFrame();
 
 	player.pos.x = 66;
 	player.pos.y = 66;
@@ -67,7 +79,7 @@ CastleJump::GameState::GameState() : srce(Nibble.getDisplay()->getBaseSprite(), 
 
 }
 
-void CastleJump::GameState::start(CastleJump &gameEnter){
+void CastleJump::GameState::start(CastleJump& gameEnter){
 	castleJump = &gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_B, [](){
 		instance->castleJump->pauseGame();
@@ -121,39 +133,39 @@ void CastleJump::GameState::drawPlayerCircle(){
 	baseSprite->drawIcon(icon_player, player.pos.x, player.pos.y, 8, 8, 1, TFT_BLACK);
 }
 
-void CastleJump::GameState::drawCoin(Coin &goldenCoin){
+void CastleJump::GameState::drawCoin(Coin& goldenCoin){
 	baseSprite->drawIcon(icon_coin, goldenCoin.x, goldenCoin.y, 5, 5);
 }
 
-void CastleJump::GameState::drawRect(Rect &stairs){
+void CastleJump::GameState::drawRect(Rect& stairs){
 	if(lvl == 1 && stairs.w == 10){
-		baseSprite->drawIcon(icon_platform1_1, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
+		baseSprite->drawIcon(icon_platform1_1, stairs.x, stairs.y, stairs.w, stairs.h, 1, TFT_BLACK);
 	}else if(lvl == 1 && stairs.w == 20){
-		baseSprite->drawIcon(icon_platform1_2, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
+		baseSprite->drawIcon(icon_platform1_2, stairs.x, stairs.y, stairs.w, stairs.h, 1, TFT_BLACK);
 	}else if(lvl == 1 && stairs.w == 40){
-		baseSprite->drawIcon(icon_platform1_3, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
+		baseSprite->drawIcon(icon_platform1_3, stairs.x, stairs.y, stairs.w, stairs.h, 1, TFT_BLACK);
 	}else if(lvl == 2 && stairs.w == 10){
-		baseSprite->drawIcon(icon_platform2_1, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
+		baseSprite->drawIcon(icon_platform2_1, stairs.x, stairs.y, stairs.w, stairs.h, 1, TFT_BLACK);
 	}else if(lvl == 2 && stairs.w == 20){
-		baseSprite->drawIcon(icon_platform2_2, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
+		baseSprite->drawIcon(icon_platform2_2, stairs.x, stairs.y, stairs.w, stairs.h, 1, TFT_BLACK);
 	}else if(lvl == 2 && stairs.w == 40){
-		baseSprite->drawIcon(icon_platform2_3, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
+		baseSprite->drawIcon(icon_platform2_3, stairs.x, stairs.y, stairs.w, stairs.h, 1, TFT_BLACK);
 	}else if(lvl == 3 && stairs.w == 10){
-		baseSprite->drawIcon(icon_platform3_1, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
+		baseSprite->drawIcon(icon_platform3_1, stairs.x, stairs.y, stairs.w, stairs.h, 1, TFT_BLACK);
 	}else if(lvl == 3 && stairs.w == 20){
-		baseSprite->drawIcon(icon_platform3_2, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
+		baseSprite->drawIcon(icon_platform3_2, stairs.x, stairs.y, stairs.w, stairs.h, 1, TFT_BLACK);
 	}else if(lvl == 3 && stairs.w == 40){
-		baseSprite->drawIcon(icon_platform3_3, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
+		baseSprite->drawIcon(icon_platform3_3, stairs.x, stairs.y, stairs.w, stairs.h, 1, TFT_BLACK);
 	}else if(lvl == 4 && stairs.w == 10){
-		baseSprite->drawIcon(icon_platform1_1, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
+		baseSprite->drawIcon(icon_platform1_1, stairs.x, stairs.y, stairs.w, stairs.h, 1, TFT_BLACK);
 	}else if(lvl == 4 && stairs.w == 20){
-		baseSprite->drawIcon(icon_platform2_2, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
+		baseSprite->drawIcon(icon_platform2_2, stairs.x, stairs.y, stairs.w, stairs.h, 1, TFT_BLACK);
 	}else if(lvl == 4 && stairs.w == 40){
-		baseSprite->drawIcon(icon_platform3_3, stairs.x, stairs.y, stairs.w, stairs.h,1,TFT_BLACK);
+		baseSprite->drawIcon(icon_platform3_3, stairs.x, stairs.y, stairs.w, stairs.h, 1, TFT_BLACK);
 	}
 }
 
-void CastleJump::GameState::drawAbilityPoint(PowerUps &ability){
+void CastleJump::GameState::drawAbilityPoint(PowerUps& ability){
 	baseSprite->drawIcon(power_up, ability.x, ability.y, 5, 5);
 }
 
@@ -174,20 +186,11 @@ void CastleJump::GameState::drawFloor(){
 	if(!firstTouch){
 		baseSprite->drawIcon(icon_floor, 0, 118, 128, 10);
 	}else if(firstTouch){
-/*lava.push();
- * step=128;
- * if(step<117){
-   step=step+0.1;
-   }else{
-   step=118;
-}
-   */
+		if(lavaGif.checkFrame()){
+			lavaGif.nextFrame();
+		}
+		lavaGif.push();
 	}
-}
-
-void CastleJump::GameState::drawLives(){
-	baseSprite->drawIcon(srce, 100, 0, 8, 8, 1, TFT_BLACK);
-//	srce.push();
 }
 
 void CastleJump::GameState::drawRedScreen(){
@@ -227,7 +230,7 @@ void CastleJump::GameState::xPosMoving(){
 	}
 }
 
-void CastleJump::GameState::movingRects(Rect &stairs, uint b){
+void CastleJump::GameState::movingRects(Rect& stairs, uint b){
 	if(!highspeed){
 		stairs.y += 0.6 * speed * b / 20000;
 	}
@@ -278,7 +281,7 @@ void CastleJump::GameState::velocity(float dt){
 }
 
 
-void CastleJump::GameState::checkForPoint(Coin &goldenCoin){
+void CastleJump::GameState::checkForPoint(Coin& goldenCoin){
 	if(abs(player.pos.x - goldenCoin.x) == 0 && abs((player.pos.y - goldenCoin.y) == 0) ||
 	   (abs(player.pos.x - goldenCoin.x) + abs((player.pos.y - goldenCoin.y))) <= 5){
 		Piezo.tone(NOTE_B5, 100);
@@ -294,7 +297,7 @@ void CastleJump::GameState::checkForPoint(Coin &goldenCoin){
 	}
 }
 
-void CastleJump::GameState::checkForPowerUp(PowerUps &powerUp){
+void CastleJump::GameState::checkForPowerUp(PowerUps& powerUp){
 	if(abs(player.pos.x - powerUp.x) == 0 && abs((player.pos.y - powerUp.y) == 0) ||
 	   (abs(player.pos.x - powerUp.x) + abs((player.pos.y - powerUp.y))) <= 5){
 		int randNum = random(1, 3);
@@ -314,7 +317,7 @@ void CastleJump::GameState::checkForPowerUp(PowerUps &powerUp){
 	}
 }
 
-void CastleJump::GameState::checkForCollision(Rect &stairs){
+void CastleJump::GameState::checkForCollision(Rect& stairs){
 	if(player.velocity.y < 0){
 		return;
 	}
@@ -384,11 +387,15 @@ void CastleJump::GameState::level(){
 }
 
 void CastleJump::GameState::lives(){
+	if(heartGif.checkFrame()){
+		heartGif.nextFrame();
+	}
+	heartGif.push();
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
 	baseSprite->drawString("x", 109, 1);
-	baseSprite->drawNumber(lifeNum - 0, 115, 1);
+	baseSprite->drawNumber(livesNum - 0, 115, 1);
 }
 
 void CastleJump::GameState::movingBrick(BackPict& brick, uint b){
@@ -411,7 +418,7 @@ void CastleJump::GameState::movingWindow(BackPict& window, uint b){
 	}
 }
 
-void CastleJump::GameState::movingCoin(Coin &goldenCoin, uint b) const{
+void CastleJump::GameState::movingCoin(Coin& goldenCoin, uint b) const{
 	goldenCoin.y += 1.1 * speed * b / 20000;
 	if(goldenCoin.y > 117){
 		float randX;
@@ -423,7 +430,7 @@ void CastleJump::GameState::movingCoin(Coin &goldenCoin, uint b) const{
 	}
 }
 
-void CastleJump::GameState::movingPowerUps(PowerUps &ability, uint b) const{
+void CastleJump::GameState::movingPowerUps(PowerUps& ability, uint b) const{
 	ability.y += 1.1 * speed * b / 20000;
 	if(ability.y > 117){
 		float randX;
@@ -455,6 +462,7 @@ void CastleJump::GameState::checkLevel(){
 }
 
 void CastleJump::GameState::draw(){
+	baseSprite->clear(TFT_DARKGREY);
 	drawBrick(bricks[0]);
 	drawWindow(window[0]);
 	for(int i = 0; i < dropRect.size(); ++i){
@@ -468,8 +476,11 @@ void CastleJump::GameState::draw(){
 	if(lostLife){
 		drawRedScreen();
 	}
+	for(int i = 0; i < 1; i++){
+		drawCoin(coin[i]);
+		drawAbilityPoint(powerUp[i]);
+	}
 	scoreTable();
-	drawLives();
 	level();
 	lives();
 	display->commit();
@@ -477,7 +488,6 @@ void CastleJump::GameState::draw(){
 }
 
 void CastleJump::GameState::loop(uint time){
-	baseSprite->clear(TFT_DARKGREY);
 	castleJump->score = score;
 	xPosMoving();
 	levelCounter();
@@ -494,7 +504,6 @@ void CastleJump::GameState::loop(uint time){
 	}*/
 	for(int i = 0; i < dropRect.size(); ++i){
 		movingRects(dropRect[i], time);
-
 		checkForCollision(dropRect[i]);
 	}
 	if(!firstTouch && player.pos.y > 112){
@@ -508,6 +517,7 @@ void CastleJump::GameState::loop(uint time){
 		if(firstTouch){
 			if(livesNum > 0){
 				livesNum--;
+				heartGif.reset();
 				lostLife = true;
 				Piezo.tone(NOTE_E5, 100);
 			}
@@ -521,11 +531,16 @@ void CastleJump::GameState::loop(uint time){
 		castleJump->gameOver();
 	}
 
+//	if(lavaGif.nextFrame()){
+//		if(lavaGif.checkFrame()){
+//			lavaGif.reset();
+//		}
+//	}
 	for(int i = 0; i < 1; i++){
-		drawCoin(coin[i]);
+//		drawCoin(coin[i]);
 		movingCoin(coin[i], time);
 		checkForPoint(coin[i]);
-		drawAbilityPoint(powerUp[i]);
+//		drawAbilityPoint(powerUp[i]);
 		movingPowerUps(powerUp[i], time);
 		checkForPowerUp(powerUp[i]);
 		movingBrick(bricks[i], time);
