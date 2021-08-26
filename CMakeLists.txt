@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
-project(CastleJump) # Project name - has to be same as directory name
-set(PORT COM4) # Upload port
+project(CastleJump-Nibble) # Project name - has to be same as directory name
+set(PORT COM10) # Upload port
 set(DEVICE cm:esp8266:nibble) # Arduino device FQBN
 set(CMAKE_CXX_STANDARD 11)
 
@@ -22,44 +22,38 @@ else()
     set(ArduinoLibs ~/Arduino/libraries)
 endif()
 
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/cores/esp8266)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/libraries/Nibble/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/libraries/CircuitOS/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/libraries/TFT_eSPI)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/libraries/TFT_eSPI/Extensions)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/libraries/FS)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/cores/esp8266/FS)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/libraries/LittleFS/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/cores/esp8266/avr)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/cores/esp8266)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/Nibble/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/CircuitOS/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/TFT_eSPI)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/TFT_eSPI/Extensions)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/FS)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/cores/esp8266/FS)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/LittleFS/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/cores/esp8266/avr)
 
 
-
-# Source directories
-AUX_SOURCE_DIRECTORY(src SOURCES)
-
-# Defines
-add_definitions(-DDEBUG)
-add_definitions(-DESP32)
-
-
+file(GLOB_RECURSE SOURCES "src/**.cpp" "src/**.c" "src/**.hpp" "src/**.h")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build)
 set(BUILD ${ROOT}/build)
 
+add_definitions(-DDEBUG)
+add_definitions(-DESP32)
+
 SET_SOURCE_FILES_PROPERTIES(${CMAKE_PROJECT_NAME}.ino PROPERTIES LANGUAGE CXX)
 
-add_custom_command(OUTPUT ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.elf ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.bin ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.partitions.bin
-        COMMAND arduino-cli compile --fqbn ${DEVICE} -o ${BUILD}/${CMAKE_PROJECT_NAME}.bin ${CMAKE_PROJECT_NAME}.ino
+add_custom_command(OUTPUT ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.ino.elf
+        COMMAND arduino-cli compile --fqbn ${DEVICE} --output-dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${CMAKE_PROJECT_NAME}.ino
         DEPENDS ${CMAKE_PROJECT_NAME}.ino ${SOURCES}
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 add_custom_target(CMBuild
-        SOURCES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.elf)
+        SOURCES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.ino.elf)
 
 add_custom_target(CMUpload ALL
-        COMMAND arduino-cli upload --fqbn ${DEVICE} -p ${PORT} -i ${BUILD}/${CMAKE_PROJECT_NAME}.bin
+        COMMAND arduino-cli upload --fqbn ${DEVICE} -p ${PORT} --input-dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
         DEPENDS CMBuild
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-add_executable(${CMAKE_PROJECT_NAME}.bin ${CMAKE_PROJECT_NAME}.ino ${SOURCES} src/CastleJump.cpp src/CastleJump.h src/State.cpp src/State.h src/GameState.cpp src/GameState.h src/GameOverState.cpp src/GameOverState.h src/Menu.h src/Menu.cpp src/ShowHighscoreState.cpp src/ShowHighscoreState.h src/Highscore/Highscore.cpp src/Highscore/Highscore.h src/EnterHighscoreState.cpp src/EnterHighscoreState.h src/PauseState.cpp src/PauseState.h src/EraseHighscoreState.cpp src/EraseHighscoreState.h src/Melodies/Notes.hpp src/Melodies/Note.h src/Melodies/Melody.cpp src/Melodies/Melody.h src/Melodies/MelodyNotes.h)
-
+add_executable(${CMAKE_PROJECT_NAME}.bin ${CMAKE_PROJECT_NAME}.ino ${SOURCES})
