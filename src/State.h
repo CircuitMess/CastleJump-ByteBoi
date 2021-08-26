@@ -1,7 +1,3 @@
-//
-// Created by hrvoj on 01/12/2020.
-//
-
 #ifndef CASTLEJUMP_STATE_H
 #define CASTLEJUMP_STATE_H
 
