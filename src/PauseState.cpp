@@ -1,5 +1,5 @@
 #include "PauseState.h"
-#include <Nibble.h>
+#include <ByteBoi.h>
 #include <Arduino.h>
 #include "GameState.h"
 
@@ -7,7 +7,7 @@
 CastleJump::PauseState *CastleJump::PauseState::instance = nullptr;
 
 CastleJump::PauseState::PauseState(){
-	display = Nibble.getDisplay();
+	display = ByteBoi.getDisplay();
 	baseSprite = display->getBaseSprite();
 
 	instance = this;
@@ -36,10 +36,10 @@ void CastleJump::PauseState::displayMessage(){
 	baseSprite->setTextSize(2);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextColor(TFT_WHITE);
-	baseSprite->printCenter("PAUSE");
+	baseSprite->printCenter("    PAUSE");
 	baseSprite->setTextSize(1);
-	baseSprite->setCursor(110, 110);
-	baseSprite->printCenter("A: resume   B: quit");
+	baseSprite->setCursor(110, 100);
+	baseSprite->printCenter("   A: resume    B: quit");
 }
 void CastleJump::PauseState::draw(){
 	baseSprite->clear(TFT_BLACK);
