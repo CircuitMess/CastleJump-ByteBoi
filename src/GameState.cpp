@@ -1,7 +1,6 @@
-#include <Nibble.h>
+#include <ByteBoi.h>
 #include <Arduino.h>
 #include "GameState.h"
-#include "Pins.hpp"
 #include "Melodies/Notes.hpp"
 #include "bitmaps/player.hpp"
 #include "bitmaps/coin.hpp"
@@ -39,16 +38,16 @@ CastleJump::GameState::GameState() : heartGif(ByteBoi.getDisplay()->getBaseSprit
 	if(SPIFFS.exists("/PodLava160x10.raw.hs")){
 		Serial.println("Exists");
 	}
-	Serial.println(ESP.getFreeHeap());
 
-	display = Nibble.getDisplay();
+	display = ByteBoi.getDisplay();
 	baseSprite = display->getBaseSprite();
 	instance = this;
 
-	heartGif.setXY(100, 0);
+	heartGif.setXY(130, 4);
 	heartGif.setMaskingColor(TFT_BLACK);
+
 	lavaGif.setLoop(true);
-	lavaGif.setXY(0, 118);
+	lavaGif.setXY(0, 110);
 	lavaGif.setMaskingColor(TFT_BLACK);
 	lavaGif.nextFrame();
 
@@ -66,11 +65,12 @@ CastleJump::GameState::GameState() : heartGif(ByteBoi.getDisplay()->getBaseSprit
 	window.push_back({20, 30, 20, 20});
 
 	dropRect.push_back({40, 0, 20, 2});
-	dropRect.push_back({80, -21, 40, 2});
-	dropRect.push_back({70, -42, 20, 2});
-	dropRect.push_back({20, -63, 10, 2});
-	dropRect.push_back({60, -84, 20, 2});
-	dropRect.push_back({80, -100, 40, 2});
+	dropRect.push_back({20, -23, 10, 2});
+	dropRect.push_back({90, -50, 20, 2});
+	dropRect.push_back({80, -75, 20, 2});
+	dropRect.push_back({110, -97, 40, 2});
+
+	//dropRect.push_back({103, -105, 40, 2});
 	randBitmapBrick = 0;
 	randBitmapWin = 0;
 
@@ -122,7 +122,7 @@ void CastleJump::GameState::stop(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
 	Input::getInstance()->removeBtnPressCallback(BTN_C);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_C);
-	Piezo.setMute(true);
+//	Piezo.setMute(true);
 
 }
 
@@ -197,7 +197,7 @@ void CastleJump::GameState::drawWindow(BackPict& windows){
 
 void CastleJump::GameState::drawWalls(){
 	baseSprite->drawIcon(leftWall, 0, 0, 5, 128);
-	baseSprite->drawIcon(rightWall, 123, 0, 5, 128);
+	baseSprite->drawIcon(rightWall, 155, 0, 5, 128);
 }
 
 void CastleJump::GameState::drawFloor(){
@@ -206,9 +206,6 @@ void CastleJump::GameState::drawFloor(){
 		baseSprite->drawIcon(grassFloorBuffer, 0, 115, 160, 10);
 
 	}else if(firstTouch){
-		if(lavaGif.checkFrame()){
-			lavaGif.nextFrame();
-		}
 		lavaGif.push();
 	}
 }
@@ -218,20 +215,20 @@ void CastleJump::GameState::drawRedScreen(){
 }
 
 void CastleJump::GameState::xPosMoving(){
-	if(player.pos.x > 115){
+	if(player.pos.x > 145){
 		checkWallBump = true;
 		rightState = false;
-		player.pos.x = 115;
+		player.pos.x = 146;
 		player.velocity.x = -70;
-		Piezo.tone(NOTE_E4, 100);
+		//Piezo.tone(NOTE_E4, 100);
 
 	}
-	if(player.pos.x < 5){
+	if(player.pos.x < 8){
 		checkWallBump = true;
 		leftState = false;
-		player.pos.x = 5;
+		player.pos.x = 7;
 		player.velocity.x = 80;
-		Piezo.tone(NOTE_E4, 100);
+		//	Piezo.tone(NOTE_E4, 100);
 
 	}
 	if(!rightState && !checkWallBump){
@@ -273,8 +270,8 @@ void CastleJump::GameState::movingRects(Rect& stairs, uint b){
 		float randX;
 		do {
 			stairs.y = 0;
-			randX = random(9, 86);
-		} while(abs(randX - stairs.x > 30));
+			randX = random(9, 110);
+		} while(abs(randX - stairs.x > 50));
 		stairs.x = randX;
 	}
 }
@@ -304,8 +301,8 @@ void CastleJump::GameState::velocity(float dt){
 void CastleJump::GameState::checkForPoint(Coin& goldenCoin){
 	if(abs(player.pos.x - goldenCoin.x) == 0 && abs((player.pos.y - goldenCoin.y) == 0) ||
 	   (abs(player.pos.x - goldenCoin.x) + abs((player.pos.y - goldenCoin.y))) <= 5){
-		Piezo.tone(NOTE_B5, 100);
-		Piezo.tone(NOTE_E6, 150);
+		//	Piezo.tone(NOTE_B5, 100);
+		//	Piezo.tone(NOTE_E6, 150);
 		score = score + 5;
 		goldenCoin.y = -700;
 		float randX;
@@ -345,7 +342,7 @@ void CastleJump::GameState::checkForCollision(Rect& stairs){
 	if(stairs.w == 20){
 		float distX = abs(player.pos.x - stairs.x - 10);
 		float distY = abs(player.pos.y - stairs.y - 1);
-		if((distX <= 11.5 && distY <= 6)){
+		if((distX <= 11.5 && distY <= 8)){
 			player.velocity.y = -min(player.velocity.y, 110.0f);
 			firstTouch = true;
 			lostLife = false;
@@ -353,7 +350,7 @@ void CastleJump::GameState::checkForCollision(Rect& stairs){
 	}else if(stairs.w == 40){
 		float distX = abs(player.pos.x - stairs.x - 20);
 		float distY = abs(player.pos.y - stairs.y - 1);
-		if((distX <= 21.5 && distY <= 6)){
+		if((distX <= 21.5 && distY <= 8)){
 			player.velocity.y = -min(player.velocity.y, 110.0f);
 			firstTouch = true;
 			lostLife = false;
@@ -362,7 +359,7 @@ void CastleJump::GameState::checkForCollision(Rect& stairs){
 	}else if(stairs.w == 10){
 		float distX = abs(player.pos.x - stairs.x - 5);
 		float distY = abs(player.pos.y - stairs.y - 1);
-		if((distX <= 6.5 && distY <= 6)){
+		if((distX <= 6.5 && distY <= 8)){
 			player.velocity.y = -min(player.velocity.y, 110.0f);
 			firstTouch = true;
 			lostLife = false;
@@ -375,15 +372,15 @@ void CastleJump::GameState::scoreTable(){
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("Score:", 6, 1);
-	baseSprite->drawNumber(score - 0, 44, 1);
+	baseSprite->drawString("Score:", 7, 4);
+	baseSprite->drawNumber(score - 0, 44, 4);
 }
 
 void CastleJump::GameState::powerUpTimer(){
 	baseSprite->setTextColor(TFT_GREEN);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
-	baseSprite->drawNumber(seconds - 0, 10, 110);
+	baseSprite->drawNumber(seconds - 0, 10, 105);
 }
 
 void CastleJump::GameState::levelCounter(){
@@ -402,8 +399,8 @@ void CastleJump::GameState::level(){
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("Lvl: ", 63, 1);
-	baseSprite->drawNumber(lvl - 0, 89, 1);
+	baseSprite->drawString("Lvl: ", 73, 4);
+	baseSprite->drawNumber(lvl - 0, 99, 4);
 }
 
 void CastleJump::GameState::lives(){
@@ -414,8 +411,8 @@ void CastleJump::GameState::lives(){
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(1);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("x", 109, 1);
-	baseSprite->drawNumber(livesNum - 0, 115, 1);
+	baseSprite->drawString("x", 140, 4);
+	baseSprite->drawNumber(livesNum - 0, 147, 4);
 }
 
 void CastleJump::GameState::movingBrick(BackPict& brick, uint b){
@@ -444,8 +441,8 @@ void CastleJump::GameState::movingCoin(Coin& goldenCoin, uint b) const{
 		float randX;
 		do {
 			goldenCoin.y = -700;
-			randX = random(10, 110);
-		} while(abs(randX - goldenCoin.x > 30));
+			randX = random(10, 130);
+		} while(abs(randX - goldenCoin.x > 60));
 		goldenCoin.x = randX;
 	}
 }
@@ -456,8 +453,8 @@ void CastleJump::GameState::movingPowerUps(PowerUps& ability, uint b) const{
 		float randX;
 		do {
 			ability.y = -1800;
-			randX = random(10, 110);
-		} while(abs(randX - ability.x) > 30);
+			randX = random(10, 130);
+		} while(abs(randX - ability.x) > 60);
 		ability.x = randX;
 	}
 }
@@ -490,12 +487,11 @@ void CastleJump::GameState::draw(){
 	}
 	drawPlayerCircle();
 	drawWalls();
-	if(!lostLife){
-		drawFloor();
-	}
-	if(lostLife){
+	drawFloor();
+
+/*	if(lostLife){
 		drawRedScreen();
-	}
+	}*/
 	for(int i = 0; i < 1; i++){
 		drawCoin(coin[i]);
 		drawAbilityPoint(powerUp[i]);
@@ -526,20 +522,20 @@ void CastleJump::GameState::loop(uint time){
 		movingRects(dropRect[i], time);
 		checkForCollision(dropRect[i]);
 	}
-	if(!firstTouch && player.pos.y > 112){
-		player.pos.y = 112;
-		Piezo.tone(NOTE_E5, 100);
+	if(!firstTouch && player.pos.y > 110){
+		player.pos.y = 110;
+		//	Piezo.tone(NOTE_E5, 100);
 		player.velocity.y = -min(player.velocity.y, 200.0f);
 	}
 	if(firstTouch && player.pos.y > 120){
 		player.pos.y = 120;
-		Piezo.tone(NOTE_E5, 100);
+		//	Piezo.tone(NOTE_E5, 100);
 		if(firstTouch){
 			if(livesNum > 0){
 				livesNum--;
 				heartGif.reset();
-				lostLife = true;
-				Piezo.tone(NOTE_E5, 100);
+				//lostLife = true;
+				//		Piezo.tone(NOTE_E5, 100);
 			}
 
 		}
@@ -551,11 +547,12 @@ void CastleJump::GameState::loop(uint time){
 		castleJump->gameOver();
 	}
 
-//	if(lavaGif.nextFrame()){
-//		if(lavaGif.checkFrame()){
-//			lavaGif.reset();
-//		}
-//	}
+	if(firstTouch){
+		if(lavaGif.checkFrame()){
+			lavaGif.nextFrame();
+		}
+	}
+
 	for(int i = 0; i < 1; i++){
 //		drawCoin(coin[i]);
 		movingCoin(coin[i], time);
