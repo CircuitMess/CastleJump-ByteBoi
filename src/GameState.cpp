@@ -27,16 +27,16 @@
 #include "bitmaps/brick3.hpp"
 #include <FS/PGMFile.h>
 #include <FS/CompressedFile.h>
-#include <LittleFS.h>
+#include <SPIFFS.h>
 
 CastleJump::GameState* CastleJump::GameState::instance = nullptr;
 
 const unsigned short* listBricks1[2] = {cigle2, cigle3};
 const unsigned short* listBricks2[2] = {window_draw, cigle1};
 
-CastleJump::GameState::GameState() : heartGif(Nibble.getDisplay()->getBaseSprite(), LittleFS.open("/heart.hpp.g565", "r")),
-									 lavaGif(Nibble.getDisplay()->getBaseSprite(), CompressedFile::open(LittleFS.open("/lava.g565.hs", "r"), 12, 11, 683), true){
-	if(LittleFS.exists("/lava.g565.hs")){
+CastleJump::GameState::GameState() : heartGif(ByteBoi.getDisplay()->getBaseSprite(), SPIFFS.open("/heart.hpp.g565", "r")),
+									 lavaGif(ByteBoi.getDisplay()->getBaseSprite(), CompressedFile::open(SPIFFS.open("/PodLava160x10.raw.hs", "r"), 12, 11,840), true){
+	if(SPIFFS.exists("/PodLava160x10.raw.hs")){
 		Serial.println("Exists");
 	}
 	Serial.println(ESP.getFreeHeap());
@@ -77,6 +77,24 @@ CastleJump::GameState::GameState() : heartGif(Nibble.getDisplay()->getBaseSprite
 	score = 0;
 	melody.play(MelodyImpl::game, true);
 
+	grassFloorBuffer = static_cast<Color*>(ps_malloc(160 * 10 * 2));
+	if(grassFloorBuffer == nullptr){
+		Serial.printf("Grass floor picture unpack error\n");
+		return;
+	}
+
+	fs::File grassFloorFile = SPIFFS.open("/Pod160x10.raw");
+
+	grassFloorFile.read(reinterpret_cast<uint8_t*>(grassFloorBuffer), 160 * 10 * 2);
+	grassFloorFile.close();
+
+	if(SPIFFS.exists("/Pod160x10.raw")){
+		Serial.println("ExistsPOD");
+	}
+}
+
+CastleJump::GameState::~GameState(){
+	free(grassFloorBuffer);
 }
 
 void CastleJump::GameState::start(CastleJump& gameEnter){
@@ -184,7 +202,9 @@ void CastleJump::GameState::drawWalls(){
 
 void CastleJump::GameState::drawFloor(){
 	if(!firstTouch){
-		baseSprite->drawIcon(icon_floor, 0, 118, 128, 10);
+
+		baseSprite->drawIcon(grassFloorBuffer, 0, 115, 160, 10);
+
 	}else if(firstTouch){
 		if(lavaGif.checkFrame()){
 			lavaGif.nextFrame();

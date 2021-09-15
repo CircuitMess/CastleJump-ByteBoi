@@ -40,6 +40,8 @@ namespace CastleJump {
 	public:
 		GameState();
 
+		virtual ~GameState();
+
 		void loop(uint time) override;
 
 		void start(CastleJump& gameEnter) override;
@@ -85,6 +87,8 @@ namespace CastleJump {
 		float korak = 0;
 		bool lostLife = false;
 		uint8_t lavaHeight = 128;
+		Color* grassFloorBuffer = nullptr;
+
 
 		Vector<PowerUps> powerUp;
 		Vector<BackPict> bricks;
