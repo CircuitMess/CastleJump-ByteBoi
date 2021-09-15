@@ -23,6 +23,8 @@ namespace CastleJump {
 
 		Sprite* baseSprite;
 
+		Color* backgroundBuffer = nullptr;
+
 		void drawScrollText();
 
 		void drawHighscore();

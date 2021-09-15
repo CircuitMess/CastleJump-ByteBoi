@@ -1,3 +1,6 @@
+#include <FS.h>
+#include <FS/CompressedFile.h>
+#include <SPIFFS.h>
 #include "ShowHighscoreState.h"
 #include "Highscore/Highscore.h"
 #include "Melodies/Notes.hpp"
@@ -7,8 +10,18 @@
 CastleJump::ShowHighscoreState *CastleJump::ShowHighscoreState::instance = nullptr;
 
 CastleJump::ShowHighscoreState::ShowHighscoreState(){
+	backgroundBuffer = static_cast<Color*>(ps_malloc(160 * 128 * 2));
+	if(backgroundBuffer == nullptr){
+		Serial.printf("MainMenu background picture unpack error\n");
+		return;
+	}
 
-	display = Nibble.getDisplay();
+	fs::File backgroundFile = CompressedFile::open(SPIFFS.open("/Highscore160x128.raw.hs"), 10, 5);
+
+	backgroundFile.read(reinterpret_cast<uint8_t*>(backgroundBuffer), 160 * 128* 2);
+	backgroundFile.close();
+
+	display = ByteBoi.getDisplay();
 	baseSprite = display->getBaseSprite();
 	instance = this;
 
@@ -47,7 +60,7 @@ void CastleJump::ShowHighscoreState::stop(){
 }
 void CastleJump::ShowHighscoreState::drawHighscore(){
 	baseSprite->clear(TFT_BLACK);
-	baseSprite->drawIcon(high_score,0,0,128,128);
+	baseSprite->drawIcon(backgroundBuffer,0,0,160,128);
 	for(int i=0;i<5;i++){
 		baseSprite->setTextColor(TFT_WHITE);
 		baseSprite->setCursor(43,(i*16)+37);
