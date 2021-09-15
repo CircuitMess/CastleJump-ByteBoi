@@ -9,7 +9,6 @@
 #include "Highscore/Highscore.h"
 #include "GameOverState.h"
 
-
 CastleJump::CastleJump *CastleJump::CastleJump::instance = nullptr;
 
 CastleJump::CastleJump::CastleJump(Display *display) : Context(*display), score(0){

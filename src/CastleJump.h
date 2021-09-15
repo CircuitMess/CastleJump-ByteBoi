@@ -1,27 +1,18 @@
-//
-// Created by hrvoj on 01/12/2020.
-//
-
 #ifndef CASTLEJUMP_CASTLEJUMP_H
 #define CASTLEJUMP_CASTLEJUMP_H
 
 #include <Arduino.h>
-#include <Nibble.h>
+#include <ByteBoi.h>
 #include <Input/I2cExpander.h>
 #include <Input/InputI2C.h>
 #include <Loop/LoopManager.h>
-#include <spiffs_api.h>
-#include <Audio/Piezo.h>
 #include "CastleJump.h"
 #include "Melodies/Melody.h"
 #include <Support/Context.h>
 //extern Context* runningContext;
 
 namespace CastleJump {
-
-
 	class State;
-
 	class CastleJump : public Context, public LoopListener {
 
 	public:
