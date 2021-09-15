@@ -1,6 +1,6 @@
 #include "Melody.h"
 #include <Arduino.h>
-#include <Nibble.h>
+#include <ByteBoi.h>
 #include "MelodyNotes.h"
 
 MelodyImpl melody;
@@ -44,7 +44,7 @@ void MelodyImpl::loop(uint){
 		return;
 	}
 	if(counterMelody <= melodySize){
-		Piezo.tone(playingMelody[counterMelody].frequency, playingMelody[counterMelody].duration);
+	//	Piezo.tone(playingMelody[counterMelody].frequency, playingMelody[counterMelody].duration);
 		currentNoteTime = millis();
 		if(currentNoteTime - previousNoteTime > playingMelody[counterMelody].duration){
 			previousNoteTime = currentNoteTime;
