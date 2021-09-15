@@ -1,17 +1,15 @@
 #include "Highscore.h"
-
-
 #include <FS.h>
-#include <LittleFS.h>
+#include <SPIFFS.h>
 
 HighscoreImpl Highscore;
 
 void HighscoreImpl::begin(){
-	if(!LittleFS.begin()){
+	if(!SPIFFS.begin()){
 		Serial.println("LittleFS begin error");
 	}
 
-	bool firstTime = !LittleFS.exists(HS_FILENAME);
+	bool firstTime = !SPIFFS.exists(HS_FILENAME);
 	if(firstTime){
 		data.count = 0;
 		save();
@@ -64,13 +62,13 @@ uint8_t HighscoreImpl::count(){
 }
 
 void HighscoreImpl::save(){
-	File file = LittleFS.open(HS_FILENAME, "w");
+	File file = SPIFFS.open(HS_FILENAME, "w");
 	file.write((byte*) &data, sizeof(Data));
 	file.close();
 }
 
 void HighscoreImpl::load(){
-	File file = LittleFS.open(HS_FILENAME, "r");
+	File file = SPIFFS.open(HS_FILENAME, "r");
 	file.readBytes((char*) &data , sizeof(Data));
 	file.close();
 }
