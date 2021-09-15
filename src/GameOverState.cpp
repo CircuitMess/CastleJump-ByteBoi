@@ -1,34 +1,32 @@
 #include "GameOverState.h"
 #include "Highscore/Highscore.h"
-#include <Nibble.h>
+#include <ByteBoi.h>
 #include <Arduino.h>
 #include "Melodies/Notes.hpp"
-#include "bitmaps/game_over.hpp"
+#include "bitmaps/game_over160x128.hpp"
 
-CastleJump::GameOverState *CastleJump::GameOverState::instance = nullptr;
+CastleJump::GameOverState* CastleJump::GameOverState::instance = nullptr;
 
 CastleJump::GameOverState::GameOverState(){
-
+	display = ByteBoi.getDisplay();
+	baseSprite = display->getBaseSprite();
 
 	instance = this;
-	display = Nibble.getDisplay();
-	baseSprite = display->getBaseSprite();
-	score =0 ;
+	score = 0;
 }
 
-void CastleJump::GameOverState::start(CastleJump &gameEnter){
+void CastleJump::GameOverState::start(CastleJump& gameEnter){
 
 	castleJump = &gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
-		Piezo.tone(NOTE_B6, 25);
+		//Piezo.tone(NOTE_B6, 25);
 		instance->castleJump->newGame();
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_B, [](){
-		Piezo.tone(NOTE_B6, 25);
+		//	Piezo.tone(NOTE_B6, 25);
 		instance->castleJump->returnToMenu();
 	});
 }
-
 
 
 void CastleJump::GameOverState::stop(){
@@ -36,19 +34,19 @@ void CastleJump::GameOverState::stop(){
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
-	Piezo.setMute(true);
+//	Piezo.setMute(true);
 }
 
 void CastleJump::GameOverState::drawGameOver(){
 	baseSprite->setTextColor(TFT_WHITE);
-	baseSprite->drawIcon(game_over, 0, 0, 128, 128);
+	baseSprite->drawIcon(game_over1, 0, 0, 160, 128);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("Score : ", 35, 30);
-	baseSprite->drawNumber(castleJump->score -0, 85, 30);
+	baseSprite->drawString("Score : ", 45, 30);
+	baseSprite->drawNumber(castleJump->score - 0, 95, 30);
 	baseSprite->setTextSize(1);
-	baseSprite->setCursor(110, 1);
-	baseSprite->printCenter("A: new game B: menu");
+	baseSprite->setCursor(130, 1);
+	baseSprite->printCenter("  A: new game  B: menu");
 	display->commit();
 
 }
@@ -59,7 +57,7 @@ void CastleJump::GameOverState::draw(){
 
 void CastleJump::GameOverState::loop(uint time){
 	Serial.println("castleJump->score :");
-	score=castleJump->score;
+	score = castleJump->score;
 	if(Highscore.count() > 1){
 		initialValue = false;
 	}
