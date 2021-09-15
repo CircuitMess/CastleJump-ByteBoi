@@ -7,7 +7,7 @@ CastleJump::EraseHighscoreState *CastleJump::EraseHighscoreState::instance = nul
 
 CastleJump::EraseHighscoreState::EraseHighscoreState(){
 
-	display = Nibble.getDisplay();
+	display = ByteBoi.getDisplay();
 	baseSprite = display->getBaseSprite();
 	instance = this;
 
@@ -18,11 +18,11 @@ void CastleJump::EraseHighscoreState::start(CastleJump &gameEnter){
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
 		Highscore.clear();
 		instance->castleJump->openHighscores();
-		Piezo.tone(NOTE_B6,25);
+		//	Piezo.tone(NOTE_B6,25);
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_B, [](){
 		instance->castleJump->openHighscores();
-		Piezo.tone(NOTE_B6,25);
+		//	Piezo.tone(NOTE_B6,25);
 	});
 
 }
@@ -32,7 +32,7 @@ void CastleJump::EraseHighscoreState::stop(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
-	Piezo.setMute(true);
+	//Piezo.setMute(true);
 }
 
 void CastleJump::EraseHighscoreState::drawWarning(){
@@ -40,13 +40,13 @@ void CastleJump::EraseHighscoreState::drawWarning(){
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("Your really want", 15, 17);
-	baseSprite->drawString("to erase your", 15, 32);
-	baseSprite->drawString("highscore list?", 15, 47);
+	baseSprite->drawString("   Your really want", 15, 17);
+	baseSprite->drawString("   to erase your", 15, 32);
+	baseSprite->drawString("   highscore list?", 15, 47);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
-	baseSprite->setCursor(110, 110);
-	baseSprite->printCenter("A: delete  B: back");
+	baseSprite->setCursor(110, 100);
+	baseSprite->printCenter("  A: delete     B: back");
 
 }
 void CastleJump::EraseHighscoreState::draw(){
