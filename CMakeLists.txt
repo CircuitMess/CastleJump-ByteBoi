@@ -1,42 +1,56 @@
 cmake_minimum_required(VERSION 3.15)
-project(CastleJump-Nibble) # Project name - has to be same as directory name
-set(PORT COM10) # Upload port
-set(DEVICE cm:esp8266:nibble) # Arduino device FQBN
+project(CastleJump-ByteBoi) # Project name - has to be same as directory name
+set(PORT /dev/ttyUSB0) # Upload port
+set(DEVICE cm:esp32:wheelson) # Arduino device FQBN
 set(CMAKE_CXX_STANDARD 11)
 
 set(ROOT ${CMAKE_SOURCE_DIR})
-if(WIN32 OR CYGWIN)
+if (WIN32 OR CYGWIN)
     set(Arduino15 $ENV{APPDATA}/../Local/Arduino15)
     set(ArduinoLibs $ENV{USERPROFILE}/Documents/Arduino/libraries)
 
     string(REPLACE "\\" "/" Arduino15 ${Arduino15})
     string(REPLACE "\\" "/" ArduinoLibs ${ArduinoLibs})
 
-    if(CYGWIN)
+    if (CYGWIN)
         string(REGEX REPLACE "^([A-Za-z]):" "/cygdrive/\\1" Arduino15 ${Arduino15})
         string(REGEX REPLACE "^([A-Za-z]):" "/cygdrive/\\1" ArduinoLibs ${ArduinoLibs})
         string(REGEX REPLACE "^/cygdrive/([A-Za-z])" "\\1:/" ROOT ${ROOT})
-    endif()
-else()
+    endif ()
+else ()
     set(Arduino15 ~/.arduino15)
     set(ArduinoLibs ~/Arduino/libraries)
-endif()
+endif ()
 
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/cores/esp8266)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/Nibble/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/CircuitOS/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/TFT_eSPI)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/TFT_eSPI/Extensions)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/FS)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/cores/esp8266/FS)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/LittleFS/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/cores/esp8266/avr)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/cores/esp32)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/tools/sdk)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/tools/sdk/include)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/tools/sdk/include/esp32)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/tools/sdk/include/freertos)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/tools/sdk/include/spi_flash)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/tools/sdk/include/nvs_flash)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/tools/sdk/include/driver)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/tools/sdk/include/driver/driver)
 
+# Include directories
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/libraries/Wire/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/libraries/FS/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/libraries/SD/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/libraries/SPI/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/libraries/WiFi/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/libraries/SPIFFS/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/libraries/CircuitOS/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/libraries/JPEGDecoder/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.2.4/libraries/OpenCV-ESP32/src)
 
+include_directories(${ArduinoLibs}/LovyanGFX/src)
+include_directories(${ArduinoLibs}/ByteBoi-Library/src)
+
+# Source directories
 file(GLOB_RECURSE SOURCES "src/**.cpp" "src/**.c" "src/**.hpp" "src/**.h")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build)
-set(BUILD ${ROOT}/build)
+set(../CastleJump-ByteBoi/build ${ROOT}/build)
 
 add_definitions(-DDEBUG)
 add_definitions(-DESP32)
