@@ -7,7 +7,7 @@ CastleJump::EnterHighscoreState *CastleJump::EnterHighscoreState::instance = nul
 CastleJump::EnterHighscoreState::EnterHighscoreState(){
 
 
-	display = Nibble.getDisplay();
+	display = ByteBoi.getDisplay();
 	baseSprite = display->getBaseSprite();
 	charCursor = 0;
 	cursorTime = 0;
@@ -27,7 +27,7 @@ void CastleJump::EnterHighscoreState::start(CastleJump &gameEnter){
 		instance->cursorBlink = true;
 		instance->cursorTime = millis();
 		instance->name[instance->charCursor]++;
-		Piezo.tone(NOTE_B6,25);
+		//Piezo.tone(NOTE_B6,25);
 		if(instance->name[instance->charCursor] == '0') instance->name[instance->charCursor] = ' ';
 		if(instance->name[instance->charCursor] == '!') instance->name[instance->charCursor] = 'A';
 		if(instance->name[instance->charCursor] == '[') instance->name[instance->charCursor] = '0';
@@ -38,7 +38,7 @@ void CastleJump::EnterHighscoreState::start(CastleJump &gameEnter){
 		instance->cursorBlink = true;
 		instance->cursorTime = millis();
 		instance->name[instance->charCursor]++;
-		Piezo.tone(NOTE_B6,25);
+		//Piezo.tone(NOTE_B6,25);
 		if(instance->name[instance->charCursor] == '0') instance->name[instance->charCursor] = ' ';
 		if(instance->name[instance->charCursor] == '!') instance->name[instance->charCursor] = 'A';
 		if(instance->name[instance->charCursor] == '[') instance->name[instance->charCursor] = '0';
@@ -48,7 +48,7 @@ void CastleJump::EnterHighscoreState::start(CastleJump &gameEnter){
 		instance->cursorBlink = true;
 		instance->cursorTime = millis();
 		instance->name[instance->charCursor]--;
-		Piezo.tone(NOTE_B6,25);
+		//Piezo.tone(NOTE_B6,25);
 		if(instance->name[instance->charCursor] == ' ') instance->name[instance->charCursor] = '?';
 		if(instance->name[instance->charCursor] == '/') instance->name[instance->charCursor] = 'Z';
 		if(instance->name[instance->charCursor] == 31) instance->name[instance->charCursor] = '/';
@@ -58,7 +58,7 @@ void CastleJump::EnterHighscoreState::start(CastleJump &gameEnter){
 		instance->cursorBlink = true;
 		instance->cursorTime = millis();
 		instance->name[instance->charCursor]--;
-		Piezo.tone(NOTE_B6,25);
+		//Piezo.tone(NOTE_B6,25);
 		if(instance->name[instance->charCursor] == ' ') instance->name[instance->charCursor] = '?';
 		if(instance->name[instance->charCursor] == '/') instance->name[instance->charCursor] = 'Z';
 		if(instance->name[instance->charCursor] == 31) instance->name[instance->charCursor] = '/';
@@ -68,14 +68,14 @@ void CastleJump::EnterHighscoreState::start(CastleJump &gameEnter){
 		instance->charCursor++;
 		instance->cursorBlink = true;
 		instance->cursorTime = millis();
-		Piezo.tone(NOTE_B6,25);
+		//Piezo.tone(NOTE_B6,25);
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
 		if(instance->charCursor > 0){
 			instance->charCursor--;
 			instance->cursorBlink = true;
 			instance->cursorTime = millis();
-			Piezo.tone(NOTE_B6,25);
+			//	Piezo.tone(NOTE_B6,25);
 		}
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
@@ -83,36 +83,36 @@ void CastleJump::EnterHighscoreState::start(CastleJump &gameEnter){
 			instance->charCursor++;
 			instance->cursorBlink = true;
 			instance->cursorTime = millis();
-			Piezo.tone(NOTE_B6,25);
+			//	Piezo.tone(NOTE_B6,25);
 		}
 	});
-	Piezo.setMute(false);
+	//Piezo.setMute(false);
 
 }
 
 
 void CastleJump::EnterHighscoreState::drawHighscore(){
-	baseSprite->setCursor(16, 8);
+	baseSprite->setCursor(40, 8);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextSize(1);
-	baseSprite->printCenter("ENTER NAME");
-	baseSprite->setCursor(20, 75);
+	baseSprite->printCenter("        ENTER NAME");
+	baseSprite->setCursor(40, 75);
 
 	if(hiscoreBlink && castleJump->score > Highscore.get(0).score){
-		baseSprite->printCenter("NEW HIGH!");
+		baseSprite->printCenter("         NEW HIGH!");
 	}else{
-		baseSprite->setCursor(20, 90);
-		baseSprite->printf("SCORE: %3d", castleJump->score);
+		baseSprite->setCursor(40, 90);
+		baseSprite->printf("  SCORE: %3d", castleJump->score);
 	}
-	baseSprite->setCursor(40, 40);
+	baseSprite->setCursor(65, 40);
 	baseSprite->print(name[0]);
-	baseSprite->setCursor(55, 40);
+	baseSprite->setCursor(80, 40);
 	baseSprite->print(name[1]);
-	baseSprite->setCursor(70, 40);
+	baseSprite->setCursor(95, 40);
 	baseSprite->print(name[2]);
 	if(cursorBlink){
-		baseSprite->drawFastHLine(38 + 15 * charCursor, 56, 12, TFT_WHITE);
+		baseSprite->drawFastHLine(62 + 15 * charCursor, 55, 12, TFT_WHITE);
 	}
 }
 
@@ -130,7 +130,7 @@ void CastleJump::EnterHighscoreState::stop(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_UP);
 	Input::getInstance()->setButtonHeldRepeatCallback(BTN_UP, 0, nullptr);
 	Input::getInstance()->setButtonHeldRepeatCallback(BTN_DOWN, 0, nullptr);
-	Piezo.setMute(true);
+	//Piezo.setMute(true);
 	castleJump->score=0;
 }
 void CastleJump::EnterHighscoreState::draw(){
