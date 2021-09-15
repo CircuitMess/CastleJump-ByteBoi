@@ -1,5 +1,5 @@
 #include "Menu.h"
-#include <Nibble.h>
+#include <ByteBoi.h>
 #include <Arduino.h>
 #include <FS.h>
 #include <FS/CompressedFile.h>
@@ -7,14 +7,12 @@
 #include "Melodies/Notes.hpp"
 #include "bitmaps/player.hpp"
 #include "bitmaps/home_screen.hpp"
-#include <Pins.hpp>
 
-const char *CastleJump::Menu::titleMenu[3] = {"Start", "Highscore", "Quit"};
+const char *CastleJump::Menu::titleMenu[3] = {"        Start", "        Highscore", "        Quit"};
 CastleJump::Menu *CastleJump::Menu::instance = nullptr;
 
 CastleJump::Menu::Menu(){
-
-	display = Nibble.getDisplay();
+	display = ByteBoi.getDisplay();
 	baseSprite = display->getBaseSprite();
 
 	instance = this;
@@ -47,14 +45,14 @@ void CastleJump::Menu::start(CastleJump &gameEnter){
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
 		if(instance->titleCursor > 0){
 			instance->titleCursor--;
-			Piezo.tone(NOTE_B6, 25);
+			//	Piezo.tone(NOTE_B6, 25);
 
 		}
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
 		if(instance->titleCursor < 2){
 			instance->titleCursor++;
-			Piezo.tone(NOTE_B6, 25);
+			//	Piezo.tone(NOTE_B6, 25);
 
 		}
 	});
@@ -73,12 +71,8 @@ void CastleJump::Menu::start(CastleJump &gameEnter){
 				break;
 		}
 	});
-	Piezo.setMute(true);
+//	Piezo.setMute(true);
 
-}
-
-CastleJump::Menu::~Menu(){
-	stop();
 }
 
 void CastleJump::Menu::stop(){
@@ -89,7 +83,7 @@ void CastleJump::Menu::stop(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_LEFT);
 	Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_RIGHT);
-	Piezo.setMute(true);
+//	Piezo.setMute(true);
 }
 
 void CastleJump::Menu::draw(){
@@ -99,33 +93,33 @@ void CastleJump::Menu::draw(){
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
 	baseSprite->setTextColor(TFT_WHITE);
-	baseSprite->drawRect(18, 110, 92, 18, TFT_WHITE);
-	baseSprite->drawRect(17, 109, 94, 20, TFT_WHITE);
+	baseSprite->drawRect(35, 100, 92, 18, TFT_WHITE);
+	baseSprite->drawRect(34, 99, 94, 20, TFT_WHITE);
 
-	baseSprite->setCursor(18*2, 110);
+	baseSprite->setCursor(60, 100);
 	baseSprite->printCenter(titleMenu[titleCursor]);
 	if(blinkState)
 	{
 		if (titleCursor == 0)
 		{
-			baseSprite->drawIcon(icon_player, 4, 114, 8, 8, 1, TFT_BLACK );
-			baseSprite->drawIcon(icon_player, 116, 114, 8, 8, 1, TFT_BLACK);
+			baseSprite->drawIcon(icon_player, 23, 108, 8, 8, 1, TFT_BLACK );
+			baseSprite->drawIcon(icon_player, 131, 108, 8, 8, 1, TFT_BLACK);
 		}
 		else if (titleCursor == 2)
 		{
-			baseSprite->drawIcon(icon_player, 4, 116, 8, 8, 1, TFT_BLACK);
-			baseSprite->drawIcon(icon_player, 116, 116, 8, 8, 1, TFT_BLACK);
+			baseSprite->drawIcon(icon_player, 23, 110, 8, 8, 1, TFT_BLACK);
+			baseSprite->drawIcon(icon_player, 131, 110, 8, 8, 1, TFT_BLACK);
 		}
 		else
 		{
-			baseSprite->drawIcon(icon_player, 4, 116, 8, 8, 1, TFT_BLACK);
-			baseSprite->drawIcon(icon_player, 116, 114, 8, 8, 1, TFT_BLACK);
+			baseSprite->drawIcon(icon_player, 23, 110, 8, 8, 1, TFT_BLACK);
+			baseSprite->drawIcon(icon_player, 131, 108, 8, 8, 1, TFT_BLACK);
 		}
 	}
 	else
 	{
-		baseSprite->drawIcon(icon_player, 4, 114, 8, 8, 1, TFT_BLACK);
-		baseSprite->drawIcon(icon_player, 116, 116, 8, 8, 1, TFT_BLACK);
+		baseSprite->drawIcon(icon_player, 23, 108, 8, 8, 1, TFT_BLACK);
+		baseSprite->drawIcon(icon_player, 131, 110, 8, 8, 1, TFT_BLACK);
 	}
 
 	display->commit();
