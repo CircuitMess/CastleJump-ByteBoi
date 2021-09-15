@@ -3,6 +3,7 @@
 
 #include "State.h"
 #include "GameState.h"
+
 namespace CastleJump {
 	class GameOverState : public State {
 	public:
@@ -18,16 +19,16 @@ namespace CastleJump {
 
 		void loop(uint time) override;
 
-		void start(CastleJump &gameEnter) override;
+		void start(CastleJump& gameEnter) override;
 
 		void stop() override;
 
 		void draw() override;
 
 	private:
-		GameState *gameState;
-		Display *display;
-		Sprite *baseSprite;
+		GameState* gameState;
+		Display* display;
+		Sprite* baseSprite;
 		bool aState = false;
 		bool bState = false;
 		bool initialValue = true;
@@ -39,7 +40,7 @@ namespace CastleJump {
 
 		void drawGameOver();
 
-		static GameOverState *instance;
+		static GameOverState* instance;
 	};
 };
 #endif //CASTLEJUMP_GAMEOVERSTATE_H
