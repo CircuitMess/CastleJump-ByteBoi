@@ -41,21 +41,21 @@ namespace CastleJump {
 
 		void loop(uint time) override;
 
-		void start(CastleJump &gameEnter) override;
+		void start(CastleJump& gameEnter) override;
 
 		void stop() override;
 
 		void draw() override;
 
 	private:
-		static const char *titleMenu[3];
+		static const char* titleMenu[3];
 		uint8_t titleCursor;
 		bool blinkState;
 		uint blinkMicros;
-		static Menu *instance;
-		Display *display;
-		Sprite *baseSprite;
-
+		static Menu* instance;
+		Display* display;
+		Sprite* baseSprite;
+		Color* backgroundBuffer = nullptr;
 	};
 };
 

@@ -1,6 +1,9 @@
 #include "Menu.h"
 #include <Nibble.h>
 #include <Arduino.h>
+#include <FS.h>
+#include <FS/CompressedFile.h>
+#include <SPIFFS.h>
 #include "Melodies/Notes.hpp"
 #include "bitmaps/player.hpp"
 #include "bitmaps/home_screen.hpp"
@@ -20,6 +23,22 @@ CastleJump::Menu::Menu(){
 	blinkMicros = 0;
 	melody.play(MelodyImpl::menu, true);
 	display->commit();
+
+	backgroundBuffer = static_cast<Color*>(ps_malloc(160 * 128 * 2));
+	if(backgroundBuffer == nullptr){
+		Serial.printf("Menu background picture unpack error\n");
+		return;
+	}
+
+	fs::File backgroundFile = CompressedFile::open(SPIFFS.open("/HomeScreen160x128.raw.hs"),13,12);
+
+	backgroundFile.read(reinterpret_cast<uint8_t*>(backgroundBuffer), 160 * 128 * 2);
+	backgroundFile.close();
+}
+
+CastleJump::Menu::~Menu(){
+	stop();
+	free(backgroundBuffer);
 }
 
 void CastleJump::Menu::start(CastleJump &gameEnter){
@@ -75,8 +94,8 @@ void CastleJump::Menu::stop(){
 
 void CastleJump::Menu::draw(){
 	baseSprite->clear(TFT_BLACK);
-	baseSprite->drawIcon(homescreen, 0,0,128,128);
-	baseSprite->setCursor(118, 110);
+	baseSprite->drawIcon(backgroundBuffer, 0,0,160,128);
+	baseSprite->setCursor(125, 105);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
 	baseSprite->setTextColor(TFT_WHITE);
