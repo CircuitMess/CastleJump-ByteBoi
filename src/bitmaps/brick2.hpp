@@ -4,8 +4,7 @@
 // Dimensions    : 40x20 pixels
 // Size          : 1,600 Bytes
 
-#include <avr/pgmspace.h>
-#include <avr/pgmspace.h>
+
 #ifndef PROGMEM
 #define PROGMEM
 #endif
