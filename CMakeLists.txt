@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.15)
 project(CastleJump-ByteBoi) # Project name - has to be same as directory name
 set(PORT /dev/ttyUSB0) # Upload port
-set(DEVICE cm:esp32:wheelson) # Arduino device FQBN
+set(DEVICE cm:esp32:byteboi) # Arduino device FQBN
 set(CMAKE_CXX_STANDARD 11)
 
 set(ROOT ${CMAKE_SOURCE_DIR})
 if (WIN32 OR CYGWIN)
     set(Arduino15 $ENV{APPDATA}/../Local/Arduino15)
-    set(ArduinoLibs $ENV{USERPROFILE}/Documents/Arduino/libraries)
+    set(ArduinoLibs $ENV{USERPROFILE}/OneDrive/Documents/Arduino/libraries)
 
     string(REPLACE "\\" "/" Arduino15 ${Arduino15})
     string(REPLACE "\\" "/" ArduinoLibs ${ArduinoLibs})
