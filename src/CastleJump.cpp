@@ -39,7 +39,6 @@ void CastleJump::CastleJump::resumeGame(){
 }
 
 void CastleJump::CastleJump::start(){
-	//runningContext = this;
 	Highscore.begin();
 	state->start(*this);
 	LoopManager::addListener(this);

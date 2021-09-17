@@ -9,7 +9,6 @@
 #include "CastleJump.h"
 #include "Melodies/Melody.h"
 #include <Support/Context.h>
-//extern Context* runningContext;
 
 namespace CastleJump {
 	class State;
