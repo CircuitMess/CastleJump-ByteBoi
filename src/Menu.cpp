@@ -45,14 +45,14 @@ void CastleJump::Menu::start(CastleJump &gameEnter){
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
 		if(instance->titleCursor > 0){
 			instance->titleCursor--;
-			//	Piezo.tone(NOTE_B6, 25);
+			Piezo.tone(NOTE_B6, 25);
 
 		}
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
 		if(instance->titleCursor < 2){
 			instance->titleCursor++;
-			//	Piezo.tone(NOTE_B6, 25);
+			Piezo.tone(NOTE_B6, 25);
 
 		}
 	});

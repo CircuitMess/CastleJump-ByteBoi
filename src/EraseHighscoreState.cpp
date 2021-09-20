@@ -18,11 +18,11 @@ void CastleJump::EraseHighscoreState::start(CastleJump &gameEnter){
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
 		Highscore.clear();
 		instance->castleJump->openHighscores();
-		//	Piezo.tone(NOTE_B6,25);
+		Piezo.tone(NOTE_B6,25);
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_B, [](){
 		instance->castleJump->openHighscores();
-		//	Piezo.tone(NOTE_B6,25);
+		Piezo.tone(NOTE_B6,25);
 	});
 
 }
@@ -32,7 +32,7 @@ void CastleJump::EraseHighscoreState::stop(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
-	//Piezo.setMute(true);
+
 }
 
 void CastleJump::EraseHighscoreState::drawWarning(){

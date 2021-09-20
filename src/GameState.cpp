@@ -100,17 +100,17 @@ CastleJump::GameState::~GameState(){
 void CastleJump::GameState::start(CastleJump& gameEnter){
 	castleJump = &gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_B, [](){
+		Piezo.tone(NOTE_B6, 25);
 		instance->castleJump->pauseGame();
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_C, [](){
+		Piezo.tone(NOTE_B6, 25);
 		instance->castleJump->pauseGame();
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, buttonRightPress);
 	Input::getInstance()->setBtnReleaseCallback(BTN_RIGHT, buttonRightRelease);
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, buttonLeftPress);
 	Input::getInstance()->setBtnReleaseCallback(BTN_LEFT, buttonLeftRelease);
-
-	//Piezo.setMute(false);
 }
 
 void CastleJump::GameState::stop(){
@@ -122,7 +122,6 @@ void CastleJump::GameState::stop(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
 	Input::getInstance()->removeBtnPressCallback(BTN_C);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_C);
-//	Piezo.setMute(true);
 
 }
 
@@ -220,7 +219,7 @@ void CastleJump::GameState::xPosMoving(){
 		rightState = false;
 		player.pos.x = 146;
 		player.velocity.x = -70;
-		//Piezo.tone(NOTE_E4, 100);
+		Piezo.tone(NOTE_E4, 100);
 
 	}
 	if(player.pos.x < 8){
@@ -228,7 +227,7 @@ void CastleJump::GameState::xPosMoving(){
 		leftState = false;
 		player.pos.x = 7;
 		player.velocity.x = 80;
-		//	Piezo.tone(NOTE_E4, 100);
+		Piezo.tone(NOTE_E4, 100);
 
 	}
 	if(!rightState && !checkWallBump){
@@ -301,8 +300,8 @@ void CastleJump::GameState::velocity(float dt){
 void CastleJump::GameState::checkForPoint(Coin& goldenCoin){
 	if(abs(player.pos.x - goldenCoin.x) == 0 && abs((player.pos.y - goldenCoin.y) == 0) ||
 	   (abs(player.pos.x - goldenCoin.x) + abs((player.pos.y - goldenCoin.y))) <= 5){
-		//	Piezo.tone(NOTE_B5, 100);
-		//	Piezo.tone(NOTE_E6, 150);
+		Piezo.tone(NOTE_B5, 100);
+		Piezo.tone(NOTE_E6, 150);
 		score = score + 5;
 		goldenCoin.y = -700;
 		float randX;
@@ -524,18 +523,18 @@ void CastleJump::GameState::loop(uint time){
 	}
 	if(!firstTouch && player.pos.y > 110){
 		player.pos.y = 110;
-		//	Piezo.tone(NOTE_E5, 100);
+		Piezo.tone(NOTE_E5, 25);
 		player.velocity.y = -min(player.velocity.y, 200.0f);
 	}
 	if(firstTouch && player.pos.y > 120){
 		player.pos.y = 120;
-		//	Piezo.tone(NOTE_E5, 100);
+		Piezo.tone(NOTE_E5, 100);
 		if(firstTouch){
 			if(livesNum > 0){
 				livesNum--;
 				heartGif.reset();
 				//lostLife = true;
-				//		Piezo.tone(NOTE_E5, 100);
+				Piezo.tone(NOTE_E5, 100);
 			}
 
 		}
