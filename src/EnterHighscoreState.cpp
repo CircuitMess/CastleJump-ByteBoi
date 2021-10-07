@@ -91,27 +91,27 @@ void CastleJump::EnterHighscoreState::start(CastleJump &gameEnter){
 
 
 void CastleJump::EnterHighscoreState::drawHighscore(){
-	baseSprite->setCursor(display->getWidth()/ 2 - display->getBaseSprite()->textWidth("ENTER NAME")/2, 8);
+	baseSprite->setCursor(40, 8);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextSize(1);
 	baseSprite->print("ENTER NAME");
-	baseSprite->setCursor(display->getWidth()/ 2 - display->getBaseSprite()->textWidth("NEW HIGH")/2, 75);
+	baseSprite->setCursor(40, 75);
 
 	if(hiscoreBlink && castleJump->score > Highscore.get(0).score){
 		baseSprite->print("NEW HIGH!");
 	}else{
-		baseSprite->setCursor(display->getWidth()/ 2 - display->getBaseSprite()->textWidth("SCORE:     ")/2, 90);
+		baseSprite->setCursor(40, 90);
 		baseSprite->printf(" SCORE: %3d", castleJump->score);
 	}
-	baseSprite->setCursor(65, 40);
+	baseSprite->setCursor(60, 40);
 	baseSprite->print(name[0]);
-	baseSprite->setCursor(80, 40);
+	baseSprite->setCursor(75, 40);
 	baseSprite->print(name[1]);
-	baseSprite->setCursor(95, 40);
+	baseSprite->setCursor(90, 40);
 	baseSprite->print(name[2]);
 	if(cursorBlink){
-		baseSprite->drawFastHLine(62 + 15 * charCursor, 55, 12, TFT_WHITE);
+		baseSprite->drawFastHLine(57 + 15 * charCursor, 55, 12, TFT_WHITE);
 	}
 }
 
