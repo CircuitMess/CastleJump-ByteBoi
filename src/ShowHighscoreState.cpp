@@ -82,10 +82,10 @@ void CastleJump::ShowHighscoreState::loop(uint time){
 }
 
 void CastleJump::ShowHighscoreState::drawScrollText(){
-	baseSprite->setCursor(14, 1);
+	baseSprite->setCursor(display->getWidth()/ 2 - display->getBaseSprite()->textWidth("Press UP to erase") / 2, 1);
 	baseSprite->setTextSize(1);
 	baseSprite->setTextFont(1);
-	baseSprite->print("   Press UP to erase");
+	baseSprite->print("Press UP to erase");
 }
 
 
