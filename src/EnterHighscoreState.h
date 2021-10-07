@@ -8,7 +8,7 @@ namespace CastleJump {
 	class EnterHighscoreState : public State {
 	public:
 
-		EnterHighscoreState();
+		EnterHighscoreState(Screen* screen);
 
 		void loop(uint time) override;
 
@@ -31,7 +31,8 @@ namespace CastleJump {
 
 		static EnterHighscoreState *instance;
 		Display *display;
-		Sprite *baseSprite;
+		Screen* screen;
+		Sprite* baseSprite;
 	};
 };
 

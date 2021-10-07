@@ -4,11 +4,9 @@
 
 CastleJump::EnterHighscoreState *CastleJump::EnterHighscoreState::instance = nullptr;
 
-CastleJump::EnterHighscoreState::EnterHighscoreState(){
-
-
+CastleJump::EnterHighscoreState::EnterHighscoreState(Screen* screen) : screen(screen){
 	display = ByteBoi.getDisplay();
-	baseSprite = display->getBaseSprite();
+	baseSprite = screen->getSprite();
 	charCursor = 0;
 	cursorTime = 0;
 	hiscoreTime = 0;
@@ -134,7 +132,7 @@ void CastleJump::EnterHighscoreState::stop(){
 }
 void CastleJump::EnterHighscoreState::draw(){
 	drawHighscore();
-	display->commit();
+	screen->commit();
 
 }
 
