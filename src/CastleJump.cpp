@@ -14,7 +14,7 @@ CastleJump::CastleJump *CastleJump::CastleJump::instance = nullptr;
 CastleJump::CastleJump::CastleJump(Display *display) : Context(*display), score(0){
 
 	LoopManager::addListener(&melody);
-	state = new Menu();
+	state = new Menu(&screen);
 
 }
 
@@ -25,7 +25,7 @@ void CastleJump::CastleJump::draw(){
 void CastleJump::CastleJump::pauseGame(){
 	state->stop();
 	pausedGameState = state;
-	state = new PauseState();
+	state = new PauseState(&screen);
 	state->start(*this);
 }
 
@@ -52,42 +52,42 @@ void CastleJump::CastleJump::stop(){
 void CastleJump::CastleJump::openHighscores(){
 	state->stop();
 	delete state;
-	state = new ShowHighscoreState();
+	state = new ShowHighscoreState(&screen);
 	state->start(*this);
 }
 
 void CastleJump::CastleJump::deleteHighscores(){
 	state->stop();
 	delete state;
-	state = new EraseHighscoreState();
+	state = new EraseHighscoreState(&screen);
 	state->start(*this);
 }
 
 void CastleJump::CastleJump::returnToMenu(){
 	state->stop();
 	delete state;
-	state = new Menu();
+	state = new Menu(&screen);
 	state->start(*this);
 }
 
 void CastleJump::CastleJump::enterHighscore(){
 	state->stop();
 	delete state;
-	state = new EnterHighscoreState();
+	state = new EnterHighscoreState(&screen);
 	state->start(*this);
 }
 
 void CastleJump::CastleJump::gameOver(){
 	state->stop();
 	delete state;
-	state = new GameOverState();
+	state = new GameOverState(&screen);
 	state->start(*this);
 }
 
 void CastleJump::CastleJump::newGame(){
 	state->stop();
 	delete state;
-	state = new GameState();
+	state = new GameState(&screen);
 	state->start(*this);
 }
 
