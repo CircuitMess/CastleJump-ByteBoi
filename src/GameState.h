@@ -38,7 +38,7 @@ namespace CastleJump {
 	class GameState : public State {
 
 	public:
-		GameState();
+		GameState(Screen* screen);
 
 		virtual ~GameState();
 
@@ -67,6 +67,7 @@ namespace CastleJump {
 		static GameState* instance;
 		Display* display;
 		Sprite* baseSprite;
+		Screen* screen;
 		double speed;
 		float backgorundSpeed = 0.2;
 		bool leftState = false;

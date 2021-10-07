@@ -33,14 +33,14 @@ CastleJump::GameState* CastleJump::GameState::instance = nullptr;
 const unsigned short* listBricks1[2] = {cigle2, cigle3};
 const unsigned short* listBricks2[2] = {window_draw, cigle1};
 
-CastleJump::GameState::GameState() : heartGif(ByteBoi.getDisplay()->getBaseSprite(), SPIFFS.open("/heart.hpp.g565", "r")),
-									 lavaGif(ByteBoi.getDisplay()->getBaseSprite(), CompressedFile::open(SPIFFS.open("/PodLava160x10.raw.hs", "r"), 12, 11,840), true){
+CastleJump::GameState::GameState(Screen* screen) : heartGif(screen->getSprite(), SPIFFS.open("/heart.hpp.g565", "r")),
+									 lavaGif(screen->getSprite(), CompressedFile::open(SPIFFS.open("/PodLava160x10.raw.hs", "r"), 12, 11,840), true), screen(screen){
 	if(SPIFFS.exists("/PodLava160x10.raw.hs")){
 		Serial.println("Exists");
 	}
 
 	display = ByteBoi.getDisplay();
-	baseSprite = display->getBaseSprite();
+	baseSprite = screen->getSprite();
 	instance = this;
 
 	heartGif.setXY(130, 4);
@@ -498,7 +498,7 @@ void CastleJump::GameState::draw(){
 	scoreTable();
 	level();
 	lives();
-	display->commit();
+	screen->commit();
 
 }
 
