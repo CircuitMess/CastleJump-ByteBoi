@@ -16,6 +16,7 @@ void setup(){
 	ByteBoi.begin();
 	castleJump=new CastleJump::CastleJump(ByteBoi.getDisplay());
 	castleJump->unpack();
+	ByteBoi.splash();
 	castleJump->start();
 }
 
