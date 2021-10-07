@@ -6,9 +6,9 @@
 
 CastleJump::PauseState *CastleJump::PauseState::instance = nullptr;
 
-CastleJump::PauseState::PauseState(){
+CastleJump::PauseState::PauseState(Screen* screen) : screen(screen){
 	display = ByteBoi.getDisplay();
-	baseSprite = display->getBaseSprite();
+	baseSprite = screen->getSprite();
 
 	instance = this;
 }
@@ -44,7 +44,7 @@ void CastleJump::PauseState::displayMessage(){
 void CastleJump::PauseState::draw(){
 	baseSprite->clear(TFT_BLACK);
 	displayMessage();
-	display->commit();
+	screen->commit();
 
 }
 

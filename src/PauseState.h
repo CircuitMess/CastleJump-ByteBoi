@@ -4,7 +4,7 @@
 namespace CastleJump {
 	class PauseState : public State {
 	public:
-		PauseState();
+		PauseState(Screen* screen);
 
 
 		void loop(uint time) override;
@@ -19,7 +19,7 @@ namespace CastleJump {
 
 		Display *display;
 		Sprite *baseSprite;
-
+		Screen* screen;
 		void displayMessage();
 
 
