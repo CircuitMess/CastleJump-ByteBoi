@@ -8,7 +8,9 @@
 
 CastleJump::ShowHighscoreState *CastleJump::ShowHighscoreState::instance = nullptr;
 
-CastleJump::ShowHighscoreState::ShowHighscoreState(){
+CastleJump::ShowHighscoreState::ShowHighscoreState(Screen* screen) : screen(screen){
+	display = ByteBoi.getDisplay();
+	baseSprite = screen->getSprite();
 	backgroundBuffer = static_cast<Color*>(ps_malloc(160 * 120 * 2));
 	if(backgroundBuffer == nullptr){
 		Serial.printf("Highscore background picture unpack error\n");
@@ -20,8 +22,6 @@ CastleJump::ShowHighscoreState::ShowHighscoreState(){
 	backgroundFile.read(reinterpret_cast<uint8_t*>(backgroundBuffer), 160 * 120* 2);
 	backgroundFile.close();
 
-	display = ByteBoi.getDisplay();
-	baseSprite = display->getBaseSprite();
 	instance = this;
 
 }
@@ -74,7 +74,7 @@ void CastleJump::ShowHighscoreState::drawHighscore(){
 void CastleJump::ShowHighscoreState::draw(){
 	drawHighscore();
 	drawScrollText();
-	display->commit();
+	screen->commit();
 
 }
 void CastleJump::ShowHighscoreState::loop(uint time){

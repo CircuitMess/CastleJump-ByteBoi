@@ -6,7 +6,7 @@
 namespace CastleJump {
 	class ShowHighscoreState : public State {
 	public:
-		ShowHighscoreState();
+		ShowHighscoreState(Screen* screen);
 
 		void loop(uint time) override;
 
@@ -22,7 +22,7 @@ namespace CastleJump {
 		Display* display;
 
 		Sprite* baseSprite;
-
+		Screen* screen;
 		Color* backgroundBuffer = nullptr;
 
 		void drawScrollText();
