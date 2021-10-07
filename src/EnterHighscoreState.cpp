@@ -86,24 +86,23 @@ void CastleJump::EnterHighscoreState::start(CastleJump &gameEnter){
 			Piezo.tone(NOTE_B6,25);
 		}
 	});
-	//Piezo.setMute(false);
 
 }
 
 
 void CastleJump::EnterHighscoreState::drawHighscore(){
-	baseSprite->setCursor(40, 8);
+	baseSprite->setCursor(display->getWidth()/ 2 - display->getBaseSprite()->textWidth("ENTER NAME")/2, 8);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextSize(1);
-	baseSprite->printCenter("        ENTER NAME");
-	baseSprite->setCursor(40, 75);
+	baseSprite->print("ENTER NAME");
+	baseSprite->setCursor(display->getWidth()/ 2 - display->getBaseSprite()->textWidth("NEW HIGH")/2, 75);
 
 	if(hiscoreBlink && castleJump->score > Highscore.get(0).score){
-		baseSprite->printCenter("         NEW HIGH!");
+		baseSprite->print("NEW HIGH!");
 	}else{
-		baseSprite->setCursor(40, 90);
-		baseSprite->printf("  SCORE: %3d", castleJump->score);
+		baseSprite->setCursor(display->getWidth()/ 2 - display->getBaseSprite()->textWidth("SCORE:     ")/2, 90);
+		baseSprite->printf(" SCORE: %3d", castleJump->score);
 	}
 	baseSprite->setCursor(65, 40);
 	baseSprite->print(name[0]);
