@@ -14,11 +14,7 @@ Sprite *baseSprite;
 void setup(){
 	Serial.begin(115200);
 	ByteBoi.begin();
-	ByteBoi.getDisplay()->commit();
-	Piezo.begin(25);
-	LoopManager::addListener(Input::getInstance());
 	castleJump=new CastleJump::CastleJump(ByteBoi.getDisplay());
-	LoopManager::addListener(castleJump);
 	castleJump->unpack();
 	castleJump->start();
 }
