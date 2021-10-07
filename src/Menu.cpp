@@ -22,15 +22,15 @@ CastleJump::Menu::Menu(){
 	melody.play(MelodyImpl::menu, true);
 	display->commit();
 
-	backgroundBuffer = static_cast<Color*>(ps_malloc(160 * 128 * 2));
+	backgroundBuffer = static_cast<Color*>(ps_malloc(160 * 120 * 2));
 	if(backgroundBuffer == nullptr){
 		Serial.printf("Menu background picture unpack error\n");
 		return;
 	}
 
-	fs::File backgroundFile = CompressedFile::open(SPIFFS.open("/HomeScreen160x128.raw.hs"),13,12);
+	fs::File backgroundFile = CompressedFile::open(SPIFFS.open("/Homescreen.raw.hs"),13,12);
 
-	backgroundFile.read(reinterpret_cast<uint8_t*>(backgroundBuffer), 160 * 128 * 2);
+	backgroundFile.read(reinterpret_cast<uint8_t*>(backgroundBuffer), 160 * 120 * 2);
 	backgroundFile.close();
 }
 
@@ -82,12 +82,11 @@ void CastleJump::Menu::stop(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_LEFT);
 	Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_RIGHT);
-//	Piezo.setMute(true);
 }
 
 void CastleJump::Menu::draw(){
 	baseSprite->clear(TFT_BLACK);
-	baseSprite->drawIcon(backgroundBuffer, 0,0,160,128);
+	baseSprite->drawIcon(backgroundBuffer, 0,0,160,120);
 	baseSprite->setCursor(125, 105);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
