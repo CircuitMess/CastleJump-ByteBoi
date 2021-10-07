@@ -9,15 +9,15 @@
 CastleJump::ShowHighscoreState *CastleJump::ShowHighscoreState::instance = nullptr;
 
 CastleJump::ShowHighscoreState::ShowHighscoreState(){
-	backgroundBuffer = static_cast<Color*>(ps_malloc(160 * 128 * 2));
+	backgroundBuffer = static_cast<Color*>(ps_malloc(160 * 120 * 2));
 	if(backgroundBuffer == nullptr){
-		Serial.printf("MainMenu background picture unpack error\n");
+		Serial.printf("Highscore background picture unpack error\n");
 		return;
 	}
 
-	fs::File backgroundFile = CompressedFile::open(SPIFFS.open("/Highscore160x128.raw.hs"), 10, 5);
+	fs::File backgroundFile = CompressedFile::open(SPIFFS.open("/Highscore.raw.hs"), 10, 5);
 
-	backgroundFile.read(reinterpret_cast<uint8_t*>(backgroundBuffer), 160 * 128* 2);
+	backgroundFile.read(reinterpret_cast<uint8_t*>(backgroundBuffer), 160 * 120* 2);
 	backgroundFile.close();
 
 	display = ByteBoi.getDisplay();
@@ -44,7 +44,6 @@ void CastleJump::ShowHighscoreState::start(CastleJump &gameEnter){
 	Input::getInstance()->setBtnPressCallback(BTN_C, [](){
 		instance->castleJump->returnToMenu();
 	});
-//	Piezo.setMute(true);
 }
 void CastleJump::ShowHighscoreState::stop(){
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
@@ -59,10 +58,10 @@ void CastleJump::ShowHighscoreState::stop(){
 }
 void CastleJump::ShowHighscoreState::drawHighscore(){
 	baseSprite->clear(TFT_BLACK);
-	baseSprite->drawIcon(backgroundBuffer,0,0,160,128);
+	baseSprite->drawIcon(backgroundBuffer,0,0,160,120);
 	for(int i=0;i<5;i++){
 		baseSprite->setTextColor(TFT_WHITE);
-		baseSprite->setCursor(43,(i*16)+37);
+		baseSprite->setCursor(43,(i*16)+32);
 		baseSprite->setTextSize(1);
 		baseSprite->setTextFont(1);
 		if((i+1) <= Highscore.count()){
@@ -83,7 +82,7 @@ void CastleJump::ShowHighscoreState::loop(uint time){
 }
 
 void CastleJump::ShowHighscoreState::drawScrollText(){
-	baseSprite->setCursor(14, 4);
+	baseSprite->setCursor(14, 1);
 	baseSprite->setTextSize(1);
 	baseSprite->setTextFont(1);
 	baseSprite->print("   Press UP to erase");
