@@ -6,11 +6,10 @@
 HighscoreImpl Highscore;
 
 void HighscoreImpl::begin(){
-	if(!SPIFFS.begin()){
-		Serial.println("LittleFS begin error");
-	}
+	fs::File hs = ByteBoi.openData(HS_FILENAME);
+	bool firstTime = !hs;
+	hs.close();
 
-	bool firstTime = !SPIFFS.exists(HS_FILENAME);
 	if(firstTime){
 		data.count = 0;
 		save();
