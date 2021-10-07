@@ -7,7 +7,7 @@ namespace CastleJump {
 	class EraseHighscoreState : public State {
 	public:
 
-		EraseHighscoreState();
+		EraseHighscoreState(Screen* screen);
 
 		void loop(uint time) override;
 
@@ -23,6 +23,7 @@ namespace CastleJump {
 
 		static EraseHighscoreState *instance;
 		Display *display;
+		Screen* screen;
 		Sprite *baseSprite;
 	};
 };

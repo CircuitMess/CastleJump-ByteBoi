@@ -5,10 +5,9 @@
 
 CastleJump::EraseHighscoreState *CastleJump::EraseHighscoreState::instance = nullptr;
 
-CastleJump::EraseHighscoreState::EraseHighscoreState(){
-
+CastleJump::EraseHighscoreState::EraseHighscoreState(Screen* screen) : screen(screen){
 	display = ByteBoi.getDisplay();
-	baseSprite = display->getBaseSprite();
+	baseSprite = screen->getSprite();
 	instance = this;
 
 }
@@ -51,7 +50,7 @@ void CastleJump::EraseHighscoreState::drawWarning(){
 }
 void CastleJump::EraseHighscoreState::draw(){
 	drawWarning();
-	display->commit();
+	screen->commit();
 
 }
 void CastleJump::EraseHighscoreState::loop(uint time){
