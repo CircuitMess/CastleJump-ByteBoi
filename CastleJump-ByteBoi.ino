@@ -16,6 +16,7 @@ void setup(){
 	ByteBoi.begin();
 	ByteBoi.bindMenu();
 	BatteryPopup.enablePopups(true);
+	ByteBoi.setGameID("CJump");
 	castleJump=new CastleJump::CastleJump(ByteBoi.getDisplay());
 	castleJump->unpack();
 	ByteBoi.splash();
@@ -24,5 +25,4 @@ void setup(){
 
 void loop(){
 	LoopManager::loop();
-
 }
