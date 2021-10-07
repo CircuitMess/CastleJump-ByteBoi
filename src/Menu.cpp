@@ -67,11 +67,10 @@ void CastleJump::Menu::start(CastleJump &gameEnter){
 				instance->castleJump->openHighscores();
 				break;
 			case 2:
-				instance->castleJump->pop();
+				ByteBoi.backToLauncher();
 				break;
 		}
 	});
-//	Piezo.setMute(true);
 
 }
 
