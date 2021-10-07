@@ -8,7 +8,7 @@
 #include "bitmaps/player.hpp"
 #include "bitmaps/home_screen.hpp"
 
-const char *CastleJump::Menu::titleMenu[3] = {"        Start", "        Highscore", "        Quit"};
+const char *CastleJump::Menu::titleMenu[3] = {"Start", "Highscore", "Quit"};
 CastleJump::Menu *CastleJump::Menu::instance = nullptr;
 
 CastleJump::Menu::Menu(){
@@ -93,9 +93,8 @@ void CastleJump::Menu::draw(){
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->drawRect(35, 100, 92, 18, TFT_WHITE);
 	baseSprite->drawRect(34, 99, 94, 20, TFT_WHITE);
-
-	baseSprite->setCursor(60, 100);
-	baseSprite->printCenter(titleMenu[titleCursor]);
+	baseSprite->setCursor(display->getWidth()/ 2 - display->getBaseSprite()->textWidth(titleMenu[titleCursor]) / 2, 100);
+	baseSprite->print(titleMenu[titleCursor]);
 	if(blinkState)
 	{
 		if (titleCursor == 0)
