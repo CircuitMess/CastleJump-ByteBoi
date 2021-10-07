@@ -7,7 +7,7 @@
 namespace CastleJump {
 	class GameOverState : public State {
 	public:
-		GameOverState();
+		GameOverState(Screen* screen);
 
 		static void buttonAPress();
 
@@ -29,6 +29,7 @@ namespace CastleJump {
 		GameState* gameState;
 		Display* display;
 		Sprite* baseSprite;
+		Screen* screen;
 		bool aState = false;
 		bool bState = false;
 		bool initialValue = true;

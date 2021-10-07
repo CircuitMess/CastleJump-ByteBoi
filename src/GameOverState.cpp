@@ -7,9 +7,9 @@
 
 CastleJump::GameOverState* CastleJump::GameOverState::instance = nullptr;
 
-CastleJump::GameOverState::GameOverState(){
+CastleJump::GameOverState::GameOverState(Screen* screen) : screen(screen){
 	display = ByteBoi.getDisplay();
-	baseSprite = display->getBaseSprite();
+	baseSprite = screen->getSprite();
 
 	instance = this;
 	score = 0;
@@ -46,7 +46,7 @@ void CastleJump::GameOverState::drawGameOver(){
 	baseSprite->setTextSize(1);
 	baseSprite->setCursor(130, 1);
 	baseSprite->printCenter("  A: new game  B: menu");
-	display->commit();
+	screen->commit();
 
 }
 
