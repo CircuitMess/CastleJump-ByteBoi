@@ -40,9 +40,9 @@ void CastleJump::EraseHighscoreState::drawWarning(){
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
-	baseSprite->drawString("   Your really want", 15, 17);
-	baseSprite->drawString("   to erase your", 15, 32);
-	baseSprite->drawString("   highscore list?", 15, 47);
+	baseSprite->drawString("Your really want", 30, 17);
+	baseSprite->drawString("to erase your", 30, 32);
+	baseSprite->drawString("highscore list?", 30, 47);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
 	baseSprite->setCursor(110, 100);
