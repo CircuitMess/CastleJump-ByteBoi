@@ -14,6 +14,8 @@ Sprite *baseSprite;
 void setup(){
 	Serial.begin(115200);
 	ByteBoi.begin();
+	ByteBoi.bindMenu();
+	BatteryPopup.enablePopups(true);
 	castleJump=new CastleJump::CastleJump(ByteBoi.getDisplay());
 	castleJump->unpack();
 	ByteBoi.splash();
