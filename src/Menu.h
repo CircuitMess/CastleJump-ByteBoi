@@ -12,32 +12,12 @@ namespace CastleJump {
 		Color color;
 	};
 
-	class Menu : public State {
+	class Menu : public State{
 
 	public:
-		Menu();
+		Menu(Screen* screen);
 
 		~Menu();
-
-		static void buttonAPress();
-
-		static void buttonARelease();
-
-		static void buttonDownPress();
-
-		static void buttonDownRelease();
-
-		static void buttonUpPress();
-
-		static void buttonUpRelease();
-
-		static void buttonRightPress();
-
-		static void buttonRightRelease();
-
-		static void buttonLeftPress();
-
-		static void buttonLeftRelease();
 
 		void loop(uint time) override;
 
@@ -54,6 +34,7 @@ namespace CastleJump {
 		uint blinkMicros;
 		static Menu* instance;
 		Display* display;
+		Screen* screen;
 		Sprite* baseSprite;
 		Color* backgroundBuffer = nullptr;
 	};

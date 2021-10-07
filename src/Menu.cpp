@@ -11,10 +11,9 @@
 const char *CastleJump::Menu::titleMenu[3] = {"Start", "Highscore", "Quit"};
 CastleJump::Menu *CastleJump::Menu::instance = nullptr;
 
-CastleJump::Menu::Menu(){
+CastleJump::Menu::Menu(Screen* screen) : screen(screen){
 	display = ByteBoi.getDisplay();
-	baseSprite = display->getBaseSprite();
-
+	baseSprite = screen->getSprite();
 	instance = this;
 	titleCursor = 0;
 	blinkState = 0;
@@ -118,8 +117,9 @@ void CastleJump::Menu::draw(){
 		baseSprite->drawIcon(icon_player, 23, 108, 8, 8, 1, TFT_BLACK);
 		baseSprite->drawIcon(icon_player, 131, 110, 8, 8, 1, TFT_BLACK);
 	}
+	screen->commit();
 
-	display->commit();
+
 }
 
 void CastleJump::Menu::loop(uint time){
