@@ -89,18 +89,18 @@ void CastleJump::EnterHighscoreState::start(CastleJump &gameEnter){
 
 
 void CastleJump::EnterHighscoreState::drawHighscore(){
-	baseSprite->setCursor(40, 8);
+	baseSprite->setCursor(45, 8);
 	baseSprite->setTextFont(2);
 	baseSprite->setTextColor(TFT_WHITE);
 	baseSprite->setTextSize(1);
 	baseSprite->print("ENTER NAME");
-	baseSprite->setCursor(40, 75);
+	baseSprite->setCursor(50, 75);
 
 	if(hiscoreBlink && castleJump->score > Highscore.get(0).score){
 		baseSprite->print("NEW HIGH!");
 	}else{
-		baseSprite->setCursor(40, 90);
-		baseSprite->printf(" SCORE: %3d", castleJump->score);
+		baseSprite->setCursor(50, 90);
+		baseSprite->printf("SCORE: %3d", castleJump->score);
 	}
 	baseSprite->setCursor(60, 40);
 	baseSprite->print(name[0]);
