@@ -34,10 +34,8 @@ const unsigned short* listBricks1[2] = {cigle2, cigle3};
 const unsigned short* listBricks2[2] = {window_draw, cigle1};
 
 CastleJump::GameState::GameState(Screen* screen) : heartGif(screen->getSprite(), SPIFFS.open("/heart.hpp.g565", "r")),
-									 GameState(screen->getSprite(), CompressedFile::open(SPIFFS.open("/LavaFloor.raw.hs", "r"), 12, 11,840), true), screen(screen){
-	if(SPIFFS.exists("/LavaFloor.raw.hs")){
-		Serial.println("Exists");
-	}
+									 lavaGif(screen->getSprite(), CompressedFile::open(SPIFFS.open("/PodLava160x10.g565.hs", "r"), 13, 12,866), true), screen(screen){
+
 
 	display = ByteBoi.getDisplay();
 	baseSprite = screen->getSprite();
@@ -83,12 +81,12 @@ CastleJump::GameState::GameState(Screen* screen) : heartGif(screen->getSprite(),
 		return;
 	}
 
-	fs::File grassFloorFile = SPIFFS.open("/Floor.raw");
+	fs::File grassFloorFile = SPIFFS.open("/Pod160x10.raw");
 
 	grassFloorFile.read(reinterpret_cast<uint8_t*>(grassFloorBuffer), 160 * 10 * 2);
 	grassFloorFile.close();
 
-	if(SPIFFS.exists("/Floor.raw")){
+	if(SPIFFS.exists("/Pod160x10.raw")){
 		Serial.println("ExistsPOD");
 	}
 }
