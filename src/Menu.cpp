@@ -12,6 +12,7 @@ const char *CastleJump::Menu::titleMenu[3] = {"Start", "Highscore", "Quit"};
 CastleJump::Menu *CastleJump::Menu::instance = nullptr;
 
 CastleJump::Menu::Menu(Screen* screen) : screen(screen){
+	Serial.println("Menu");
 	display = ByteBoi.getDisplay();
 	baseSprite = screen->getSprite();
 	instance = this;
@@ -27,7 +28,7 @@ CastleJump::Menu::Menu(Screen* screen) : screen(screen){
 		return;
 	}
 
-	fs::File backgroundFile = CompressedFile::open(SPIFFS.open("/Homescreen.raw.hs"),13,12);
+	fs::File backgroundFile = CompressedFile::open(ByteBoi.openResource("/Homescreen.raw.hs"),13,12);
 
 	backgroundFile.read(reinterpret_cast<uint8_t*>(backgroundBuffer), 160 * 120 * 2);
 	backgroundFile.close();
