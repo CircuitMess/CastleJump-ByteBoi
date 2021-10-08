@@ -17,7 +17,7 @@ CastleJump::ShowHighscoreState::ShowHighscoreState(Screen* screen) : screen(scre
 		return;
 	}
 
-	fs::File backgroundFile = CompressedFile::open(SPIFFS.open("/Highscore.raw.hs"), 10, 5);
+	fs::File backgroundFile = CompressedFile::open(ByteBoi.openResource("/Highscore.raw.hs"), 10, 5);
 
 	backgroundFile.read(reinterpret_cast<uint8_t*>(backgroundBuffer), 160 * 120* 2);
 	backgroundFile.close();
