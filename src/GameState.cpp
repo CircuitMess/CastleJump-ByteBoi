@@ -68,7 +68,6 @@ CastleJump::GameState::GameState(Screen* screen) : heartGif(screen->getSprite(),
 	dropRect.push_back({80, -75, 20, 2});
 	dropRect.push_back({110, -97, 40, 2});
 
-	//dropRect.push_back({103, -105, 40, 2});
 	randBitmapBrick = 0;
 	randBitmapWin = 0;
 
@@ -498,14 +497,7 @@ void CastleJump::GameState::loop(uint time){
 	checkLevel();
 	float dt = (float) time / 1000000.0f;
 	velocity(dt);
-	/*if(player.pos.y < 0){//check height
-		float delta = -player.pos.y;
-		player.pos.y = 0;
-		for(int i = 0; i < dropRect.size(); ++i){
-			dropRect[i].y -= delta;
-			speed = speed + 0.1;
-		}
-	}*/
+
 	for(int i = 0; i < dropRect.size(); ++i){
 		movingRects(dropRect[i], time);
 		checkForCollision(dropRect[i]);
@@ -559,10 +551,8 @@ void CastleJump::GameState::loop(uint time){
 	}
 
 	for(int i = 0; i < 1; i++){
-//		drawCoin(coin[i]);
 		movingCoin(coin[i], time);
 		checkForPoint(coin[i]);
-//		drawAbilityPoint(powerUp[i]);
 		movingPowerUps(powerUp[i], time);
 		checkForPowerUp(powerUp[i]);
 		movingBrick(bricks[i], time);

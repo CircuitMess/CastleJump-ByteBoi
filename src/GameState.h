@@ -87,7 +87,6 @@ namespace CastleJump {
 		int livesNum = 5;
 		float korak = 0;
 		bool lostLife = false;
-		uint8_t lavaHeight = 128;
 		Color* grassFloorBuffer = nullptr;
 		bool isDrawing = true;
 		uint8_t blinkerCounter = 0;
@@ -152,7 +151,6 @@ namespace CastleJump {
 
 		void drawFloor();
 
-		void drawRedScreen();
 	};
 };
 #endif
