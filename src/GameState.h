@@ -89,6 +89,9 @@ namespace CastleJump {
 		bool lostLife = false;
 		uint8_t lavaHeight = 128;
 		Color* grassFloorBuffer = nullptr;
+		bool isDrawing = true;
+		uint8_t blinkerCounter = 0;
+		uint32_t previousTimeBlink = 0;
 
 
 		Vector<PowerUps> powerUp;

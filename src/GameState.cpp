@@ -207,10 +207,6 @@ void CastleJump::GameState::drawFloor(){
 	}
 }
 
-void CastleJump::GameState::drawRedScreen(){
-	baseSprite->drawIcon(redScreen, 0, 0, 128, 128, 1, TFT_BLACK);
-}
-
 void CastleJump::GameState::xPosMoving(){
 	if(player.pos.x > 145){
 		checkWallBump = true;
@@ -342,7 +338,6 @@ void CastleJump::GameState::checkForCollision(Rect& stairs){
 		if((distX <= 11.5 && distY <= 8)){
 			player.velocity.y = -min(player.velocity.y, 110.0f);
 			firstTouch = true;
-			lostLife = false;
 		}
 	}else if(stairs.w == 40){
 		float distX = abs(player.pos.x - stairs.x - 20);
@@ -350,7 +345,6 @@ void CastleJump::GameState::checkForCollision(Rect& stairs){
 		if((distX <= 21.5 && distY <= 8)){
 			player.velocity.y = -min(player.velocity.y, 110.0f);
 			firstTouch = true;
-			lostLife = false;
 		}
 
 	}else if(stairs.w == 10){
@@ -359,7 +353,6 @@ void CastleJump::GameState::checkForCollision(Rect& stairs){
 		if((distX <= 6.5 && distY <= 8)){
 			player.velocity.y = -min(player.velocity.y, 110.0f);
 			firstTouch = true;
-			lostLife = false;
 		}
 
 	}
@@ -482,13 +475,11 @@ void CastleJump::GameState::draw(){
 	for(int i = 0; i < dropRect.size(); ++i){
 		drawRect(dropRect[i]);
 	}
-	drawPlayerCircle();
+	if(isDrawing){
+		drawPlayerCircle();
+	}
 	drawWalls();
 	drawFloor();
-
-/*	if(lostLife){
-		drawRedScreen();
-	}*/
 	for(int i = 0; i < 1; i++){
 		drawCoin(coin[i]);
 		drawAbilityPoint(powerUp[i]);
@@ -531,12 +522,29 @@ void CastleJump::GameState::loop(uint time){
 			if(livesNum > 0){
 				livesNum--;
 				heartGif.reset();
-				//lostLife = true;
+				lostLife = true;
 				Piezo.tone(NOTE_E5, 100);
 			}
 
 		}
 		player.velocity.y = -min(player.velocity.y, 200.0f);
+	}
+	if(lostLife){
+		if(millis() - previousTimeBlink >= 100){
+			previousTimeBlink = millis();
+			if(isDrawing){
+				isDrawing = false;
+				blinkerCounter++;
+			}else{
+				isDrawing = true;
+			}
+			if(blinkerCounter >= 5){
+				blinkerCounter = 0;
+				previousTimeBlink = 0;
+				lostLife = false;
+				isDrawing = true;
+			}
+		}
 	}
 	if(livesNum == 0){
 		lvl = 1;
