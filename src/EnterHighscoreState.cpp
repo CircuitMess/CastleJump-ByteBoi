@@ -66,7 +66,6 @@ void CastleJump::EnterHighscoreState::start(CastleJump &gameEnter){
 		instance->charCursor++;
 		instance->cursorBlink = true;
 		instance->cursorTime = millis();
-		Piezo.tone(NOTE_B6,25);
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
 		if(instance->charCursor > 0){
