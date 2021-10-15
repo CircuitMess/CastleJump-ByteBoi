@@ -91,7 +91,7 @@ namespace CastleJump {
 		bool isDrawing = true;
 		uint8_t blinkerCounter = 0;
 		uint32_t previousTimeBlink = 0;
-
+		ByteBoiLED rgbLED;
 
 		Vector<PowerUps> powerUp;
 		Vector<BackPict> bricks;

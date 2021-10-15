@@ -119,6 +119,7 @@ void CastleJump::GameState::stop(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
 	Input::getInstance()->removeBtnPressCallback(BTN_C);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_C);
+	rgbLED.setRGB(OFF);
 
 }
 
@@ -524,6 +525,11 @@ void CastleJump::GameState::loop(uint time){
 	if(lostLife){
 		if(millis() - previousTimeBlink >= 100){
 			previousTimeBlink = millis();
+			if(rgbLED.getRGB() == OFF){
+				rgbLED.setRGB(static_cast<LEDColor>(LEDColor::RED));
+			}else{
+				rgbLED.setRGB(OFF);
+			}
 			if(isDrawing){
 				isDrawing = false;
 				blinkerCounter++;
