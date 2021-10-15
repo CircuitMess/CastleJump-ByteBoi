@@ -543,6 +543,8 @@ void CastleJump::GameState::loop(uint time){
 				isDrawing = true;
 			}
 		}
+	}else{
+		rgbLED.setRGB(OFF);
 	}
 	if(livesNum == 0){
 		lvl = 1;
