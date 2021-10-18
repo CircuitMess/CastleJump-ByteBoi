@@ -302,7 +302,7 @@ void CastleJump::GameState::checkForPoint(Coin& goldenCoin){
 		float randX;
 		do {
 			goldenCoin.y = -700;
-			randX = random(10, 110);
+			randX = random(10, 140);
 		} while(abs(randX - goldenCoin.x > 30));
 		goldenCoin.x = randX;
 	}
@@ -322,7 +322,7 @@ void CastleJump::GameState::checkForPowerUp(PowerUps& powerUp){
 		float randX;
 		do {
 			powerUp.y = -1800;
-			randX = random(10, 110);
+			randX = random(10, 140);
 		} while(abs(randX - powerUp.x > 30));
 		powerUp.x = randX;
 	}
