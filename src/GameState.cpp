@@ -119,7 +119,7 @@ void CastleJump::GameState::stop(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
 	Input::getInstance()->removeBtnPressCallback(BTN_C);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_C);
-	rgbLED.setRGB(OFF);
+	LED.setRGB(OFF);
 
 }
 
@@ -524,7 +524,7 @@ void CastleJump::GameState::loop(uint time){
 	}
 	if(!firstTouch && player.pos.y > 110){
 		player.pos.y = 110;
-		Piezo.tone(NOTE_E5, 25);
+		//Piezo.tone(NOTE_E5, 25);
 		player.velocity.y = -min(player.velocity.y, 200.0f);
 	}
 	if(firstTouch && player.pos.y > 120){
@@ -559,10 +559,10 @@ void CastleJump::GameState::loop(uint time){
 	if(lostLife){
 		if(millis() - previousTimeBlink >= 100){
 			previousTimeBlink = millis();
-			if(rgbLED.getRGB() == OFF){
-				rgbLED.setRGB(static_cast<LEDColor>(LEDColor::RED));
+			if(LED.getRGB() == OFF){
+				LED.setRGB(static_cast<LEDColor>(LEDColor::RED));
 			}else{
-				rgbLED.setRGB(OFF);
+				LED.setRGB(OFF);
 			}
 			if(isDrawing){
 				isDrawing = false;
@@ -578,7 +578,7 @@ void CastleJump::GameState::loop(uint time){
 			}
 		}
 	}else{
-		rgbLED.setRGB(OFF);
+		LED.setRGB(OFF);
 	}
 	if(livesNum == 0){
 		lvl = 1;

@@ -4,6 +4,7 @@
 #include "State.h"
 #include <Motion/vec.hpp>
 #include <Display/AnimatedSprite.h>
+#include <ByteBoiLED.h>
 
 namespace CastleJump {
 	struct Player {
@@ -91,7 +92,6 @@ namespace CastleJump {
 		bool isDrawing = true;
 		uint8_t blinkerCounter = 0;
 		uint32_t previousTimeBlink = 0;
-		ByteBoiLED rgbLED;
 		bool coinIsPicked = false;
 		uint16_t previousTimeCoin = 0;
 		int secondsCoin = 15;
