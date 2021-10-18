@@ -297,6 +297,7 @@ void CastleJump::GameState::checkForPoint(Coin& goldenCoin){
 		Piezo.tone(NOTE_B5, 100);
 		Piezo.tone(NOTE_E6, 150);
 		score = score + 5;
+		coinIsPicked = true;
 		goldenCoin.y = -700;
 		float randX;
 		do {
@@ -487,6 +488,24 @@ void CastleJump::GameState::draw(){
 	scoreTable();
 	level();
 	lives();
+	if(drawCoinText){
+		baseSprite->setTextColor(TFT_GOLD);
+		baseSprite->setTextFont(1);
+		baseSprite->setTextSize(1);
+		baseSprite->drawString("+5", 44, 13);
+	}
+	if(highspeed){
+		baseSprite->setTextColor(TFT_GREEN);
+		baseSprite->setTextFont(1);
+		baseSprite->setTextSize(1);
+		baseSprite->drawString("High speed!", 5, 100);
+	}
+	if(lowGravity){
+		baseSprite->setTextColor(TFT_GREEN);
+		baseSprite->setTextFont(1);
+		baseSprite->setTextSize(1);
+		baseSprite->drawString("Low gravity!", 5, 100);
+	}
 	screen->commit();
 
 }
@@ -521,6 +540,21 @@ void CastleJump::GameState::loop(uint time){
 
 		}
 		player.velocity.y = -min(player.velocity.y, 200.0f);
+	}
+	if(coinIsPicked){
+		drawCoinText = true;
+		currentTime = millis();
+		if(currentTime - previousTimeCoin > 1000){
+			previousTime = currentTime;
+			secondsCoin--;
+		}
+		if(secondsCoin < 0){
+			drawCoinText = false;
+			coinIsPicked = false;
+			secondsCoin = 15 ;
+		}else{
+			drawCoinText = true;
+		}
 	}
 	if(lostLife){
 		if(millis() - previousTimeBlink >= 100){

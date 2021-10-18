@@ -92,6 +92,10 @@ namespace CastleJump {
 		uint8_t blinkerCounter = 0;
 		uint32_t previousTimeBlink = 0;
 		ByteBoiLED rgbLED;
+		bool coinIsPicked = false;
+		uint16_t previousTimeCoin = 0;
+		int secondsCoin = 15;
+		bool drawCoinText = false;
 
 		Vector<PowerUps> powerUp;
 		Vector<BackPict> bricks;
