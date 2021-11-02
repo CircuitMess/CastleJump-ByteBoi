@@ -27,6 +27,9 @@
 #include <FS/PGMFile.h>
 #include <FS/CompressedFile.h>
 #include <SPIFFS.h>
+#include <SD.h>
+#include <Playback/PlaybackSystem.h>
+#include <Playback/Sample.h>
 
 CastleJump::GameState* CastleJump::GameState::instance = nullptr;
 
@@ -72,7 +75,7 @@ CastleJump::GameState::GameState(Screen* screen) : heartGif(screen->getSprite(),
 	randBitmapWin = 0;
 
 	score = 0;
-	melody.play(MelodyImpl::game, true);
+	//melody.play(MelodyImpl::game, true);
 
 	grassFloorBuffer = static_cast<Color*>(ps_malloc(160 * 10 * 2));
 	if(grassFloorBuffer == nullptr){
@@ -88,6 +91,11 @@ CastleJump::GameState::GameState(Screen* screen) : heartGif(screen->getSprite(),
 	if(SPIFFS.exists("/Pod160x10.raw")){
 		Serial.println("ExistsPOD");
 	}
+
+	Sample* gameSample = new Sample(SD.open("/Desparado.aac"), false);
+	gameSample->setLooping(true);
+
+	Playback.play(gameSample);
 }
 
 CastleJump::GameState::~GameState(){
@@ -529,13 +537,13 @@ void CastleJump::GameState::loop(uint time){
 	}
 	if(firstTouch && player.pos.y > 120){
 		player.pos.y = 120;
-		Piezo.tone(NOTE_E5, 100);
+		//Piezo.tone(NOTE_E5, 100);
 		if(firstTouch){
 			if(livesNum > 0){
 				livesNum--;
 				heartGif.reset();
 				lostLife = true;
-				Piezo.tone(NOTE_E5, 100);
+				//Piezo.tone(NOTE_E5, 100);
 			}
 
 		}
