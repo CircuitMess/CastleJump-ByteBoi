@@ -40,7 +40,7 @@ void MelodyImpl::play(Melodies state, bool loopMelody){
 
 void MelodyImpl::loop(uint){
 
-	if(isPlaying == false){
+	/*if(isPlaying == false){
 		return;
 	}
 	if(counterMelody <= melodySize){
@@ -59,6 +59,6 @@ void MelodyImpl::loop(uint){
 		}
 
 
-	}
+	}*/
 }
 
