@@ -19,7 +19,6 @@ CastleJump::Menu::Menu(Screen* screen) : screen(screen){
 	titleCursor = 0;
 	blinkState = 0;
 	blinkMicros = 0;
-	melody.play(MelodyImpl::menu, true);
 	display->commit();
 
 	backgroundBuffer = static_cast<Color*>(ps_malloc(160 * 120 * 2));
@@ -45,14 +44,12 @@ void CastleJump::Menu::start(CastleJump &gameEnter){
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
 		if(instance->titleCursor > 0){
 			instance->titleCursor--;
-			Piezo.tone(NOTE_B6, 25);
 
 		}
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
 		if(instance->titleCursor < 2){
 			instance->titleCursor++;
-			Piezo.tone(NOTE_B6, 25);
 
 		}
 	});
