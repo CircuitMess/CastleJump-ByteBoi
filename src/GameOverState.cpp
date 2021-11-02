@@ -19,11 +19,11 @@ void CastleJump::GameOverState::start(CastleJump& gameEnter){
 
 	castleJump = &gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
-		Piezo.tone(NOTE_B6, 25);
+	//	Piezo.tone(NOTE_B6, 25);
 		instance->castleJump->newGame();
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_B, [](){
-			Piezo.tone(NOTE_B6, 25);
+	//		Piezo.tone(NOTE_B6, 25);
 		instance->castleJump->returnToMenu();
 	});
 }
