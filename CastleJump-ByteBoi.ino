@@ -7,9 +7,15 @@
 #include "src/GameState.h"
 #include <ByteBoi.h>
 #include <SPIFFS.h>
+#include <SD.h>
 
 CastleJump::CastleJump* castleJump;
 Sprite *baseSprite;
+
+namespace CastleJump {
+	Sample* menuMusic = nullptr;
+	Sample* gameMusic = nullptr;
+}
 
 void setup(){
 	Serial.begin(115200);
@@ -17,6 +23,15 @@ void setup(){
 	ByteBoi.bindMenu();
 	BatteryPopup.enablePopups(true);
 	ByteBoi.setGameID("CJump");
+
+	SD.begin(SD_CS, SPI);
+
+	CastleJump::menuMusic = new Sample(SD.open(ByteBoi.getSDPath() + "/Music/Menu.aac"));
+	CastleJump::gameMusic = new Sample(SD.open(ByteBoi.getSDPath() + "/Music/Game.aac"));
+
+	CastleJump::menuMusic->setLooping(true);
+	CastleJump::gameMusic->setLooping(true);
+
 	castleJump=new CastleJump::CastleJump(ByteBoi.getDisplay());
 	castleJump->unpack();
 	ByteBoi.splash();

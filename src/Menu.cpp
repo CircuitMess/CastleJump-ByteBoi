@@ -34,7 +34,7 @@ CastleJump::Menu::Menu(Screen* screen) : screen(screen){
 }
 
 CastleJump::Menu::~Menu(){
-	stop();
+	Menu::stop();
 	free(backgroundBuffer);
 }
 
@@ -69,6 +69,8 @@ void CastleJump::Menu::start(CastleJump &gameEnter){
 		}
 	});
 
+	extern Sample* menuMusic;
+	Playback.play(menuMusic);
 }
 
 void CastleJump::Menu::stop(){
@@ -79,6 +81,7 @@ void CastleJump::Menu::stop(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_LEFT);
 	Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_RIGHT);
+	Playback.stop();
 }
 
 void CastleJump::Menu::draw(){

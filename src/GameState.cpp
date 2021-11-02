@@ -91,14 +91,10 @@ CastleJump::GameState::GameState(Screen* screen) : heartGif(screen->getSprite(),
 	if(SPIFFS.exists("/Pod160x10.raw")){
 		Serial.println("ExistsPOD");
 	}
-
-	Sample* gameSample = new Sample(SD.open("/Desparado.aac"), false);
-	gameSample->setLooping(true);
-
-	Playback.play(gameSample);
 }
 
 CastleJump::GameState::~GameState(){
+	GameState::stop();
 	free(grassFloorBuffer);
 }
 
@@ -116,6 +112,9 @@ void CastleJump::GameState::start(CastleJump& gameEnter){
 	Input::getInstance()->setBtnReleaseCallback(BTN_RIGHT, buttonRightRelease);
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, buttonLeftPress);
 	Input::getInstance()->setBtnReleaseCallback(BTN_LEFT, buttonLeftRelease);
+
+	extern Sample* gameMusic;
+	Playback.play(gameMusic);
 }
 
 void CastleJump::GameState::stop(){
@@ -128,7 +127,7 @@ void CastleJump::GameState::stop(){
 	Input::getInstance()->removeBtnPressCallback(BTN_C);
 	Input::getInstance()->removeBtnReleaseCallback(BTN_C);
 	LED.setRGB(OFF);
-
+	Playback.stop();
 }
 
 void CastleJump::GameState::buttonLeftPress(){
