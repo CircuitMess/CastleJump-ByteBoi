@@ -30,15 +30,15 @@ void CastleJump::ShowHighscoreState::start(CastleJump &gameEnter){
 
 	castleJump=&gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_UP,[](){
-		Piezo.tone(NOTE_B7,100);
+		Playback.tone(NOTE_B7,100);
 		instance->castleJump->deleteHighscores();
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_A,[](){
-		Piezo.tone(NOTE_B6,25);
+		Playback.tone(NOTE_B6,25);
 		instance->castleJump->returnToMenu();
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_B,[](){
-		Piezo.tone(NOTE_B6,25);
+		Playback.tone(NOTE_B6,25);
 		instance->castleJump->returnToMenu();
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_C, [](){

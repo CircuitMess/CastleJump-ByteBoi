@@ -44,7 +44,7 @@ void MelodyImpl::loop(uint){
 		return;
 	}
 	if(counterMelody <= melodySize){
-	//	Piezo.tone(playingMelody[counterMelody].frequency, playingMelody[counterMelody].duration);
+	//	Playback.tone(playingMelody[counterMelody].frequency, playingMelody[counterMelody].duration);
 		currentNoteTime = millis();
 		if(currentNoteTime - previousNoteTime > playingMelody[counterMelody].duration){
 			previousNoteTime = currentNoteTime;

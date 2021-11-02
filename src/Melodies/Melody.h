@@ -10,7 +10,7 @@
 #include <Input/Input.h>
 #include <Loop/LoopManager.h>
 #include "Note.h"
-#include <Audio/Piezo.h>
+#include <ByteBoi.h>
 
 
 class MelodyImpl : public LoopListener {
