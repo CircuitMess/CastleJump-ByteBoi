@@ -313,6 +313,7 @@ void CastleJump::GameState::checkForPoint(Coin& goldenCoin){
 void CastleJump::GameState::checkForPowerUp(PowerUps& powerUp){
 	if(abs(player.pos.x - powerUp.x) == 0 && abs((player.pos.y - powerUp.y) == 0) ||
 	   (abs(player.pos.x - powerUp.x) + abs((player.pos.y - powerUp.y))) <= 5){
+		Playback.tone(NOTE_E6, 150);
 		int randNum = random(1, 3);
 		if(randNum == 1){
 			highspeed = true;
@@ -525,6 +526,7 @@ void CastleJump::GameState::loop(uint time){
 		checkForCollision(dropRect[i]);
 	}
 	if(!firstTouch && player.pos.y > 110){
+		Playback.tone(NOTE_E4, 100);
 		player.pos.y = 110;
 		player.velocity.y = -min(player.velocity.y, 200.0f);
 	}
@@ -535,6 +537,7 @@ void CastleJump::GameState::loop(uint time){
 				livesNum--;
 				heartGif.reset();
 				lostLife = true;
+				Playback.tone(NOTE_C4, 100);
 			}
 
 		}
