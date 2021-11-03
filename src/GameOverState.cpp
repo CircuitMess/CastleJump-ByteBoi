@@ -19,11 +19,9 @@ void CastleJump::GameOverState::start(CastleJump& gameEnter){
 
 	castleJump = &gameEnter;
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
-	//	Playback.tone(NOTE_B6, 25);
 		instance->castleJump->newGame();
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_B, [](){
-	//		Playback.tone(NOTE_B6, 25);
 		instance->castleJump->returnToMenu();
 	});
 }
@@ -55,7 +53,6 @@ void CastleJump::GameOverState::draw(){
 }
 
 void CastleJump::GameOverState::loop(uint time){
-	Serial.println("castleJump->score :");
 	score = castleJump->score;
 	if(Highscore.count() > 1){
 		initialValue = false;
@@ -63,7 +60,6 @@ void CastleJump::GameOverState::loop(uint time){
 	if(score > Highscore.get(0).score || initialValue || score > Highscore.get(1).score ||
 	   score > Highscore.get(2).score || score > Highscore.get(3).score ||
 	   score >= Highscore.get(4).score){
-		Serial.println(Highscore.get(0).score);
 		castleJump->enterHighscore();
 	}else{
 		if(Highscore.get(4).score > score && Highscore.count() > 1){

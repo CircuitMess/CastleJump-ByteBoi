@@ -13,7 +13,6 @@ CastleJump::ShowHighscoreState::ShowHighscoreState(Screen* screen) : screen(scre
 	baseSprite = screen->getSprite();
 	backgroundBuffer = static_cast<Color*>(ps_malloc(160 * 120 * 2));
 	if(backgroundBuffer == nullptr){
-		Serial.printf("Highscore background picture unpack error\n");
 		return;
 	}
 
@@ -65,7 +64,6 @@ void CastleJump::ShowHighscoreState::drawHighscore(){
 		baseSprite->setTextSize(1);
 		baseSprite->setTextFont(1);
 		if((i+1) <= Highscore.count()){
-			Serial.println(Highscore.get(i).score);
 			baseSprite->printf("  %.3s  %4d",Highscore.get(i).name, Highscore.get(i).score);
 		}
 	}

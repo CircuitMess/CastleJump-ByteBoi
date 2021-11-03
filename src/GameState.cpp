@@ -75,11 +75,9 @@ CastleJump::GameState::GameState(Screen* screen) : heartGif(screen->getSprite(),
 	randBitmapWin = 0;
 
 	score = 0;
-	//melody.play(MelodyImpl::game, true);
 
 	grassFloorBuffer = static_cast<Color*>(ps_malloc(160 * 10 * 2));
 	if(grassFloorBuffer == nullptr){
-		Serial.printf("Grass floor picture unpack error\n");
 		return;
 	}
 
@@ -88,9 +86,6 @@ CastleJump::GameState::GameState(Screen* screen) : heartGif(screen->getSprite(),
 	grassFloorFile.read(reinterpret_cast<uint8_t*>(grassFloorBuffer), 160 * 10 * 2);
 	grassFloorFile.close();
 
-	if(SPIFFS.exists("/Pod160x10.raw")){
-		Serial.println("ExistsPOD");
-	}
 }
 
 CastleJump::GameState::~GameState(){
@@ -531,18 +526,15 @@ void CastleJump::GameState::loop(uint time){
 	}
 	if(!firstTouch && player.pos.y > 110){
 		player.pos.y = 110;
-		//Playback.tone(NOTE_E5, 25);
 		player.velocity.y = -min(player.velocity.y, 200.0f);
 	}
 	if(firstTouch && player.pos.y > 120){
 		player.pos.y = 120;
-		//Playback.tone(NOTE_E5, 100);
 		if(firstTouch){
 			if(livesNum > 0){
 				livesNum--;
 				heartGif.reset();
 				lostLife = true;
-				//Playback.tone(NOTE_E5, 100);
 			}
 
 		}

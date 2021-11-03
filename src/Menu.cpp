@@ -12,7 +12,6 @@ const char *CastleJump::Menu::titleMenu[3] = {"Start", "Highscore", "Quit"};
 CastleJump::Menu *CastleJump::Menu::instance = nullptr;
 
 CastleJump::Menu::Menu(Screen* screen) : screen(screen){
-	Serial.println("Menu");
 	display = ByteBoi.getDisplay();
 	baseSprite = screen->getSprite();
 	instance = this;
@@ -23,7 +22,6 @@ CastleJump::Menu::Menu(Screen* screen) : screen(screen){
 
 	backgroundBuffer = static_cast<Color*>(ps_malloc(160 * 120 * 2));
 	if(backgroundBuffer == nullptr){
-		Serial.printf("Menu background picture unpack error\n");
 		return;
 	}
 
