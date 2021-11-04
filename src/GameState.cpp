@@ -123,6 +123,7 @@ void CastleJump::GameState::stop(){
 	Input::getInstance()->removeBtnReleaseCallback(BTN_C);
 	LED.setRGB(OFF);
 	Playback.stop();
+	delay(100);
 }
 
 void CastleJump::GameState::buttonLeftPress(){
