@@ -38,7 +38,8 @@ void CastleJump::GameOverState::start(CastleJump& gameEnter){
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
 		instance->castleJump->enterHighscore();
 	});
-
+	extern Sample* gameOverMusic;
+	Playback.play(gameOverMusic);
 }
 
 
@@ -49,6 +50,7 @@ void CastleJump::GameOverState::stop(){
 	Input::getInstance()->removeBtnPressCallback(BTN_DOWN);
 	Input::getInstance()->removeBtnPressCallback(BTN_LEFT);
 	Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
+	Playback.stop();
 }
 
 void CastleJump::GameOverState::drawGameOver(){
