@@ -18,64 +18,72 @@ CastleJump::GameOverState::GameOverState(Screen* screen) : screen(screen){
 void CastleJump::GameOverState::start(CastleJump& gameEnter){
 
 	castleJump = &gameEnter;
+	score = castleJump->score;
+
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
-		instance->castleJump->newGame();
+		instance->castleJump->enterHighscore();
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_B, [](){
-		instance->castleJump->returnToMenu();
+		instance->castleJump->enterHighscore();
 	});
+	Input::getInstance()->setBtnPressCallback(BTN_UP, [](){
+		instance->castleJump->enterHighscore();
+	});
+	Input::getInstance()->setBtnPressCallback(BTN_DOWN, [](){
+		instance->castleJump->enterHighscore();
+	});
+	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
+		instance->castleJump->enterHighscore();
+	});
+	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
+		instance->castleJump->enterHighscore();
+	});
+
 }
 
 
 void CastleJump::GameOverState::stop(){
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
-	Input::getInstance()->removeBtnReleaseCallback(BTN_A);
-	Input::getInstance()->removeBtnReleaseCallback(BTN_B);
+	Input::getInstance()->removeBtnPressCallback(BTN_UP);
+	Input::getInstance()->removeBtnPressCallback(BTN_DOWN);
+	Input::getInstance()->removeBtnPressCallback(BTN_LEFT);
+	Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
 }
 
 void CastleJump::GameOverState::drawGameOver(){
-	baseSprite->setTextColor(TFT_WHITE);
-	baseSprite->drawIcon(game_over1, 0, 0, 160, 128);
-	baseSprite->setTextFont(2);
+	baseSprite->drawIcon(game_over1, 0, -4, 160, 128);
+	/*baseSprite->setTextFont(2);
 	baseSprite->setTextSize(1);
 	baseSprite->drawString("Score : ", 45, 30);
 	baseSprite->drawNumber(castleJump->score - 0, 95, 30);
 	baseSprite->setTextSize(1);
-	baseSprite->setCursor(130, 1);
-	baseSprite->printCenter("  A: new game  B: menu");
+	*/
+	baseSprite->setTextColor(TFT_WHITE);
+	baseSprite->setTextFont(1);
+	baseSprite->setTextSize(1);
+	baseSprite->setCursor(0, 5);
+	baseSprite->printCenter("Press any key to continue.");
 	screen->commit();
 
 }
 
 void CastleJump::GameOverState::draw(){
-
+//	drawGameOver();
 }
 
 void CastleJump::GameOverState::loop(uint time){
-	score = castleJump->score;
-	if(Highscore.count() > 1){
-		initialValue = false;
-	}
-	if(score > Highscore.get(0).score || initialValue || score > Highscore.get(1).score ||
-	   score > Highscore.get(2).score || score > Highscore.get(3).score ||
-	   score >= Highscore.get(4).score){
-		castleJump->enterHighscore();
-	}else{
-		if(Highscore.get(4).score > score && Highscore.count() > 1){
-			previousTime = 0;
-			currentTime = millis();
-			if(currentTime - previousTime > 1000){
-				previousTime = currentTime;
-				seconds++;
-				if(seconds < 2){
-					melody.play(MelodyImpl::dead, false);
-				}
-				drawGameOver();
 
-			}
-
+	previousTime = 0;
+	currentTime = millis();
+	if(currentTime - previousTime > 1000){
+		previousTime = currentTime;
+		seconds++;
+		if(seconds < 2){
+			melody.play(MelodyImpl::dead, false);
 		}
+		drawGameOver();
 	}
+
 }
 
