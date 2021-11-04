@@ -94,4 +94,5 @@ void CastleJump::CastleJump::newGame(){
 void CastleJump::CastleJump::loop(uint time){
 	state->loop(time);
 	draw();
+	screen.commit();
 }

@@ -83,7 +83,6 @@ void CastleJump::Menu::stop(){
 }
 
 void CastleJump::Menu::draw(){
-	baseSprite->clear(TFT_BLACK);
 	baseSprite->drawIcon(backgroundBuffer, 0,0,160,120);
 	baseSprite->setCursor(125, 105);
 	baseSprite->setTextFont(2);
@@ -116,13 +115,9 @@ void CastleJump::Menu::draw(){
 		baseSprite->drawIcon(icon_player, 23, 108, 8, 8, 1, TFT_BLACK);
 		baseSprite->drawIcon(icon_player, 131, 110, 8, 8, 1, TFT_BLACK);
 	}
-	screen->commit();
-
-
 }
 
 void CastleJump::Menu::loop(uint time){
-	baseSprite->clear(TFT_BLACK);
 	blinkMicros+=time;
 	if(blinkMicros > 200000)
 	{
