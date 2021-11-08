@@ -8,6 +8,7 @@
 #include <ByteBoi.h>
 #include <SPIFFS.h>
 #include <SD.h>
+#include <SleepService.h>
 
 CastleJump::CastleJump* castleJump;
 Sprite *baseSprite;
@@ -21,6 +22,7 @@ namespace CastleJump {
 void setup(){
 	Serial.begin(115200);
 	ByteBoi.begin();
+	Sleep.begin();
 	ByteBoi.bindMenu();
 	BatteryPopup.enablePopups(true);
 	ByteBoi.setGameID("CJump");
