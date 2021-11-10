@@ -38,8 +38,6 @@ void CastleJump::GameOverState::start(CastleJump& gameEnter){
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
 		instance->castleJump->enterHighscore();
 	});
-	extern Sample* gameOverMusic;
-	Playback.play(gameOverMusic);
 }
 
 

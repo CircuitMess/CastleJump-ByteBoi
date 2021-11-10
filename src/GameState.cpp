@@ -109,7 +109,7 @@ void CastleJump::GameState::start(CastleJump& gameEnter){
 	Input::getInstance()->setBtnReleaseCallback(BTN_LEFT, buttonLeftRelease);
 
 	extern Sample* gameMusic;
-	Playback.play(gameMusic);
+	//Playback.play(gameMusic);
 }
 
 void CastleJump::GameState::stop(){

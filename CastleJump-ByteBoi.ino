@@ -16,7 +16,6 @@ Sprite *baseSprite;
 namespace CastleJump {
 	Sample* menuMusic = nullptr;
 	Sample* gameMusic = nullptr;
-	Sample* gameOverMusic = nullptr;
 }
 
 void setup(){
@@ -31,9 +30,7 @@ void setup(){
 
 	CastleJump::menuMusic = new Sample(SD.open(ByteBoi.getSDPath() + "/Music/Menu.aac"));
 	CastleJump::gameMusic = new Sample(SD.open(ByteBoi.getSDPath() + "/Music/Game.aac"));
-	CastleJump::gameOverMusic = new Sample(SD.open(ByteBoi.getSDPath() + "/Music/GameOver.aac"), true);
 
-	CastleJump::gameOverMusic->setLooping(false);
 	CastleJump::menuMusic->setLooping(true);
 	CastleJump::gameMusic->setLooping(true);
 
