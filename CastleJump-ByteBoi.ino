@@ -26,8 +26,6 @@ void setup(){
 	BatteryPopup.enablePopups(true);
 	ByteBoi.setGameID("CJump");
 
-	SD.begin(SD_CS, SPI);
-
 	CastleJump::menuMusic = new Sample(SD.open(ByteBoi.getSDPath() + "/Music/Menu.aac"));
 	CastleJump::gameMusic = new Sample(SD.open(ByteBoi.getSDPath() + "/Music/Game.aac"));
 
