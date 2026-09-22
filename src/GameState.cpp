@@ -26,8 +26,6 @@
 #include "bitmaps/brick3.hpp"
 #include <FS/PGMFile.h>
 #include <FS/CompressedFile.h>
-#include <SPIFFS.h>
-#include <SD.h>
 #include <Playback/PlaybackSystem.h>
 #include <Playback/Sample.h>
 

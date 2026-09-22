@@ -6,8 +6,6 @@
 #include "src/CastleJump.h"
 #include "src/GameState.h"
 #include <ByteBoi.h>
-#include <SPIFFS.h>
-#include <SD.h>
 #include <SleepService.h>
 
 CastleJump::CastleJump* castleJump;
@@ -26,8 +24,8 @@ void setup(){
 	BatteryPopup.enablePopups(true);
 	ByteBoi.setGameID("CJump");
 
-	CastleJump::menuMusic = new Sample(SD.open(ByteBoi.getSDPath() + "/Music/Menu.aac"));
-	CastleJump::gameMusic = new Sample(SD.open(ByteBoi.getSDPath() + "/Music/Game.aac"));
+	CastleJump::menuMusic = new Sample(ByteBoi.SD_open(ByteBoi.getSDPath() + "/Music/Menu.aac"));
+	CastleJump::gameMusic = new Sample(ByteBoi.SD_open(ByteBoi.getSDPath() + "/Music/Game.aac"));
 
 	CastleJump::menuMusic->setLooping(true);
 	CastleJump::gameMusic->setLooping(true);
